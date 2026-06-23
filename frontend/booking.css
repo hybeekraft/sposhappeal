@@ -95,12 +95,13 @@ body.booking-page-body {
 .booking-page-main .modal-footer {
   background: transparent !important;
   border-top: 1px solid var(--border-rose) !important;
-  padding: 24px 0 0 0 !important;
+  padding: 24px 4px 16px 4px !important;
   margin-top: 24px !important;
   display: flex;
   align-items: center !important;
   box-sizing: border-box !important;
   width: 100% !important;
+  overflow: visible !important;
 }
 
 .modal-actions {
@@ -110,6 +111,8 @@ body.booking-page-body {
   align-items: center !important;
   box-sizing: border-box !important;
   flex-wrap: nowrap !important;
+  overflow: visible !important;
+  padding: 0 2px !important;
 }
 
 /* ─── Sidebar & Stepper: Vertical Layout ───────────────────────── */
@@ -1331,22 +1334,23 @@ body.booking-page-body .footer-bottom {
     font-size: 1rem !important;
   }
   .btn-primary, #btn-wizard-next, #btn-wizard-back {
-    padding: 14px 20px !important;
+    padding: 14px 16px !important;
     font-size: 1rem !important;
-    min-height: 48px !important;
+    min-height: 52px !important;
+    box-shadow: none !important;
   }
   #btn-wizard-next {
     max-width: none !important;
+    flex: 1 !important;
   }
   .modal-actions {
-    gap: 12px !important;
+    gap: 10px !important;
+    padding: 0 4px !important;
   }
   #btn-wizard-back {
     flex-shrink: 0 !important;
     white-space: nowrap !important;
-  }
-  #btn-wizard-next {
-    flex: 1 !important;
+    min-width: 90px !important;
   }
 }
 
