@@ -247,7 +247,9 @@ function renderBookingsList() {
       : '';
 
     let actionButtons = '';
-    if (b.status !== 'cancelled' && !isPast) {
+    if (b.status === 'completed') {
+      actionButtons = `<span style="font-size:0.72rem;color:#22a86b;text-transform:uppercase;letter-spacing:1px;text-align:center;padding:8px 0;display:flex;align-items:center;gap:6px;"><i class="fa-solid fa-circle-check"></i> Service Completed</span>`;
+    } else if (b.status !== 'cancelled' && !isPast) {
       let permissions = {};
       try {
         permissions = JSON.parse(sessionStorage.getItem('sposh_permissions') || '{}');
@@ -257,7 +259,17 @@ function renderBookingsList() {
       const isAdminUser = role === 'admin';
       const canResched = isAdminUser || permissions.canRescheduleBookings;
       const canCancel = isAdminUser || permissions.canCancelBookings;
+      const canComplete = isAdminUser || permissions.canConfirmComplete !== false;
 
+      if (canComplete && (b.status === 'confirmed' || b.status === 'rescheduled')) {
+        const totalAmt = b.total || 0;
+        const depositAmt = b.depositDue || 0;
+        actionButtons += `
+          <button class="btn-confirm-complete" id="btn-adm-done-${b.reference_id}"
+            onclick="openConfirmCompleteModal('${b.reference_id}', '${b.reference_id}', '${(b.clientName||'').replace(/'/g,"\'")}', ${totalAmt}, ${depositAmt})">
+            <i class="fa-solid fa-circle-check"></i> Confirm Complete
+          </button>`;
+      }
       if (canResched) {
         actionButtons += `
           <button class="btn-admin-resched" id="btn-adm-res-${b.reference_id}" onclick="openRescheduleModal('${b.reference_id}')">
@@ -271,7 +283,7 @@ function renderBookingsList() {
           </button>`;
       }
 
-      if (!canResched && !canCancel) {
+      if (!canResched && !canCancel && !canComplete) {
         actionButtons = `<span style="font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;text-align:center;padding:8px 0;">View Only</span>`;
       }
     } else {
@@ -368,6 +380,51 @@ function openRescheduleModal(id) {
 function closeRescheduleModal() {
   document.getElementById('reschedule-modal').style.display = 'none';
   activeRescheduleId = null;
+}
+
+// ─── CONFIRM COMPLETE MODAL CONTROLS ────────────────────────────
+let _completeBookingId = null;
+
+function openConfirmCompleteModal(bookingId, refId, clientName, total, deposit) {
+  _completeBookingId = bookingId;
+  const balance = total - deposit;
+  document.getElementById('complete-ref-label').textContent = refId;
+  document.getElementById('complete-client-label').textContent = clientName;
+  document.getElementById('complete-balance-amount').textContent = '\u20a6' + balance.toLocaleString();
+  document.getElementById('complete-balance-breakdown').textContent =
+    'Total: \u20a6' + total.toLocaleString() + ' \u00b7 Deposit paid: \u20a6' + deposit.toLocaleString();
+  document.getElementById('complete-notes').value = '';
+  document.getElementById('complete-payment-method').value = 'cash';
+  document.getElementById('confirm-complete-modal').style.display = 'flex';
+}
+
+function closeConfirmCompleteModal() {
+  document.getElementById('confirm-complete-modal').style.display = 'none';
+  _completeBookingId = null;
+}
+
+async function submitConfirmComplete() {
+  if (!_completeBookingId) return;
+  const btn = document.getElementById('btn-submit-complete');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Saving...';
+  try {
+    await adminFetch('/bookings/' + _completeBookingId + '/complete', {
+      method: 'PATCH',
+      body: JSON.stringify({
+        paymentMethod: document.getElementById('complete-payment-method').value,
+        completionNotes: document.getElementById('complete-notes').value.trim(),
+      }),
+    });
+    closeConfirmCompleteModal();
+    adminToast('Booking marked complete! Balance collected.');
+    await loadBookings();
+  } catch (err) {
+    adminToast('Failed to mark complete: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Mark Complete & Collect Balance';
+  }
 }
 
 async function submitReschedule(event) {
