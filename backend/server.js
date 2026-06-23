@@ -68,7 +68,7 @@ async function sendWhatsAppMessage(to, body) {
       console.error(`[Twilio SMS] Failed to send to ${formattedTo}:`, err.message);
     }
   } else {
-    console.log(`\n=================== WHATSAPP NOTIFICATION (MOCK) ===================\nTo: ${formattedTo}\nFrom: ${twilioFrom}\nMessage: ${body}\n===================================================================\n`);
+    const _msgPreview = body ? body.slice(0, 120).replace(/\n/g, ' ') : ''; console.log(`[WhatsApp MOCK] To: ${formattedTo} | ${_msgPreview}`);
   }
 }
 
@@ -940,7 +940,61 @@ app.patch('/api/bookings/reschedule/:id', async (req, res) => {
   }
 });
 
-// 5. Paystack Webhook Handler (POST /api/payments/webhook)
+
+// 5. Confirm Service Complete & Collect Balance (PATCH /api/bookings/:id/complete)
+app.patch('/api/bookings/:id/complete', adminLimiter, async (req, res) => {
+  try {
+    const bookingId = req.params.id;
+    const { paymentMethod, completionNotes } = req.body;
+
+    const passcode = req.headers['x-admin-passcode'];
+    if (!passcode) return res.status(401).json({ error: 'Passcode required.' });
+
+    const adminPasscode = ADMIN_PASSCODE;
+    let canComplete = false;
+    if (await bcrypt.compare(passcode, adminPasscode)) {
+      canComplete = true;
+    } else {
+      const staff = await getStaffMemberByPasscode(passcode);
+      if (staff) canComplete = staff.permissions?.canConfirmComplete !== false;
+    }
+    if (!canComplete) return res.status(403).json({ error: 'Forbidden. Insufficient permissions.' });
+
+    const useDb = mongoose.connection.readyState === 1;
+    let booking = null;
+    if (useDb) {
+      booking = await Booking.findOne({ reference_id: bookingId });
+    } else {
+      booking = mockBookings.find(b => b.reference_id === bookingId);
+    }
+
+    if (!booking) return res.status(404).json({ error: 'Booking not found.' });
+    if (booking.status === 'completed') return res.status(400).json({ error: 'Booking already marked complete.' });
+    if (booking.status === 'cancelled') return res.status(400).json({ error: 'Cannot complete a cancelled booking.' });
+
+    if (useDb) {
+      booking.status = 'completed';
+      booking.paymentStatus = 'fully_paid';
+      booking.completedAt = new Date();
+      booking.completionNotes = completionNotes || '';
+      booking.balancePaymentMethod = paymentMethod || 'cash';
+      await booking.save();
+    } else {
+      Object.assign(booking, {
+        status: 'completed', paymentStatus: 'fully_paid',
+        completedAt: new Date(), completionNotes: completionNotes || '',
+        balancePaymentMethod: paymentMethod || 'cash', updatedAt: new Date()
+      });
+    }
+
+    res.json({ status: 'success', message: 'Booking marked as complete.', booking });
+  } catch (err) {
+    console.error('[Complete Booking] Server error:', err);
+    res.status(500).json({ error: 'Server error marking booking complete.' });
+  }
+});
+
+// 6. Paystack Webhook Handler (POST /api/payments/webhook)
 app.post('/api/payments/webhook', paymentLimiter, async (req, res) => {
   try {
     const signature = req.headers['x-paystack-signature'];
