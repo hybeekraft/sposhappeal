@@ -6,8 +6,6 @@ const http = require('https');
 const bcrypt = require('bcryptjs');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss');
 require('dotenv').config();
 
 // ─── Admin / Staff Passcodes ────────────────────────────────
@@ -429,7 +427,6 @@ const app = express();
 
 // ─── Security Headers ───────────────────────────────────────
 app.use(helmet());
-app.use(mongoSanitize());
 
 // ─── Rate Limiting ──────────────────────────────────────────
 // Booking creation: 10 per IP per hour
@@ -609,17 +606,11 @@ app.get('/api/health', (req, res) => {
 app.post('/api/bookings/new', bookingLimiter, async (req, res) => {
   try {
     const {
-      clientName: _cn, clientEmail: _ce, clientPhone: _cp,
+      clientName, clientEmail, clientPhone,
       services, expert, expertName,
       dateISO, dateDisplay, time, startTime,
-      total, depositDue, serviceType, address: _addr, notes
+      total, depositDue, serviceType, address, notes
     } = req.body;
-    const _xss = (v) => typeof v === 'string' ? xss(v.trim(), { whiteList: {}, stripIgnoreTag: true }) : v;
-    const clientName  = _xss(_cn);
-    const clientEmail = _xss(_ce);
-    const clientPhone = _xss(_cp);
-    const notes       = _xss(_notes);
-    const address     = _xss(_addr);
 
     // Validate request fields
     if (!clientName || !clientEmail || !clientPhone || !services || services.length === 0 || !dateISO || !time || !startTime) {
