@@ -6,17 +6,6 @@ const http = require('https');
 const bcrypt = require('bcryptjs');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-
-// Inline XSS sanitizer — no external package needed
-const _sanitize = (v) => {
-  if (typeof v !== 'string') return v;
-  return v.trim()
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;')
-    .replace(/\//g, '&#x2F;');
-};
 require('dotenv').config();
 
 // ─── Admin / Staff Passcodes ────────────────────────────────
@@ -438,19 +427,6 @@ const app = express();
 
 // ─── Security Headers ───────────────────────────────────────
 app.use(helmet());
-// Strip MongoDB operator keys ($, .) from req.body to prevent NoSQL injection
-app.use((req, res, next) => {
-  const strip = (obj) => {
-    if (obj && typeof obj === 'object') {
-      for (const key of Object.keys(obj)) {
-        if (key.startsWith('$') || key.startsWith('.')) { delete obj[key]; }
-        else strip(obj[key]);
-      }
-    }
-  };
-  strip(req.body);
-  next();
-});
 
 // ─── Rate Limiting ──────────────────────────────────────────
 // Booking creation: 10 per IP per hour
@@ -630,16 +606,11 @@ app.get('/api/health', (req, res) => {
 app.post('/api/bookings/new', bookingLimiter, async (req, res) => {
   try {
     const {
-      clientName: _cn, clientEmail: _ce, clientPhone: _cp,
+      clientName, clientEmail, clientPhone,
       services, expert, expertName,
       dateISO, dateDisplay, time, startTime,
-      total, depositDue, serviceType, address: _addr, notes
+      total, depositDue, serviceType, address, notes
     } = req.body;
-    const clientName  = _sanitize(_cn);
-    const clientEmail = _sanitize(_ce);
-    const clientPhone = _sanitize(_cp);
-    const notes       = _sanitize(_notes);
-    const address     = _sanitize(_addr);
 
     // Validate request fields
     if (!clientName || !clientEmail || !clientPhone || !services || services.length === 0 || !dateISO || !time || !startTime) {
