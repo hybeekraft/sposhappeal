@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="S'posh APPEAL Staff Portal — Manage salon appointments and service pricing dynamically.">
+  <link rel="icon" href="assets/sposh_logo.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/sposh_logo.png">
+  <meta name="theme-color" content="#1a1025">
+  <title>Staff Portal | S'posh APPEAL</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="staff.css">
+
+  <style>
+    /* Confirm complete button */
+    .btn-confirm-complete {
+      background: linear-gradient(135deg, #1a7a4a, #22a86b);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+    .btn-confirm-complete:hover { opacity: 0.85; }
+    .btn-confirm-complete:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Photo upload field */
+    .staff-photo-upload-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed rgba(224, 68, 122, 0.35);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      gap: 8px;
+      transition: border-color 0.2s;
+      color: var(--text-dim, #aaa);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    .staff-photo-upload-label:hover { border-color: rgba(224, 68, 122, 0.7); }
+    .staff-photo-upload-label i { font-size: 1.6rem; color: var(--primary-rose, #e0447a); }
+    #staff-photo-preview {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: none;
+      margin: 0 auto 8px;
+      border: 2px solid var(--primary-rose, #e0447a);
+    }
+    #add-staff-photo { display: none; }
+  </style>
+</head>
+<body class="admin-page-body">
+
+  <!-- ═══════════ LOGIN OVERLAY ═══════════ -->
+  <div class="admin-login-overlay" id="login-overlay">
+    <div class="login-card">
+      <div class="login-logo-container logo-flex" style="justify-content: center; margin-bottom: 24px; gap: 12px;">
+        <img src="assets/sposh_logo.png" alt="S'posh APPEAL Logo" class="logo-img" style="width: 52px; height: 52px; filter: drop-shadow(0 0 8px rgba(224, 68, 122, 0.3));">
+        <div class="logo-text" style="text-align: left;">
+          <span class="logo-name">S'posh APPEAL</span>
+          <span class="logo-tagline">Premium Unisex Salon</span>
+        </div>
+      </div>
+      <h3>Staff & Admin Login</h3>
+      <p>Select your role and enter your passcode to access the workspace.</p>
+      
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-field">
+          <select id="login-role" required>
+            <option value="staff">Staff Member</option>
+            <option value="admin">Administrator</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <input type="password" id="admin-passcode" placeholder="Enter passcode" required autocomplete="current-password">
+          <span class="login-error-msg" id="login-error-msg"></span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="btn-login">
+          Log In &nbsp;<i class="fa-solid fa-right-to-bracket"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════ MAIN PORTAL ═══════════ -->
+  <div class="admin-portal-wrapper" id="admin-portal" style="display: none;">
+    
+    <!-- HEADER -->
+    <header class="admin-header">
+      <div class="container admin-header-flex">
+        <div class="admin-brand">
+          <img src="assets/sposh_logo.png" alt="S'posh APPEAL Logo" class="admin-logo-img">
+          <div>
+            <h1>S'posh APPEAL <span class="accent-text" id="header-role-badge">Staff</span></h1>
+            <p>Salon Portal &bull; Live Scheduling & Catalog Management</p>
+          </div>
+        </div>
+        <div class="admin-header-actions">
+          <a href="index.html" class="btn btn-outline-white" style="margin-right: 12px;">
+            <i class="fa-solid fa-arrow-left"></i> View Site
+          </a>
+          <button class="btn btn-ghost" onclick="handleLogout()" id="btn-logout">
+            Logout &nbsp;<i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTAINER / NAV -->
+    <main class="container admin-main-content">
+      
+      <!-- Tab Navigation -->
+      <nav class="admin-nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('bookings')" id="tab-bookings-btn">
+          <i class="fa-regular fa-calendar-check"></i> Manage Bookings
+        </button>
+        <button class="tab-btn" onclick="switchTab('pricing')" id="tab-pricing-btn" style="display: none;">
+          <i class="fa-solid fa-tags"></i> Edit Service Pricing
+        </button>
+        <button class="tab-btn" onclick="switchTab('staff')" id="tab-staff-btn" style="display: none;">
+          <i class="fa-solid fa-user-gear"></i> Manage Staff
+        </button>
+      </nav>
+
+      <!-- TAB 1: BOOKINGS -->
+      <section class="admin-tab-panel active" id="panel-bookings">
+        <div class="admin-panel-header">
+          <h2>Client Appointments</h2>
+          <div class="filter-controls">
+            <!-- Search bar -->
+            <div class="admin-search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="booking-search" placeholder="Search by name, email, or Ref ID..." oninput="filterBookings()">
+            </div>
+            <!-- Status dropdown -->
+            <div class="admin-select-box">
+              <select id="booking-status-filter" onchange="filterBookings()">
+                <option value="all">All Statuses</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="pending">Pending</option>
+                <option value="cancelled">Cancelled</option>
+                <option value="rescheduled">Rescheduled</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bookings Loader / Empty State -->
+        <div class="admin-loader" id="bookings-loader" style="display: none;">
+          <i class="fa-solid fa-circle-notch fa-spin"></i> Loading appointments...
+        </div>
+
+        <div class="admin-bookings-grid" id="bookings-grid-list">
+          <!-- Populated by staff.js -->
+        </div>
+      </section>
+
+      <!-- TAB 2: PRICING -->
+      <section class="admin-tab-panel" id="panel-pricing">
+        <div class="admin-panel-header">
+          <h2>Service Categories &amp; Pricing</h2>
+          <p class="section-desc">Edit base rates and service details. Saved changes update on the booking wizard immediately.</p>
+        </div>
+
+        <!-- Pricing Loader -->
+        <div class="admin-loader" id="pricing-loader" style="display: none;">
+          <i class="fa-solid fa-circle-notch fa-spin"></i> Loading catalog...
+        </div>
+
+        <div class="admin-pricing-container" id="pricing-categories-list">
+          <!-- Populated by staff.js -->
+        </div>
+      </section>
+
+      <!-- TAB 3: STAFF -->
+      <section class="admin-tab-panel" id="panel-staff">
+        <div class="admin-panel-header" style="margin-bottom: 20px;">
+          <h2>Staff Members & Permissions</h2>
+          <div style="display: flex; gap: 12px; align-items: center; width: 100%;">
+            <p class="section-desc" style="margin: 0; flex: 1;">Add, remove, or rename staff members, update login passcodes, and control access permissions.</p>
+            <button class="btn btn-primary" onclick="openAddStaffModal()" style="margin-left: auto;">
+              <i class="fa-solid fa-user-plus"></i> Add Staff
+            </button>
+          </div>
+        </div>
+
+        <!-- Staff Loader -->
+        <div class="admin-loader" id="staff-loader" style="display: none;">
+          <i class="fa-solid fa-circle-notch fa-spin"></i> Loading staff list...
+        </div>
+
+        <div class="admin-staff-grid" id="staff-members-list">
+          <!-- Populated by staff.js -->
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ═══════════ RESCHEDULE MODAL OVERLAY ═══════════ -->
+  <div class="admin-modal-overlay" id="reschedule-modal" style="display: none;">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3>Reschedule Appointment</h3>
+        <button class="modal-close-btn" onclick="closeRescheduleModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="admin-modal-body">
+        <p style="margin-bottom: 20px; font-size: 0.9rem; color: var(--text-dim);">
+          Update slot date and time for booking <strong id="resched-ref-label" style="color: var(--primary-rose);">SP-XXXXXX</strong>.
+        </p>
+        <form id="admin-reschedule-form" onsubmit="submitReschedule(event)">
+          <div class="form-field">
+            <label for="resched-date">NEW APPOINTMENT DATE</label>
+            <input type="date" id="resched-date" required>
+          </div>
+          <div class="form-field">
+            <label for="resched-time">NEW START TIME (e.g. 10:30 AM)</label>
+            <select id="resched-time" required>
+              <option value="">Choose a slot</option>
+              <option value="08:00 AM">08:00 AM</option>
+              <option value="08:30 AM">08:30 AM</option>
+              <option value="09:00 AM">09:00 AM</option>
+              <option value="09:30 AM">09:30 AM</option>
+              <option value="10:00 AM">10:00 AM</option>
+              <option value="10:30 AM">10:30 AM</option>
+              <option value="11:00 AM">11:00 AM</option>
+              <option value="11:30 AM">11:30 AM</option>
+              <option value="12:00 PM">12:00 PM</option>
+              <option value="12:30 PM">12:30 PM</option>
+              <option value="01:00 PM">01:00 PM</option>
+              <option value="01:30 PM">01:30 PM</option>
+              <option value="02:00 PM">02:00 PM</option>
+              <option value="02:30 PM">02:30 PM</option>
+              <option value="03:00 PM">03:00 PM</option>
+              <option value="03:30 PM">03:30 PM</option>
+              <option value="04:00 PM">04:00 PM</option>
+              <option value="04:30 PM">04:30 PM</option>
+              <option value="05:00 PM">05:00 PM</option>
+              <option value="05:30 PM">05:30 PM</option>
+              <option value="06:00 PM">06:00 PM</option>
+              <option value="06:30 PM">06:30 PM</option>
+            </select>
+          </div>
+          <div class="modal-actions" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px;">
+            <button type="button" class="btn btn-ghost" onclick="closeRescheduleModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-resched">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ CONFIRM COMPLETE MODAL ═══════════ -->
+  <div class="admin-modal-overlay" id="confirm-complete-modal" style="display: none;">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3><i class="fa-solid fa-circle-check" style="color: #22a86b; margin-right: 8px;"></i> Confirm Service Complete</h3>
+        <button class="modal-close-btn" onclick="closeConfirmCompleteModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="admin-modal-body">
+        <p style="margin-bottom: 8px; font-size: 0.9rem; color: var(--text-dim);">
+          Booking <strong id="complete-ref-label" style="color: var(--primary-rose);">SP-XXXXXX</strong>
+        </p>
+        <p style="margin-bottom: 20px; font-size: 0.9rem; color: var(--text-dim);">
+          Customer: <strong id="complete-client-label" style="color: #fff;">--</strong>
+        </p>
+
+        <div class="form-field" style="background: rgba(34,168,107,0.08); border: 1px solid rgba(34,168,107,0.2); border-radius: 10px; padding: 16px; margin-bottom: 20px;">
+          <label style="color: #22a86b; font-size: 0.75rem; letter-spacing: 0.08em;">BALANCE DUE FROM CLIENT</label>
+          <div style="font-size: 1.6rem; font-weight: 700; color: #fff; margin-top: 4px;" id="complete-balance-amount">₦0</div>
+          <div style="font-size: 0.78rem; color: var(--text-dim); margin-top: 4px;" id="complete-balance-breakdown">--</div>
+        </div>
+
+        <div class="form-field">
+          <label for="complete-payment-method">PAYMENT METHOD USED</label>
+          <select id="complete-payment-method">
+            <option value="cash">Cash</option>
+            <option value="transfer">Bank Transfer</option>
+            <option value="pos">POS / Card</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="complete-notes">COMPLETION NOTES (OPTIONAL)</label>
+          <textarea id="complete-notes" placeholder="e.g. Client was happy, used extra lash glue..." rows="2"></textarea>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px;">
+          <button type="button" class="btn btn-ghost" onclick="closeConfirmCompleteModal()">Cancel</button>
+          <button type="button" class="btn-confirm-complete" id="btn-submit-complete" onclick="submitConfirmComplete()">
+            <i class="fa-solid fa-circle-check"></i> Mark Complete & Collect Balance
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ADD SERVICE MODAL OVERLAY ═══════════ -->
+  <div class="admin-modal-overlay" id="add-service-modal" style="display: none;">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3>Add New Service</h3>
+        <button class="modal-close-btn" onclick="closeAddServiceModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="admin-modal-body">
+        <p style="margin-bottom: 20px; font-size: 0.9rem; color: var(--text-dim);">
+          Adding service to category: <strong id="add-service-category-label" style="color: var(--primary-rose);">CATEGORY NAME</strong>
+        </p>
+        <form id="admin-add-service-form" onsubmit="submitAddService(event)">
+          <input type="hidden" id="add-service-category-id">
+          
+          <div class="form-field">
+            <label for="add-service-name">SERVICE NAME</label>
+            <input type="text" id="add-service-name" placeholder="e.g. Classic Nail Art" required>
+          </div>
+
+          <div class="form-field-row" style="display: flex; gap: 16px;">
+            <div class="form-field" style="flex: 1;">
+              <label for="add-service-duration">DURATION (MINUTES)</label>
+              <input type="number" id="add-service-duration" min="1" placeholder="e.g. 45" required>
+            </div>
+            <div class="form-field" style="flex: 1;">
+              <label for="add-service-price">PRICE (₦)</label>
+              <input type="number" id="add-service-price" min="0" placeholder="e.g. 5000" required>
+            </div>
+          </div>
+
+          <div class="modal-actions" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px;">
+            <button type="button" class="btn btn-ghost" onclick="closeAddServiceModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-add-service">Add Service</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ADD STAFF MODAL OVERLAY ═══════════ -->
+  <div class="admin-modal-overlay" id="add-staff-modal" style="display: none;">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3 id="staff-modal-title">Add New Staff Member</h3>
+        <button class="modal-close-btn" onclick="closeAddStaffModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="admin-add-staff-form" onsubmit="submitAddStaff(event)">
+
+          <!-- Photo Upload -->
+          <div class="form-field">
+            <label>PROFILE PHOTO</label>
+            <label class="staff-photo-upload-label" for="add-staff-photo" id="staff-photo-upload-label">
+              <img id="staff-photo-preview" src="" alt="Preview">
+              <i class="fa-solid fa-camera" id="staff-photo-icon"></i>
+              <span id="staff-photo-hint">Tap to upload a photo</span>
+            </label>
+            <input type="file" id="add-staff-photo" accept="image/*" onchange="previewStaffPhoto(event)">
+          </div>
+
+          <div class="form-field">
+            <label for="add-staff-name">STAFF NAME *</label>
+            <input type="text" id="add-staff-name" placeholder="e.g. Jane Doe" required>
+          </div>
+          
+          <div class="form-field">
+            <label for="add-staff-role">ROLE/TITLE *</label>
+            <input type="text" id="add-staff-role" placeholder="e.g. Lash & Nail Stylist" required>
+          </div>
+
+          <div class="form-field">
+            <label for="add-staff-bio">BIO/DESCRIPTION</label>
+            <textarea id="add-staff-bio" placeholder="e.g. 5+ years of custom nail design..." rows="2"></textarea>
+          </div>
+
+          <div class="form-field-row" style="display: flex; gap: 16px;">
+            <div class="form-field" style="flex: 1;">
+              <label for="add-staff-ig">INSTAGRAM USERNAME</label>
+              <input type="text" id="add-staff-ig" placeholder="e.g. @janedoe">
+            </div>
+            <div class="form-field" style="flex: 1;">
+              <label for="add-staff-passcode">LOGIN PASSCODE *</label>
+              <input type="password" id="add-staff-passcode" placeholder="e.g. jane123" required autocomplete="new-password">
+            </div>
+          </div>
+
+          <!-- Permissions checkboxes -->
+          <div class="form-field">
+            <label style="margin-bottom: 12px; display: block;">ASSIGN PERMISSIONS</label>
+            <div class="permissions-checklist" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+              <label class="permission-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; color: var(--text-muted);">
+                <input type="checkbox" id="p-view-bookings" checked> View Appointments
+              </label>
+              <label class="permission-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; color: var(--text-muted);">
+                <input type="checkbox" id="p-cancel-bookings"> Cancel Bookings
+              </label>
+              <label class="permission-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; color: var(--text-muted);">
+                <input type="checkbox" id="p-resched-bookings"> Reschedule Bookings
+              </label>
+              <label class="permission-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; color: var(--text-muted);">
+                <input type="checkbox" id="p-edit-catalog"> Edit Catalog/Pricing
+              </label>
+              <label class="permission-item" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; color: var(--text-muted);">
+                <input type="checkbox" id="p-confirm-complete"> Confirm Completed Services
+              </label>
+            </div>
+          </div>
+
+          <div class="modal-actions" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px;">
+            <button type="button" class="btn btn-ghost" onclick="closeAddStaffModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-add-staff">Add Staff Member</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.SPOSH_API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+      ? 'http://localhost:5000/api' 
+      : '/api';
+
+    // ── Photo preview ──
+    function previewStaffPhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('staff-photo-preview');
+        const icon = document.getElementById('staff-photo-icon');
+        const hint = document.getElementById('staff-photo-hint');
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        icon.style.display = 'none';
+        hint.textContent = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // ── Confirm Complete Modal ──
+    let _completeBookingId = null;
+
+    function openConfirmCompleteModal(bookingId, refId, clientName, total, deposit) {
+      _completeBookingId = bookingId;
+      const balance = total - deposit;
+      document.getElementById('complete-ref-label').textContent = refId;
+      document.getElementById('complete-client-label').textContent = clientName;
+      document.getElementById('complete-balance-amount').textContent = '₦' + balance.toLocaleString();
+      document.getElementById('complete-balance-breakdown').textContent =
+        'Total: ₦' + total.toLocaleString() + ' · Deposit paid: ₦' + deposit.toLocaleString();
+      document.getElementById('complete-notes').value = '';
+      document.getElementById('complete-payment-method').value = 'cash';
+      document.getElementById('confirm-complete-modal').style.display = 'flex';
+    }
+
+    function closeConfirmCompleteModal() {
+      document.getElementById('confirm-complete-modal').style.display = 'none';
+      _completeBookingId = null;
+    }
+
+    async function submitConfirmComplete() {
+      if (!_completeBookingId) return;
+      const btn = document.getElementById('btn-submit-complete');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Saving...';
+
+      const payload = {
+        status: 'completed',
+        paymentMethod: document.getElementById('complete-payment-method').value,
+        completionNotes: document.getElementById('complete-notes').value.trim(),
+      };
+
+      try {
+        const res = await fetch(`${window.SPOSH_API_URL}/bookings/${_completeBookingId}/complete`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('Failed');
+        closeConfirmCompleteModal();
+        if (typeof loadBookings === 'function') loadBookings();
+      } catch (err) {
+        alert('Could not mark complete. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Mark Complete & Collect Balance';
+      }
+    }
+  </script>
+  <script src="staff.js"></script>
+</body>
+</html>

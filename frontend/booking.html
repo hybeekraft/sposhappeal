@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Book your appointment at S'posh APPEAL — Premium Unisex Salon. Choose your service, date, and time in a few simple steps.">
+  <link rel="icon" href="assets/sposh_logo.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/sposh_logo.png">
+  <link rel="canonical" href="https://sposh-appeal.vercel.app/booking.html">
+  <meta name="theme-color" content="#1a1025">
+  <meta property="og:title" content="Book an Appointment | S'posh APPEAL">
+  <meta property="og:description" content="Book your glam appointment at S'posh APPEAL — Hair, Nails, Lashes, Makeup & more.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sposh-appeal.vercel.app/booking.html">
+  <meta property="og:image" content="https://sposh-appeal.vercel.app/assets/sposh_logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Book an Appointment | S'posh APPEAL">
+  <meta name="twitter:description" content="Book your glam appointment at S'posh APPEAL — Hair, Nails, Lashes, Makeup & more.">
+  <meta name="twitter:image" content="https://sposh-appeal.vercel.app/assets/sposh_logo.png">
+  <title>Book an Appointment | S'posh APPEAL</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="booking.css">
+
+  <style>
+    /* Mobile: Back + Continue sit side by side */
+    @media (max-width: 768px) {
+      .modal-actions {
+        display: flex !important;
+        gap: 10px;
+        width: 100%;
+      }
+      #btn-wizard-back {
+        flex: 1;
+        display: inline-flex !important;
+      }
+      #btn-wizard-next {
+        flex: 2;
+      }
+    }
+    /* Booked slot indicator */
+    .slot-legend-booked {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #555;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+  </style>
+</head>
+
+<body class="booking-page-body">
+  <noscript>
+    <style>body{background:#0d0816;color:#e0d6f0;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center;padding:40px}</style>
+    <div style="max-width:400px;margin:auto">
+      <p style="font-size:2rem;margin-bottom:16px">✂️</p>
+      <h2 style="color:#fff;margin-bottom:12px">JavaScript Required</h2>
+      <p style="color:#9080a8;line-height:1.7">S'posh APPEAL requires JavaScript to run. Please enable JavaScript in your browser settings and reload the page.</p>
+    </div>
+  </noscript>
+
+  <!-- ═══════════ BOOKING PAGE ═══════════ -->
+  <main class="booking-page section-padding">
+    <div class="container booking-page-container">
+
+      <div class="booking-page-header">
+        <a href="index.html" class="booking-back-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+        <div class="section-label" style="justify-content: flex-start;">Book Your Appointment</div>
+        <h1>Reserve Your <span class="accent-text">S'posh Experience</span></h1>
+        <p>Follow the steps below to choose your service, pick a date and time, and secure your slot with a deposit.</p>
+      </div>
+
+      <div class="booking-page-layout">
+
+        <!-- Left Sidebar Stepper -->
+        <aside class="booking-page-sidebar">
+          <div class="wizard-steps-container">
+            <div class="wstep active" id="wstep-1">
+              <div class="wstep-num">1</div>
+              <div class="wstep-label">YOUR DETAILS</div>
+            </div>
+            <div class="wstep-line" id="wline-1"></div>
+            <div class="wstep" id="wstep-2">
+              <div class="wstep-num">2</div>
+              <div class="wstep-label">SERVICE</div>
+            </div>
+            <div class="wstep-line" id="wline-2"></div>
+            <div class="wstep" id="wstep-3">
+              <div class="wstep-num">3</div>
+              <div class="wstep-label">DATE</div>
+            </div>
+            <div class="wstep-line" id="wline-3"></div>
+            <div class="wstep" id="wstep-4">
+              <div class="wstep-num">4</div>
+              <div class="wstep-label">TIME</div>
+            </div>
+            <div class="wstep-line" id="wline-4"></div>
+            <div class="wstep" id="wstep-5">
+              <div class="wstep-num"><i class="fa-solid fa-check"></i></div>
+              <div class="wstep-label">CONFIRM</div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main panel -->
+        <div class="modal-main booking-page-main">
+          <div class="modal-top">
+            <div>
+              <h3 id="modal-step-title">Your Details</h3>
+              <div class="modal-step-mobile" id="modal-step-mobile">Step 1 of 5</div>
+            </div>
+          </div>
+
+          <div class="modal-body" id="modal-body">
+
+            <!-- Step 1: Details -->
+            <div class="step-panel active" id="panel-1">
+              <h2 class="step-heading">Your details</h2>
+              <p class="step-subtext">We'll use these to confirm your booking on WhatsApp.</p>
+              
+              <form class="booking-form" id="booking-form" onsubmit="return false;">
+                <div class="form-field">
+                  <label for="f-name">FULL NAME</label>
+                  <input type="text" id="f-name" placeholder="John Doe" required>
+                  <span class="field-error" id="err-f-name"></span>
+                </div>
+                <div class="form-field">
+                  <label for="f-phone">WHATSAPP NUMBER</label>
+                  <input type="tel" id="f-phone" placeholder="08012345678" required>
+                  <span class="field-error" id="err-f-phone"></span>
+                </div>
+                <div class="form-field">
+                  <label for="f-email">EMAIL ADDRESS</label>
+                  <input type="email" id="f-email" placeholder="johndoe@example.com" required>
+                  <span class="field-error" id="err-f-email"></span>
+                </div>
+                <div class="form-field">
+                  <label for="f-notes">ADDITIONAL NOTES (OPTIONAL)</label>
+                  <textarea id="f-notes" placeholder="Any special requests, styles, or preferences..." rows="3"></textarea>
+                </div>
+              </form>
+            </div>
+
+            <!-- Step 2: Service -->
+            <div class="step-panel" id="panel-2">
+              <h2 class="step-heading">Choose a service</h2>
+              <p class="step-subtext">Pick a category, then select the specific service below.</p>
+              <div class="service-select-panel">
+                <div class="form-field">
+                  <label for="f-service-category">1 — SERVICE CATEGORY</label>
+                  <select id="f-service-category" onchange="onServiceCategoryChange()">
+                    <option value="">Select a service</option>
+                  </select>
+                </div>
+                <div class="form-field pop-in-animation" id="specific-service-section" style="margin-top: 8px; display: none;">
+                  <label>2 — SELECT SPECIFIC SERVICE</label>
+                  <div class="service-option-preview" id="service-option-preview"></div>
+                </div>
+                <div class="selected-services-list" id="selected-services-list"></div>
+
+                <!-- Service Type Section -->
+                <div class="form-field pop-in-animation" id="service-type-section" style="margin-top: 16px; display: none;">
+                  <label>3 — SERVICE TYPE</label>
+                  <div class="service-type-grid">
+                    <button type="button" class="service-type-card selected" id="type-studio"
+                      onclick="setServiceType('salon')">
+                      <div class="service-type-icon"><i class="fa-solid fa-shop"></i></div>
+                      <span class="service-type-title">In-Studio</span>
+                      <span class="service-type-sub">Visit our salon</span>
+                      <span class="service-type-footer">No extra charge</span>
+                    </button>
+                    <button type="button" class="service-type-card" id="type-home" onclick="setServiceType('home')">
+                      <div class="service-type-icon"><i class="fa-solid fa-house"></i></div>
+                      <span class="service-type-title">Home Service</span>
+                      <span class="service-type-sub">We come to you</span>
+                      <span class="service-type-footer">+₦5,000</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Home Address Input (hidden by default) -->
+                <div class="form-field pop-in-animation" id="address-field" style="display: none; margin-top: 12px;">
+                  <label for="f-address">YOUR ADDRESS *</label>
+                  <input type="text" id="f-address" placeholder="e.g. 12 Adeola Odeku Street, Victoria Island, Lagos">
+                  <span class="field-error" id="err-f-address"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Date -->
+            <div class="step-panel" id="panel-3">
+              <h2 class="step-heading">Choose a date</h2>
+              <p class="step-subtext">Select an available day for your appointment.</p>
+              <div class="date-availability-legend">
+                <span class="legend-desc">Select a date to see available hours</span>
+                <span class="legend-badge"><span class="legend-circle off-day-legend"></span> Closed</span>
+                <span class="legend-badge"><span class="legend-circle full-day-legend"></span> Full</span>
+                <span class="legend-badge"><span class="legend-circle available-day-legend"></span> Available</span>
+              </div>
+              <div class="cal-box">
+                <div class="cal-header">
+                  <h5 id="cal-month-label">June 2026</h5>
+                  <div>
+                    <button class="btn-cal" id="btn-cal-prev" onclick="prevMonth()"><i
+                        class="fa-solid fa-chevron-left"></i></button>
+                    <button class="btn-cal" id="btn-cal-next" onclick="nextMonth()"><i
+                        class="fa-solid fa-chevron-right"></i></button>
+                  </div>
+                </div>
+                <div class="cal-weekdays">
+                  <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                </div>
+                <div class="cal-days" id="cal-days-grid"><!-- app.js --></div>
+              </div>
+            </div>
+
+            <!-- Step 4: Start Time -->
+            <div class="step-panel" id="panel-4">
+              <h2 class="step-heading">Choose a start time</h2>
+              <p class="step-subtext">
+                Working hours: 8:00am &ndash; 7:00pm &middot;
+                <span class="slot-legend-booked"></span> Booked
+              </p>
+              <div class="time-slots-banner" id="time-slots-banner" style="display: none;"></div>
+              <div class="time-box">
+                <div class="time-header" id="time-box-label">Select a date first</div>
+                <div class="time-slots" id="time-slots-grid"><!-- app.js --></div>
+              </div>
+            </div>
+
+            <!-- Step 5: Summary -->
+            <div class="step-panel" id="panel-5">
+              <h2 class="step-heading">Confirm &amp; send booking</h2>
+              <p class="step-subtext">Review your details before we send to WhatsApp.</p>
+              <div class="summary-card">
+                <div class="summary-card-header">
+                  <h5>S'posh APPEAL Appointment Summary</h5>
+                </div>
+                <div class="summary-rows">
+                  <div class="srow">
+                    <span class="srow-label">Date &amp; Time</span>
+                    <span class="srow-val" id="sum-datetime">--</span>
+                  </div>
+                  <div class="srow">
+                    <span class="srow-label">Appointment Type</span>
+                    <span class="srow-val" id="sum-type">--</span>
+                  </div>
+                  <div class="srow" id="sum-address-row" style="display: none;">
+                    <span class="srow-label">Address</span>
+                    <span class="srow-val" id="sum-address">--</span>
+                  </div>
+                  <div class="srow">
+                    <span class="srow-label">Service</span>
+                    <div class="srow-services" id="sum-services">--</div>
+                  </div>
+                </div>
+                <div class="summary-total">
+                  <span class="label">Total Estimate</span>
+                  <span class="amount" id="sum-total">&#8358;0</span>
+                </div>
+                <div class="summary-total deposit-total">
+                  <span class="label">Deposit due now (30%)</span>
+                  <span class="amount" id="sum-deposit">&#8358;0</span>
+                </div>
+                <p class="balance-note" id="sum-balance">Balance is paid at the salon.</p>
+                <p class="balance-note" style="color: var(--primary-rose); margin-top: 4px; font-size: 0.72rem; opacity: 0.85;">* Note: Appointments cannot be cancelled within 24 hours of the scheduled time.</p>
+              </div>
+            </div>
+
+            <!-- Success -->
+            <div class="step-panel" id="panel-success">
+              <div class="success-view">
+                <div class="success-ring" id="success-ring">
+                  <i class="fa-solid fa-check"></i>
+                </div>
+                <h4 id="success-title">You're All Set! 🎉</h4>
+                <p id="success-message">Your S'posh APPEAL appointment has been booked. We'll reach out to confirm
+                  within
+                  30 minutes.</p>
+                <div class="booking-ref-pill" id="success-ref-id">SP-000000</div>
+                <div class="success-actions" id="success-actions">
+                  <a class="btn btn-primary" id="btn-success-done" href="index.html">Done</a>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /modal-body -->
+
+          <div class="modal-footer" id="modal-footer">
+            <div class="modal-actions">
+              <button class="btn btn-ghost" id="btn-wizard-back" onclick="wizardNav(-1)" style="display:none;">Back</button>
+              <button class="btn btn-primary" id="btn-wizard-next" onclick="wizardNav(1)">Continue</button>
+            </div>
+          </div>
+        </div><!-- /modal-main -->
+
+      </div><!-- /booking-page-layout -->
+
+    </div>
+  </main>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer id="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 S'posh APPEAL. All rights reserved.</p>
+        <p><a href="privacy.html">Privacy Policy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      window.SPOSH_API_URL = '/api';
+    }
+    window.PAYSTACK_PUBLIC_KEY = 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+
+  </script>
+  <script async src="https://js.paystack.co/v1/inline.js"></script>
+  <script src="app.js"></script>
+  <script src="booking.js"></script>
+</body>
+
+</html>

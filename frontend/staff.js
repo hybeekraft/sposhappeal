@@ -1,0 +1,1032 @@
+/* =================================================================
+   S'POSH APPEAL — staff.js
+   Staff & Admin Portal logic: Login, Catalog edit, Booking manager
+   ================================================================= */
+
+const API_BASE = window.SPOSH_API_URL || '/api';
+const API_TIMEOUT_MS = 6000;
+
+let bookingsCache = [];
+let catalogCache = null;
+let currentTab = 'bookings';
+let activeRescheduleId = null;
+
+// Helpers: Fetch wrapper with timeout & passcode auth headers
+async function adminFetch(path, options = {}) {
+  const passcode = sessionStorage.getItem('sposh_admin_passcode') || '';
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+
+  try {
+    const res = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-passcode': passcode,
+        ...(options.headers || {})
+      },
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+
+    if (!res.ok) {
+      let body = null;
+      try { body = await res.json(); } catch { }
+      const err = new Error(body?.error || `Request failed (${res.status})`);
+      err.status = res.status;
+      throw err;
+    }
+    return res.json();
+  } catch (err) {
+    clearTimeout(timeout);
+    throw err;
+  }
+}
+
+// Apply visual role permissions
+function applyRolePermissions(role, permissions) {
+  const headerBadge = document.getElementById('header-role-badge');
+  const pricingTabBtn = document.getElementById('tab-pricing-btn');
+  const staffTabBtn = document.getElementById('tab-staff-btn');
+
+  if (!permissions) {
+    try {
+      permissions = JSON.parse(sessionStorage.getItem('sposh_permissions') || '{}');
+    } catch (e) {
+      permissions = {};
+    }
+  }
+
+  if (role === 'admin') {
+    if (headerBadge) headerBadge.textContent = 'Admin';
+    if (pricingTabBtn) pricingTabBtn.style.display = 'inline-flex';
+    if (staffTabBtn) staffTabBtn.style.display = 'inline-flex';
+  } else {
+    if (headerBadge) headerBadge.textContent = 'Staff';
+    if (staffTabBtn) staffTabBtn.style.display = 'none';
+    
+    if (permissions && permissions.canEditCatalog) {
+      if (pricingTabBtn) pricingTabBtn.style.display = 'inline-flex';
+    } else {
+      if (pricingTabBtn) pricingTabBtn.style.display = 'none';
+      if (currentTab === 'pricing') {
+        switchTab('bookings');
+      }
+    }
+
+    if (currentTab === 'staff') {
+      switchTab('bookings');
+    }
+  }
+}
+
+// ─── LOGIN / AUTH ───────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const savedPass = sessionStorage.getItem('sposh_admin_passcode');
+  if (savedPass) {
+    checkPasscodeAndLoad(savedPass);
+  } else {
+    document.getElementById('login-overlay').style.display = 'flex';
+    document.getElementById('admin-portal').style.display = 'none';
+  }
+});
+
+async function handleLogin(event) {
+  event.preventDefault();
+  const input = document.getElementById('admin-passcode');
+  const passcode = input.value.trim();
+  const errEl = document.getElementById('login-error-msg');
+  const btn = document.getElementById('btn-login');
+  const card = document.querySelector('.login-card');
+
+  if (!passcode) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+  errEl.textContent = '';
+
+  try {
+    // Save passcode first to include in header of subsequent request
+    sessionStorage.setItem('sposh_admin_passcode', passcode);
+    const checkRes = await adminFetch('/staff/bookings');
+    
+    // Auth success: Load portal
+    bookingsCache = checkRes.bookings || [];
+    const role = checkRes.role || 'staff';
+    const permissions = checkRes.permissions || {};
+    sessionStorage.setItem('sposh_role', role);
+    sessionStorage.setItem('sposh_permissions', JSON.stringify(permissions));
+    applyRolePermissions(role, permissions);
+
+    document.getElementById('login-overlay').style.display = 'none';
+    document.getElementById('admin-portal').style.display = 'block';
+    
+    loadDashboard();
+  } catch (err) {
+    // Auth failed: Reset & notify
+    sessionStorage.removeItem('sposh_admin_passcode');
+    sessionStorage.removeItem('sposh_role');
+    card.classList.add('shake');
+    setTimeout(() => card.classList.remove('shake'), 400);
+    errEl.textContent = err.status === 401 ? 'Incorrect passcode. Access Denied.' : 'Server connection failed.';
+    input.value = '';
+    input.focus();
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Log In &nbsp;<i class="fa-solid fa-right-to-bracket"></i>';
+  }
+}
+
+async function checkPasscodeAndLoad(passcode) {
+  try {
+    const checkRes = await adminFetch('/staff/bookings');
+    bookingsCache = checkRes.bookings || [];
+    const role = checkRes.role || 'staff';
+    const permissions = checkRes.permissions || {};
+    sessionStorage.setItem('sposh_role', role);
+    sessionStorage.setItem('sposh_permissions', JSON.stringify(permissions));
+    applyRolePermissions(role, permissions);
+
+    document.getElementById('login-overlay').style.display = 'none';
+    document.getElementById('admin-portal').style.display = 'block';
+    loadDashboard();
+  } catch (err) {
+    // Token is stale or invalid: Clear and prompt login
+    sessionStorage.removeItem('sposh_admin_passcode');
+    sessionStorage.removeItem('sposh_role');
+    document.getElementById('login-overlay').style.display = 'flex';
+    document.getElementById('admin-portal').style.display = 'none';
+  }
+}
+
+function handleLogout() {
+  sessionStorage.removeItem('sposh_admin_passcode');
+  sessionStorage.removeItem('sposh_role');
+  window.location.reload();
+}
+
+// ─── DASHBOARD NAVIGATION ───────────────────────────────────
+function switchTab(tabName) {
+  currentTab = tabName;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.remove('active'));
+
+  if (tabName === 'bookings') {
+    document.getElementById('tab-bookings-btn').classList.add('active');
+    document.getElementById('panel-bookings').classList.add('active');
+    renderBookingsList();
+  } else if (tabName === 'pricing') {
+    document.getElementById('tab-pricing-btn').classList.add('active');
+    document.getElementById('panel-pricing').classList.add('active');
+    loadCatalogPricing();
+  } else if (tabName === 'staff') {
+    document.getElementById('tab-staff-btn').classList.add('active');
+    document.getElementById('panel-staff').classList.add('active');
+    loadStaffList();
+  }
+}
+
+function loadDashboard() {
+  switchTab('bookings');
+}
+
+// ─── MANAGE BOOKINGS TAB ────────────────────────────────────
+async function loadBookings() {
+  const loader = document.getElementById('bookings-loader');
+  if (loader) loader.style.display = 'flex';
+
+  try {
+    const res = await adminFetch('/staff/bookings');
+    bookingsCache = res.bookings || [];
+    renderBookingsList();
+  } catch (err) {
+    adminToast('Failed to load appointments: ' + err.message);
+  } finally {
+    if (loader) loader.style.display = 'none';
+  }
+}
+
+function renderBookingsList() {
+  const grid = document.getElementById('bookings-grid-list');
+  if (!grid) return;
+
+  const searchQuery = document.getElementById('booking-search')?.value.toLowerCase().trim() || '';
+  const statusFilter = document.getElementById('booking-status-filter')?.value || 'all';
+
+  const filtered = bookingsCache.filter(b => {
+    if (statusFilter !== 'all' && b.status !== statusFilter) return false;
+
+    if (searchQuery) {
+      const matchEmail = (b.clientEmail || '').toLowerCase().includes(searchQuery);
+      const matchName = (b.clientName || '').toLowerCase().includes(searchQuery);
+      const matchRef = (b.reference_id || '').toLowerCase().includes(searchQuery);
+      return matchEmail || matchName || matchRef;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-regular fa-calendar"></i>
+        <h4>No Bookings Found</h4>
+        <p>${searchQuery || statusFilter !== 'all' ? 'Try adjusting your filters or search terms.' : 'No customer appointments recorded in the database.'}</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(b => {
+    const isPast = new Date(b.dateISO) < new Date();
+    const serviceNames = (b.services || []).map(s => s.name).join(', ');
+    
+    const addressBlock = b.serviceType === 'home' && b.address
+      ? `<div class="admin-booking-info-block" style="width: 100%; margin-top: 8px;">
+           <span class="admin-label">Home Address</span>
+           <span class="admin-val">${b.address}</span>
+         </div>`
+      : '';
+
+    let actionButtons = '';
+    if (b.status !== 'cancelled' && !isPast) {
+      let permissions = {};
+      try {
+        permissions = JSON.parse(sessionStorage.getItem('sposh_permissions') || '{}');
+      } catch (e) {}
+
+      const role = sessionStorage.getItem('sposh_role');
+      const isAdminUser = role === 'admin';
+      const canResched = isAdminUser || permissions.canRescheduleBookings;
+      const canCancel = isAdminUser || permissions.canCancelBookings;
+
+      if (canResched) {
+        actionButtons += `
+          <button class="btn-admin-resched" id="btn-adm-res-${b.reference_id}" onclick="openRescheduleModal('${b.reference_id}')">
+            <i class="fa-solid fa-clock-rotate-left"></i> Reschedule
+          </button>`;
+      }
+      if (canCancel) {
+        actionButtons += `
+          <button class="btn-admin-cancel" id="btn-adm-can-${b.reference_id}" onclick="adminCancelBooking('${b.reference_id}', '${b.clientEmail}')">
+            <i class="fa-solid fa-calendar-xmark"></i> Cancel
+          </button>`;
+      }
+
+      if (!canResched && !canCancel) {
+        actionButtons = `<span style="font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;text-align:center;padding:8px 0;">View Only</span>`;
+      }
+    } else {
+      actionButtons = `<span style="font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;text-align:center;padding:8px 0;">Locked</span>`;
+    }
+
+    return `
+      <div class="admin-booking-row" id="abr-${b.reference_id}">
+        <div class="admin-booking-details">
+          
+          <div class="admin-booking-info-block">
+            <span class="admin-label">Ref ID</span>
+            <span class="admin-val ref">${b.reference_id}</span>
+          </div>
+
+          <div class="admin-booking-info-block">
+            <span class="admin-label">Client Details</span>
+            <span class="admin-val" style="font-weight: 700;">${b.clientName}</span>
+            <div style="font-size:0.75rem;color:var(--text-dim);">${b.clientEmail} &bull; ${b.clientPhone}</div>
+          </div>
+
+          <div class="admin-booking-info-block">
+            <span class="admin-label">Date & Time</span>
+            <span class="admin-val" style="font-size:0.85rem;">${b.dateDisplay}</span>
+            <div style="font-size:0.75rem;color:var(--text-dim);">${b.time}</div>
+          </div>
+
+          <div class="admin-booking-info-block services-list">
+            <span class="admin-label">Services</span>
+            <span class="admin-val" style="font-size:0.82rem;">${serviceNames}</span>
+            <div style="font-size:0.75rem;color:var(--primary-rose);">${b.serviceType === 'home' ? 'Home Service (+₦5,000)' : 'In-Studio'}</div>
+          </div>
+
+          <div class="admin-booking-info-block">
+            <span class="admin-label">Pricing</span>
+            <span class="admin-val" style="color:var(--primary-rose); font-weight:700;">Total: ₦${(b.total || 0).toLocaleString()}</span>
+            <div style="font-size:0.75rem;color:var(--text-dim);">Deposit: ₦${(b.depositDue || 0).toLocaleString()}</div>
+          </div>
+
+          <div class="admin-booking-info-block">
+            <span class="admin-label">Status</span>
+            <span class="admin-val status-badge ${b.status}">${b.status}</span>
+            <div style="font-size:0.72rem;color:var(--text-dim);text-transform:capitalize;margin-top:2px;">Payment: ${b.paymentStatus}</div>
+          </div>
+
+          ${addressBlock}
+
+        </div>
+        <div class="admin-booking-actions">
+          ${actionButtons}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function filterBookings() {
+  renderBookingsList();
+}
+
+async function adminCancelBooking(id, email) {
+  const confirmMsg = `Are you sure you want to cancel appointment ${id} for client ${email}? This action is irreversible.`;
+  if (!confirm(confirmMsg)) return;
+
+  const btn = document.getElementById(`btn-adm-can-${id}`);
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Cancelling...'; }
+
+  try {
+    await adminFetch(`/bookings/cancel/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ email })
+    });
+    adminToast(`Booking ${id} cancelled successfully!`);
+    loadBookings();
+  } catch (err) {
+    adminToast('Failed to cancel booking: ' + err.message);
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-calendar-xmark"></i> Cancel'; }
+  }
+}
+
+// ─── RESCHEDULE MODAL CONTROLS ──────────────────────────────
+function openRescheduleModal(id) {
+  activeRescheduleId = id;
+  const booking = bookingsCache.find(b => b.reference_id === id);
+  if (!booking) return;
+
+  document.getElementById('resched-ref-label').textContent = id;
+  const currentIsoDate = booking.dateISO ? booking.dateISO.split('T')[0] : '';
+  document.getElementById('resched-date').value = currentIsoDate;
+  document.getElementById('resched-time').value = booking.startTime || '';
+
+  document.getElementById('reschedule-modal').style.display = 'flex';
+}
+
+function closeRescheduleModal() {
+  document.getElementById('reschedule-modal').style.display = 'none';
+  activeRescheduleId = null;
+}
+
+async function submitReschedule(event) {
+  event.preventDefault();
+  if (!activeRescheduleId) return;
+
+  const dateVal = document.getElementById('resched-date').value;
+  const timeVal = document.getElementById('resched-time').value;
+  const booking = bookingsCache.find(b => b.reference_id === activeRescheduleId);
+  
+  if (!booking || !dateVal || !timeVal) return;
+
+  const btn = document.getElementById('btn-submit-resched');
+
+  // Parse duration
+  let durationMinutes = 60;
+  if (booking.services && booking.services.length > 0) {
+    durationMinutes = booking.services.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+  } else {
+    const parenMatch = booking.time.match(/\(([^)]+)\)/);
+    const dotMatch = booking.time.match(/·\s*(\d+)\s*min/);
+    if (parenMatch) {
+      const durStr = parenMatch[1];
+      if (durStr.includes('hr')) {
+        const hrs = parseFloat(durStr.replace('hr', '').trim());
+        if (!isNaN(hrs)) durationMinutes = Math.round(hrs * 60);
+      } else if (durStr.includes('min')) {
+        const mins = parseInt(durStr.replace('min', '').trim(), 10);
+        if (!isNaN(mins)) durationMinutes = mins;
+      }
+    } else if (dotMatch) {
+      const mins = parseInt(dotMatch[1], 10);
+      if (!isNaN(mins)) durationMinutes = mins;
+    }
+  }
+
+  const C_start = slotToMinutes(timeVal);
+  const C_duration = durationMinutes;
+
+  const overlapBooking = bookingsCache.find(b => {
+    if (b.reference_id === activeRescheduleId) return false;
+    if (b.status === 'cancelled') return false;
+
+    const bDateStr = new Date(b.dateISO).toDateString();
+    const targetDateStr = new Date(dateVal).toDateString();
+    if (bDateStr !== targetDateStr) return false;
+
+    const E_start = slotToMinutes(b.startTime);
+    let E_duration = 60;
+    if (b.services && b.services.length > 0) {
+      E_duration = b.services.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+    } else {
+      const parenMatch = b.time.match(/\(([^)]+)\)/);
+      const dotMatch = b.time.match(/·\s*(\d+)\s*min/);
+      if (parenMatch) {
+        const durStr = parenMatch[1];
+        if (durStr.includes('hr')) {
+          const hrs = parseFloat(durStr.replace('hr', '').trim());
+          if (!isNaN(hrs)) E_duration = Math.round(hrs * 60);
+        } else if (durStr.includes('min')) {
+          const mins = parseInt(durStr.replace('min', '').trim(), 10);
+          if (!isNaN(mins)) E_duration = mins;
+        }
+      } else if (dotMatch) {
+        const mins = parseInt(dotMatch[1], 10);
+        if (!isNaN(mins)) E_duration = mins;
+      }
+    }
+
+    if (C_start < E_start + E_duration && E_start < C_start + C_duration) {
+      return true;
+    }
+    return false;
+  });
+
+  if (overlapBooking) {
+    adminToast(`Time slot conflicts with booking ${overlapBooking.reference_id} (${overlapBooking.clientName} - ${overlapBooking.time}).`);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+  try {
+    await adminFetch(`/bookings/reschedule/${activeRescheduleId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        email: booking.clientEmail,
+        appointment_date: dateVal,
+        appointment_time: to24Hour(timeVal)
+      })
+    });
+
+    adminToast(`Booking ${activeRescheduleId} rescheduled successfully!`);
+    closeRescheduleModal();
+    loadBookings();
+  } catch (err) {
+    adminToast('Failed to reschedule: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Save Changes';
+  }
+}
+
+// ─── MANAGE PRICING TAB ─────────────────────────────────────
+async function loadCatalogPricing() {
+  const loader = document.getElementById('pricing-loader');
+  if (loader) loader.style.display = 'flex';
+
+  try {
+    const res = await adminFetch('/services');
+    catalogCache = res.groups || [];
+    renderPricingList();
+  } catch (err) {
+    adminToast('Failed to load services: ' + err.message);
+  } finally {
+    if (loader) loader.style.display = 'none';
+  }
+}
+
+const CATEGORY_ICONS = {
+  hair_making: 'fa-scissors',
+  wigs: 'fa-crown',
+  nails: 'fa-hand-sparkles',
+  lash: 'fa-eye',
+  makeup: 'fa-wand-magic-sparkles',
+  care: 'fa-spa',
+  men: 'fa-user-tie'
+};
+
+function renderPricingList() {
+  const container = document.getElementById('pricing-categories-list');
+  if (!container || !catalogCache) return;
+
+  if (catalogCache.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-tags"></i>
+        <h4>Catalog Empty</h4>
+        <p>No categories or service options found in the database.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = catalogCache.map(group => {
+    const iconClass = CATEGORY_ICONS[group.id] || 'fa-tags';
+    
+    const optionsHtml = (group.options || []).map(opt => {
+      return `
+        <div class="admin-option-row" id="opt-row-${opt.id}">
+          <div class="admin-option-field">
+            <label class="admin-label-small">Service Name</label>
+            <input type="text" class="admin-name-input" id="name-input-${opt.id}" value="${opt.name}" placeholder="Service Name" required>
+          </div>
+          
+          <div class="admin-option-field">
+            <label class="admin-label-small">Duration</label>
+            <div class="admin-duration-input-wrapper">
+              <input type="number" class="admin-duration-input" id="duration-input-${opt.id}" value="${opt.durationMinutes}" min="1" placeholder="Mins" required>
+              <span class="input-suffix">min</span>
+            </div>
+          </div>
+
+          <div class="admin-option-field">
+            <label class="admin-label-small">Price</label>
+            <div class="admin-price-input-wrapper">
+              <span class="input-prefix">₦</span>
+              <input type="number" class="admin-price-input" id="price-input-${opt.id}" value="${opt.price}" min="0" placeholder="Price" required>
+            </div>
+          </div>
+
+          <div class="admin-option-field">
+            <label class="admin-label-small" style="opacity: 0;">Actions</label>
+            <div class="admin-option-actions">
+              <button class="btn-save-price" id="btn-save-${opt.id}" onclick="saveServiceOption('${opt.id}')" title="Save Changes">
+                <i class="fa-regular fa-floppy-disk"></i> Save
+              </button>
+              <button class="btn-delete-service" id="btn-delete-${opt.id}" onclick="deleteServiceOption('${opt.id}')" title="Delete Option">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="admin-category-block">
+        <div class="admin-category-header">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid ${iconClass}"></i>
+            <h3>${group.name.toUpperCase()}</h3>
+          </div>
+          <button class="btn-add-service-trigger" onclick="openAddServiceModal('${group.id}', '${group.name}')">
+            <i class="fa-solid fa-plus"></i> Add Service
+          </button>
+        </div>
+        <div class="admin-options-list">
+          ${optionsHtml || `<div style="padding: 24px; text-align: center; color: var(--text-dim); font-size: 0.88rem;">No services in this category yet. Click Add Service to add one.</div>`}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function saveServiceOption(optionId) {
+  const nameInput = document.getElementById(`name-input-${optionId}`);
+  const durationInput = document.getElementById(`duration-input-${optionId}`);
+  const priceInput = document.getElementById(`price-input-${optionId}`);
+  const btn = document.getElementById(`btn-save-${optionId}`);
+  
+  if (!nameInput || !durationInput || !priceInput || !btn) return;
+
+  const newName = nameInput.value.trim();
+  const newDuration = parseInt(durationInput.value, 10);
+  const newPrice = parseInt(priceInput.value, 10);
+
+  if (!newName) {
+    adminToast('Please enter a service name.');
+    return;
+  }
+  if (isNaN(newDuration) || newDuration <= 0) {
+    adminToast('Please enter a valid duration (minimum 1 minute).');
+    return;
+  }
+  if (isNaN(newPrice) || newPrice < 0) {
+    adminToast('Please enter a valid price.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+  try {
+    await adminFetch(`/admin/services/${optionId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        name: newName,
+        durationMinutes: newDuration,
+        price: newPrice
+      })
+    });
+    
+    const option = findOptionInCache(optionId);
+    if (option) {
+      option.name = newName;
+      option.durationMinutes = newDuration;
+      option.price = newPrice;
+    }
+    
+    adminToast('Service updated successfully!');
+    btn.innerHTML = '<i class="fa-solid fa-check" style="color: #2ecc71;"></i> Saved';
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-regular fa-floppy-disk"></i> Save';
+    }, 2000);
+  } catch (err) {
+    adminToast('Failed to save service option: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-regular fa-floppy-disk"></i> Save';
+  }
+}
+
+async function deleteServiceOption(optionId) {
+  const option = findOptionInCache(optionId);
+  const serviceName = option ? option.name : optionId;
+  
+  const confirmMsg = `Are you sure you want to delete "${serviceName}"? This option will no longer be available for future bookings.`;
+  if (!confirm(confirmMsg)) return;
+
+  const btn = document.getElementById(`btn-delete-${optionId}`);
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+  }
+
+  try {
+    await adminFetch(`/admin/services/${optionId}`, {
+      method: 'DELETE'
+    });
+    
+    adminToast(`Service "${serviceName}" deleted successfully!`);
+    loadCatalogPricing();
+  } catch (err) {
+    adminToast('Failed to delete service: ' + err.message);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-regular fa-trash-can"></i>';
+    }
+  }
+}
+
+// ─── ADD SERVICE MODAL CONTROLS ─────────────────────────────
+function openAddServiceModal(categoryId, categoryName) {
+  document.getElementById('add-service-category-id').value = categoryId;
+  document.getElementById('add-service-category-label').textContent = categoryName;
+  document.getElementById('add-service-name').value = '';
+  document.getElementById('add-service-duration').value = '';
+  document.getElementById('add-service-price').value = '';
+  
+  document.getElementById('add-service-modal').style.display = 'flex';
+}
+
+function closeAddServiceModal() {
+  document.getElementById('add-service-modal').style.display = 'none';
+}
+
+async function submitAddService(event) {
+  event.preventDefault();
+  
+  const categoryId = document.getElementById('add-service-category-id').value;
+  const name = document.getElementById('add-service-name').value.trim();
+  const durationMinutes = parseInt(document.getElementById('add-service-duration').value, 10);
+  const price = parseInt(document.getElementById('add-service-price').value, 10);
+  
+  if (!categoryId || !name || isNaN(durationMinutes) || isNaN(price)) {
+    adminToast('Please fill out all fields correctly.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit-add-service');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Adding...';
+
+  try {
+    await adminFetch('/admin/services', {
+      method: 'POST',
+      body: JSON.stringify({
+        categoryId,
+        name,
+        durationMinutes,
+        price
+      })
+    });
+
+    adminToast(`Service "${name}" added successfully!`);
+    closeAddServiceModal();
+    loadCatalogPricing();
+  } catch (err) {
+    adminToast('Failed to add service: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Add Service';
+  }
+}
+
+function findOptionInCache(optionId) {
+  if (!catalogCache) return null;
+  for (const group of catalogCache) {
+    const opt = (group.options || []).find(o => o.id === optionId);
+    if (opt) return opt;
+  }
+  return null;
+}
+
+// ─── UTILS ──────────────────────────────────────────────────
+function to24Hour(time12h) {
+  if (!time12h) return null;
+  const [time, period] = time12h.split(' ');
+  let [hours, minutes] = time.split(':').map(Number);
+  if (period === 'PM' && hours !== 12) hours += 12;
+  if (period === 'AM' && hours === 12) hours = 0;
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+}
+
+function adminToast(msg) {
+  document.getElementById('sp-admin-toast')?.remove();
+  const el = document.createElement('div');
+  el.id = 'sp-admin-toast';
+  el.textContent = msg;
+  Object.assign(el.style, {
+    position: 'fixed', bottom: '32px', right: '32px',
+    background: '#160D22', color: '#FF8FAB',
+    border: '1px solid rgba(255, 143, 171, 0.3)',
+    padding: '14px 28px', borderRadius: '10px', zIndex: '10000',
+    fontFamily: 'Outfit, sans-serif', fontSize: '0.88rem', fontWeight: '600',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
+    opacity: '0', transform: 'translateY(20px)',
+    transition: 'all 0.3s ease',
+  });
+  document.body.appendChild(el);
+  el.offsetHeight; // Force reflow
+  el.style.opacity = '1';
+  el.style.transform = 'translateY(0)';
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(15px)';
+    setTimeout(() => el.remove(), 350);
+  }, 4000);
+}
+
+// ─── MANAGE STAFF TAB ───────────────────────────────────────
+let staffCache = [];
+
+async function loadStaffList() {
+  const loader = document.getElementById('staff-loader');
+  if (loader) loader.style.display = 'flex';
+
+  try {
+    const res = await adminFetch('/admin/staff');
+    staffCache = res.staff || [];
+    renderStaffList();
+  } catch (err) {
+    adminToast('Failed to load staff list: ' + err.message);
+  } finally {
+    if (loader) loader.style.display = 'none';
+  }
+}
+
+function renderStaffList() {
+  const container = document.getElementById('staff-members-list');
+  if (!container) return;
+
+  if (staffCache.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-users-gear"></i>
+        <h4>No Staff Found</h4>
+        <p>Click "Add Staff" to register your first team member.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = staffCache.map(s => {
+    const avatarHtml = s.img 
+      ? `<img src="${s.img}" alt="${s.name}">` 
+      : `<i class="fa-solid fa-user" style="font-size: 1.5rem; color: var(--primary-rose);"></i>`;
+      
+    const p = s.permissions || {};
+
+    return `
+      <div class="admin-staff-card" id="staff-card-${s.id}">
+        <div class="admin-staff-header">
+          <div class="admin-staff-avatar">${avatarHtml}</div>
+          <div class="admin-staff-meta">
+            <h3>${s.name}</h3>
+            <p>${s.role}</p>
+          </div>
+        </div>
+
+        <div class="admin-staff-details">
+          <div class="form-field">
+            <label class="admin-label-small">Name</label>
+            <input type="text" class="admin-name-input" id="staff-name-${s.id}" value="${s.name}" required>
+          </div>
+
+          <div class="form-field">
+            <label class="admin-label-small">Role / Title</label>
+            <input type="text" class="admin-name-input" id="staff-role-${s.id}" value="${s.role}" required>
+          </div>
+
+          <div class="form-field-row" style="display: flex; gap: 12px;">
+            <div class="form-field" style="flex: 1;">
+              <label class="admin-label-small">IG Handle</label>
+              <input type="text" class="admin-name-input" id="staff-ig-${s.id}" value="${s.ig || '#'}" style="font-size: 0.8rem;">
+            </div>
+            <div class="form-field" style="flex: 1;">
+              <label class="admin-label-small">Passcode</label>
+              <input type="password" class="admin-name-input" id="staff-passcode-${s.id}" value="" placeholder="Leave blank to keep current" style="font-size: 0.8rem;" autocomplete="new-password">
+            </div>
+          </div>
+
+          <div class="admin-staff-permissions">
+            <h4>Access Permissions</h4>
+            <div class="staff-perm-list">
+              <label class="staff-perm-item">
+                <input type="checkbox" id="staff-perm-view-${s.id}" ${p.canViewBookings ? 'checked' : ''}> View Bookings
+              </label>
+              <label class="staff-perm-item">
+                <input type="checkbox" id="staff-perm-cancel-${s.id}" ${p.canCancelBookings ? 'checked' : ''}> Cancel Bookings
+              </label>
+              <label class="staff-perm-item">
+                <input type="checkbox" id="staff-perm-resched-${s.id}" ${p.canRescheduleBookings ? 'checked' : ''}> Reschedule
+              </label>
+              <label class="staff-perm-item">
+                <input type="checkbox" id="staff-perm-catalog-${s.id}" ${p.canEditCatalog ? 'checked' : ''}> Edit Catalog
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-staff-actions">
+          <button class="btn-staff-save" id="btn-save-staff-${s.id}" onclick="saveStaffMember('${s.id}')">
+            <i class="fa-regular fa-floppy-disk"></i> Save
+          </button>
+          <button class="btn-staff-delete" id="btn-delete-staff-${s.id}" onclick="deleteStaffMember('${s.id}')">
+            <i class="fa-regular fa-trash-can"></i> Delete
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function saveStaffMember(staffId) {
+  const nameVal = document.getElementById(`staff-name-${staffId}`).value.trim();
+  const roleVal = document.getElementById(`staff-role-${staffId}`).value.trim();
+  const igVal = document.getElementById(`staff-ig-${staffId}`).value.trim();
+  const passcodeVal = document.getElementById(`staff-passcode-${staffId}`).value.trim();
+  const btn = document.getElementById(`btn-save-staff-${staffId}`);
+
+  const pView = document.getElementById(`staff-perm-view-${staffId}`).checked;
+  const pCancel = document.getElementById(`staff-perm-cancel-${staffId}`).checked;
+  const pResched = document.getElementById(`staff-perm-resched-${staffId}`).checked;
+  const pCatalog = document.getElementById(`staff-perm-catalog-${staffId}`).checked;
+
+  if (!nameVal || !roleVal) {
+    adminToast('Name and Role are required.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+  // Only include passcode in the payload if admin typed a new one
+  const payload = {
+    name: nameVal,
+    role: roleVal,
+    ig: igVal,
+    permissions: {
+      canViewBookings: pView,
+      canCancelBookings: pCancel,
+      canRescheduleBookings: pResched,
+      canEditCatalog: pCatalog
+    }
+  };
+  if (passcodeVal) payload.passcode = passcodeVal;
+
+  try {
+    const response = await adminFetch(`/admin/staff/${staffId}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload)
+    });
+
+    adminToast(`Staff member "${nameVal}" updated successfully!`);
+    btn.innerHTML = '<i class="fa-solid fa-check" style="color: #2ecc71;"></i> Saved';
+    
+    // Refresh staff cache locally
+    const cachedIdx = staffCache.findIndex(s => s.id === staffId);
+    if (cachedIdx !== -1 && response.staff) {
+      staffCache[cachedIdx] = response.staff;
+    }
+    
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-regular fa-floppy-disk"></i> Save';
+    }, 2000);
+  } catch (err) {
+    adminToast('Failed to save staff updates: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-regular fa-floppy-disk"></i> Save';
+  }
+}
+
+async function deleteStaffMember(staffId) {
+  const staff = staffCache.find(s => s.id === staffId);
+  const name = staff ? staff.name : staffId;
+
+  if (!confirm(`Are you sure you want to remove "${name}" from S'posh APPEAL staff?`)) {
+    return;
+  }
+
+  const btn = document.getElementById(`btn-delete-staff-${staffId}`);
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+  try {
+    await adminFetch(`/admin/staff/${staffId}`, {
+      method: 'DELETE'
+    });
+
+    adminToast(`Staff member "${name}" removed successfully!`);
+    loadStaffList();
+  } catch (err) {
+    adminToast('Failed to delete staff member: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-regular fa-trash-can"></i> Delete';
+  }
+}
+
+// Modal management
+function openAddStaffModal() {
+  document.getElementById('add-staff-name').value = '';
+  document.getElementById('add-staff-role').value = '';
+  document.getElementById('add-staff-bio').value = '';
+  document.getElementById('add-staff-ig').value = '';
+  document.getElementById('add-staff-passcode').value = '';
+  
+  document.getElementById('p-view-bookings').checked = true;
+  document.getElementById('p-cancel-bookings').checked = false;
+  document.getElementById('p-resched-bookings').checked = false;
+  document.getElementById('p-edit-catalog').checked = false;
+
+  document.getElementById('add-staff-modal').style.display = 'flex';
+}
+
+function closeAddStaffModal() {
+  document.getElementById('add-staff-modal').style.display = 'none';
+}
+
+async function submitAddStaff(event) {
+  event.preventDefault();
+
+  const nameVal = document.getElementById('add-staff-name').value.trim();
+  const roleVal = document.getElementById('add-staff-role').value.trim();
+  const bioVal = document.getElementById('add-staff-bio').value.trim();
+  const igVal = document.getElementById('add-staff-ig').value.trim();
+  const passcodeVal = document.getElementById('add-staff-passcode').value.trim();
+
+  const pView = document.getElementById('p-view-bookings').checked;
+  const pCancel = document.getElementById('p-cancel-bookings').checked;
+  const pResched = document.getElementById('p-resched-bookings').checked;
+  const pCatalog = document.getElementById('p-edit-catalog').checked;
+
+  if (!nameVal || !passcodeVal) {
+    adminToast('Staff Name and Login Passcode are required.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit-add-staff');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Adding...';
+
+  try {
+    await adminFetch('/admin/staff', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: nameVal,
+        role: roleVal,
+        bio: bioVal,
+        ig: igVal,
+        passcode: passcodeVal,
+        permissions: {
+          canViewBookings: pView,
+          canCancelBookings: pCancel,
+          canRescheduleBookings: pResched,
+          canEditCatalog: pCatalog
+        }
+      })
+    });
+
+    adminToast(`Staff member "${nameVal}" added successfully!`);
+    closeAddStaffModal();
+    loadStaffList();
+  } catch (err) {
+    adminToast('Failed to add staff member: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Add Staff Member';
+  }
+}
+
+function slotToMinutes(slot) {
+  if (!slot) return 0;
+  if (slot.includes('AM') || slot.includes('PM')) {
+    const [time, period] = slot.split(' ');
+    let [h, m] = time.split(':').map(Number);
+    if (period === 'PM' && h !== 12) h += 12;
+    if (period === 'AM' && h === 12) h = 0;
+    return h * 60 + m;
+  } else {
+    let [h, m] = slot.split(':').map(Number);
+    return h * 60 + m;
+  }
+}

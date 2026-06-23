@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="S'posh APPEAL — Premium Unisex Salon offering Hair Making, Installation and Sales of Wigs, Nail Art, Lash Extensions, Makeup, Pedicure & Manicure, and Home Service. Book your appointment today.">
+  <meta property="og:title" content="S'posh APPEAL | Premium Unisex Beauty Salon">
+  <meta property="og:description" content="Look good. Feel posh. Book your glam appointment today.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sposh-appeal.vercel.app/">
+  <meta property="og:image" content="https://sposh-appeal.vercel.app/assets/sposh_logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="S'posh APPEAL | Premium Unisex Beauty Salon">
+  <meta name="twitter:description" content="Look good. Feel posh. Book your glam appointment today.">
+  <meta name="twitter:image" content="https://sposh-appeal.vercel.app/assets/sposh_logo.png">
+  <link rel="icon" href="assets/sposh_logo.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/sposh_logo.png">
+  <link rel="canonical" href="https://sposh-appeal.vercel.app/">
+  <meta name="theme-color" content="#1a1025">
+  <title>S'posh APPEAL | Premium Unisex Beauty Salon</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <noscript>
+    <style>body{background:#0d0816;color:#e0d6f0;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center;padding:40px}</style>
+    <div style="max-width:400px;margin:auto">
+      <p style="font-size:2rem;margin-bottom:16px">✂️</p>
+      <h2 style="color:#fff;margin-bottom:12px">JavaScript Required</h2>
+      <p style="color:#9080a8;line-height:1.7">S'posh APPEAL requires JavaScript to run. Please enable JavaScript in your browser settings and reload the page.</p>
+    </div>
+  </noscript>
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <header id="site-header">
+    <div class="nav-container">
+      <a href="#home" class="logo" id="nav-logo">
+        <div class="logo-flex">
+          <img src="assets/sposh_logo.png" alt="S'posh APPEAL Logo" class="logo-img">
+          <div class="logo-text">
+            <span class="logo-name">S'posh APPEAL</span>
+            <span class="logo-tagline">Premium Unisex Salon</span>
+          </div>
+        </div>
+      </a>
+
+      <ul class="nav-links" id="main-nav">
+        <li><a href="#home" class="active" id="link-home">Home</a></li>
+        <li><a href="#about" id="link-about">About</a></li>
+        <li><a href="#services" id="link-services">Services</a></li>
+        <li><a href="#gallery" id="link-gallery">Gallery</a></li>
+        <li><a href="#experts" id="link-experts">Experts</a></li>
+        <li><a href="#my-bookings" id="link-bookings">My Bookings</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <button class="menu-toggle" id="btn-menu-toggle" aria-label="Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="hero section-padding" id="home">
+    <div class="hero-bg-container">
+      <img src="assets/hero_minimalist_salon.png" alt="S'posh APPEAL Salon Background" class="hero-bg-image">
+    </div>
+    <div class="container hero-left">
+      <div class="hero-badge">
+        <span>✦</span> Lagos' Most Trusted Beauty Destination
+      </div>
+      <h1 id="hero-heading">
+        Look Good.<br>
+        Feel <span class="accent-text">Posh.</span><br>
+        Live Bold.
+      </h1>
+      <p class="hero-sub" id="hero-sub">
+        From flawless lash extensions to runway-ready wigs, stunning nail art to full glam makeup — S'posh APPEAL is
+        where your best look begins.
+      </p>
+      <div class="hero-btns">
+        <a href="#services" class="btn btn-ghost" id="btn-hero-services">Explore Services</a>
+        <a href="booking.html" class="btn btn-primary" id="btn-hero-book">Book Appointment</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ MARQUEE ═══════════ -->
+  <div class="marquee-strip" aria-hidden="true">
+    <div class="marquee-track" id="marquee-track">
+      <span class="marquee-item">Hair Making <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Installation and Sales of Wigs <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Lash Extensions <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Nail Art <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Makeup &amp; Glam <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Pedicure &amp; Manicure <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Personal Care <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Home Service <i class="fa-solid fa-circle"></i></span>
+      <!-- Duplicate for seamless loop -->
+      <span class="marquee-item">Hair Making <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Installation and Sales of Wigs <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Lash Extensions <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Nail Art <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Makeup &amp; Glam <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Pedicure &amp; Manicure <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Personal Care <i class="fa-solid fa-circle"></i></span>
+      <span class="marquee-item">Home Service <i class="fa-solid fa-circle"></i></span>
+    </div>
+  </div>
+
+  <!-- ═══════════ ABOUT ═══════════ -->
+  <section class="about section-padding" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image-stack">
+          <div class="about-img-main">
+            <img src="assets/about_main.jpg" alt="S'posh APPEAL Lead Stylist" id="img-about-main" loading="lazy">
+          </div>
+          <div class="about-img-accent">
+            <img src="assets/about_accent.jpg" alt="S'posh APPEAL Makeup Artist" id="img-about-accent" loading="lazy">
+          </div>
+          <div class="about-img-badge">
+            <h3>6+</h3>
+            <p>Years of<br>Expertise</p>
+          </div>
+        </div>
+
+        <div class="about-text">
+          <div class="section-label">Our Story</div>
+          <h3 id="about-heading">
+            Where <span class="accent-text">Glamour</span> Meets Precision
+          </h3>
+          <p>
+            S'posh APPEAL was born from a simple belief — every person deserves to feel extraordinary. Since 2018, we
+            have been the go-to destination for bold, fashion-forward beauty in the heart of the city. From natural hair
+            transformations to dramatic lash sets and flawless bridal makeup, our expert team delivers results that
+            speak for themselves.
+          </p>
+          <div class="about-perks">
+            <div class="perk-item">
+              <div class="perk-icon"><i class="fa-solid fa-gem"></i></div>
+              <div class="perk-text">
+                <h4>Premium Products Only</h4>
+                <p>We use the finest brands in hair, skin, and nail care.</p>
+              </div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-icon"><i class="fa-solid fa-house-chimney"></i></div>
+              <div class="perk-text">
+                <h4>Home Service Available</h4>
+                <p>Can't come to us? Our experts come to you, anywhere.</p>
+              </div>
+            </div>
+            <div class="perk-item">
+              <div class="perk-icon"><i class="fa-solid fa-award"></i></div>
+              <div class="perk-text">
+                <h4>Certified Beauticians</h4>
+                <p>Every stylist is trained, certified, and passionate.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-stats">
+            <div class="stat-item">
+              <h4 id="stat-clients">1,000+</h4>
+              <p>Happy Clients</p>
+            </div>
+            <div class="stat-item">
+              <h4 id="stat-experts">8+</h4>
+              <p>Beauty Experts</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SERVICES ═══════════ -->
+  <section class="services section-padding" id="services">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label" style="justify-content:center;">What We Offer</div>
+        <h2>Signature <span class="accent-text">Services</span></h2>
+        <p>Every service is crafted with precision, premium products, and a deep passion for beauty.</p>
+      </div>
+
+
+
+      <div class="services-grid" id="services-grid">
+        <!-- Populated by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ GALLERY ═══════════ -->
+  <section class="gallery section-padding" id="gallery">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label" style="justify-content:center;">Flyer Showcase</div>
+        <h2>Our Craft <span class="accent-text">In Action</span></h2>
+        <p>Real results from S'posh APPEAL. Stunning nail art, breathtaking eye glam, and flawless cosmetic
+          transformations.</p>
+      </div>
+
+      <div class="gallery-slideshow" id="gallery-slideshow">
+        <div class="gs-viewport">
+          <div class="gs-track" id="gs-track">
+            <!-- Populated by app.js -->
+          </div>
+        </div>
+
+        <button class="gs-arrow gs-arrow-left" onclick="gsNav(-1)" aria-label="Previous">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button class="gs-arrow gs-arrow-right" onclick="gsNav(1)" aria-label="Next">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <div class="gs-dots" id="gs-dots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ EXPERTS ═══════════ -->
+  <section class="experts section-padding" id="experts">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label" style="justify-content:center;">The Team</div>
+        <h2>Meet Our <span class="accent-text">Beauty Experts</span></h2>
+        <p>Passionate, certified professionals who make your beauty goals a reality.</p>
+      </div>
+      <div class="experts-grid" id="experts-grid">
+        <!-- Populated by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ TESTIMONIALS ═══════════ -->
+  <section class="testimonials section-padding" id="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label" style="justify-content:center;">Client Love</div>
+        <h2>What They're <span class="accent-text">Saying</span></h2>
+      </div>
+      <div class="testimonial-wrapper">
+        <div class="testimonial-slider">
+          <div class="testimonial-track" id="testimonial-track">
+            <!-- Populated by app.js -->
+          </div>
+        </div>
+        <div class="carousel-controls" id="carousel-dots">
+          <!-- Dots by app.js -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ CTA STRIP ═══════════ -->
+  <section class="cta-strip" id="cta-section">
+    <div class="container">
+      <h2 id="cta-heading">Ready for Your <em>Glow Up?</em></h2>
+      <p id="cta-sub">Book a call, request a quote, or walk in. We're ready to make you look stunning.</p>
+      <div class="cta-strip-btns">
+        <a href="booking.html" class="btn btn-white" id="btn-cta-book">
+          <i class="fa-solid fa-calendar-check"></i> &nbsp;Book Appointment
+        </a>
+        <a href="tel:+2349131282016" class="btn btn-outline-white" id="btn-cta-call">
+          <i class="fa-solid fa-phone"></i> &nbsp;Call: 09131282016
+        </a>
+        <a href="https://wa.me/2347011083217" target="_blank" class="btn btn-outline-white" id="btn-cta-whatsapp">
+          <i class="fa-brands fa-whatsapp"></i> &nbsp;WhatsApp: 07011083217
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ HOME SERVICE ═══════════ -->
+  <section class="home-service section-padding" id="home-service">
+    <div class="container">
+      <div class="home-service-banner" id="home-service-banner">
+        <div class="home-banner-icon"><i class="fa-solid fa-car-side"></i></div>
+        <div class="home-banner-text">
+          <h3>Home Service Available <span class="accent-text">Anywhere.</span></h3>
+          <p>We bring the full S'posh APPEAL experience to your doorstep — salon-quality results in the comfort of your
+            home. Just add the Home Service option when booking.</p>
+        </div>
+        <div class="home-banner-actions">
+          <a href="booking.html" class="btn btn-primary" id="btn-homeservice-book">
+            Book Home Visit
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ MY BOOKINGS ═══════════ -->
+  <section class="my-bookings section-padding" id="my-bookings">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label" style="justify-content:center;">Your Appointments</div>
+        <h2>Manage Your <span class="accent-text">Bookings</span></h2>
+        <p>View and cancel your upcoming S'posh APPEAL appointments below.<br><small style="color: var(--primary-rose); opacity: 0.85;">* Note: Appointments cannot be cancelled within 24 hours of the scheduled time.</small></p>
+      </div>
+      <div class="bookings-lookup" id="bookings-lookup">
+        <input type="email" id="bookings-lookup-email" placeholder="Enter the email used for booking"
+          autocomplete="email">
+        <button class="btn btn-primary" id="btn-bookings-lookup" onclick="lookupMyBookings()">
+          <i class="fa-solid fa-magnifying-glass"></i> Find My Bookings
+        </button>
+      </div>
+      <div class="bookings-list" id="bookings-list">
+        <!-- Populated by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ WORKING HOURS SECTION ═══════════ -->
+  <section class="working-hours-section section-padding" id="working-hours">
+    <div class="container">
+      <div class="booking-direct-contact" style="margin-top: 0;">
+
+        <div class="direct-contact-grid">
+          <div class="contact-card contact-card-full hours-card">
+            <div class="contact-card-inner">
+              <div class="contact-icon hours"><i class="fa-solid fa-clock"></i></div>
+              <div class="contact-info">
+                <span class="contact-label">Working Hours</span>
+                <span class="contact-value">Open this week</span>
+
+                <div class="hours-table">
+                  <div class="hours-item">
+                    <span class="day">Mon &ndash; Fri</span>
+                    <span class="time">9:00 AM &ndash; 6:00 PM</span>
+                  </div>
+                  <div class="hours-item">
+                    <span class="day">Saturday</span>
+                    <span class="time">8:00 AM &ndash; 7:00 PM</span>
+                  </div>
+                  <div class="hours-item">
+                    <span class="day">Sunday</span>
+                    <span class="time">10:00 AM &ndash; 5:00 PM</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="home-service-note">
+              <i class="fa-solid fa-house-chimney"></i> Home service available by appointment
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer id="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <div class="logo-flex">
+              <img src="assets/sposh_logo.png" alt="S'posh APPEAL Logo" class="logo-img">
+              <div class="logo-text">
+                <span class="logo-name">S'posh APPEAL</span>
+                <span class="logo-tagline">Premium Unisex Salon</span>
+              </div>
+            </div>
+          </div>
+          <p>Where style meets luxury. Your beauty, our passion. Visit us or book a home service today.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul class="footer-contact">
+            <li>
+              <i class="fa-solid fa-location-dot"></i>
+              <span>Lagos State, Nigeria</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-envelope"></i>
+              <span>hello@sposhappeal.com</span>
+            </li>
+          </ul>
+          <div class="social-row">
+            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://instagram.com/sposhappeal_001" target="_blank" aria-label="Instagram"><i
+                class="fa-brands fa-instagram"></i></a>
+            <a href="https://tiktok.com/@sposhappeal" target="_blank" aria-label="TikTok"><i
+                class="fa-brands fa-tiktok"></i></a>
+            <a href="https://wa.me/2347011083217" target="_blank" aria-label="WhatsApp"><i
+                class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 S'posh APPEAL. All rights reserved.</p>
+        <p><!-- Crafted with love by <a href="https://hybeekraft.github.io/" target="_blank">Hybeekraft</a>. --><a href="privacy.html">Privacy Policy</a></p>
+      </div>
+    </div>
+  </footer>
+
+
+  <script>
+    // ─── Backend API (optional) ───────────────────────────────
+    // Once the S'posh APPEAL backend is deployed (e.g. on Railway),
+    // uncomment and set this to its base URL to enable live
+    // services/experts data, real bookings, emails, WhatsApp alerts,
+    // and Paystack payments. Leave commented out to use the
+    // built-in data + localStorage (current default — fully working).
+    //
+    // Auto-detect API: uses /api on production (Vercel), stays local-only on localhost
+    // Remove the condition below to force localStorage-only mode during testing
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      window.SPOSH_API_URL = '/api';
+    }
+  </script>
+  <!-- Back to Top Button -->
+  <button id="btn-back-to-top" aria-label="Back to Top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
