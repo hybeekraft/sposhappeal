@@ -5,22 +5,16 @@
       "maxDuration": 30
     }
   },
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.js" },
-    { "source": "/((?!api/).*)", "destination": "/frontend/$1" }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
-      ]
-    },
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400" }
-      ]
-    }
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/index.js" },
+    { "src": "/assets/(.*)", "dest": "/frontend/assets/$1", "headers": { "Cache-Control": "public, max-age=86400" } },
+    { "src": "/booking.html", "dest": "/frontend/booking.html" },
+    { "src": "/privacy.html", "dest": "/frontend/privacy.html" },
+    { "src": "/staff.html", "dest": "/frontend/staff.html" },
+    { "src": "/404.html", "dest": "/frontend/404.html" },
+    { "src": "/robots.txt", "dest": "/frontend/robots.txt" },
+    { "src": "/sitemap.xml", "dest": "/frontend/sitemap.xml" },
+    { "src": "/", "dest": "/frontend/index.html" },
+    { "src": "/(.*)", "dest": "/frontend/404.html", "status": 404 }
   ]
 }
