@@ -121,10 +121,14 @@ async function handleLogin(event) {
     // Auth failed: Reset & notify
     sessionStorage.removeItem('sposh_admin_passcode');
     sessionStorage.removeItem('sposh_role');
+    sessionStorage.removeItem('sposh_selected_role');
+    sessionStorage.removeItem('sposh_permissions');
     card.classList.add('shake');
     setTimeout(() => card.classList.remove('shake'), 400);
     if (err.status === 401) {
       errEl.textContent = err.message || 'Incorrect passcode. Access Denied.';
+    } else if (err.status === 429) {
+      errEl.textContent = 'Too many attempts. Please wait a few minutes and try again.';
     } else if (err.status === 503) {
       errEl.textContent = 'Server not configured. Contact admin.';
     } else if (err.name === 'AbortError') {
@@ -157,6 +161,8 @@ async function checkPasscodeAndLoad(passcode) {
     // Token is stale or invalid: Clear and prompt login
     sessionStorage.removeItem('sposh_admin_passcode');
     sessionStorage.removeItem('sposh_role');
+    sessionStorage.removeItem('sposh_selected_role');
+    sessionStorage.removeItem('sposh_permissions');
     document.getElementById('login-overlay').style.display = 'flex';
     document.getElementById('admin-portal').style.display = 'none';
   }
@@ -165,6 +171,8 @@ async function checkPasscodeAndLoad(passcode) {
 function handleLogout() {
   sessionStorage.removeItem('sposh_admin_passcode');
   sessionStorage.removeItem('sposh_role');
+  sessionStorage.removeItem('sposh_selected_role');
+  sessionStorage.removeItem('sposh_permissions');
   window.location.reload();
 }
 

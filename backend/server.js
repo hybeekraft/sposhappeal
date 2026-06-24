@@ -471,8 +471,8 @@ const paymentLimiter = rateLimit({
 // Staff/admin: 15 attempts per IP per 15 minutes
 const adminLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 15,
-  message: { error: 'Too many admin login attempts. Please wait before trying again.' },
+  max: 30,
+  message: { error: 'Too many requests. Please wait a few minutes before trying again.' },
   standardHeaders: true,
   legacyHeaders: false,
 });

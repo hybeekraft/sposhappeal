@@ -489,9 +489,14 @@
       };
 
       try {
+        const passcode = sessionStorage.getItem('sposh_admin_passcode') || '';
         const res = await fetch(`${window.SPOSH_API_URL}/bookings/${_completeBookingId}/complete`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-passcode': passcode,
+            'x-selected-role': sessionStorage.getItem('sposh_selected_role') || ''
+          },
           body: JSON.stringify(payload),
         });
         if (!res.ok) throw new Error('Failed');
