@@ -825,8 +825,9 @@ body.admin-page-body {
     gap: 16px;
   }
   .admin-booking-actions {
-    flex-direction: row;
+    flex-direction: column;
     min-width: unset;
+    width: 100%;
   }
   .admin-option-row {
     grid-template-columns: 1fr;
