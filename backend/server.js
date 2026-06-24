@@ -255,6 +255,24 @@ async function dispatchBookingNotifications(booking, actionType) {
   }
 }
 
+
+// ─── Server-side Sanitization Helper ────────────────────────
+function sanitizeInput(str) {
+  if (!str) return '';
+  return String(str).replace(/<[^>]*>/g, '').trim();
+}
+
+// ─── XML Escape Helper (for Twilio TwiML responses) ─────────
+function escapeXml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 const Booking = require('./models/Booking');
 const Staff = require('./models/Staff');
 const { ServiceCategory, ServiceOption } = require('./models/Service');
@@ -425,6 +443,9 @@ let mockBookings = [
 
 const app = express();
 
+// Enable trust proxy for Vercel — ensures rate-limiting sees real client IPs
+app.set('trust proxy', 1);
+
 // ─── Security Headers ───────────────────────────────────────
 app.use(helmet());
 
@@ -512,15 +533,27 @@ async function seedDatabase() {
   }
 }
 
-// MongoDB Connection
+// MongoDB Connection (serverless-optimized: caches connection across warm invocations)
 mongoose.set('bufferCommands', false);
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/sposh_appeal';
-mongoose.connect(MONGODB_URI)
-  .then(() => {
+let cachedConnection = null;
+async function connectDB() {
+  if (cachedConnection && mongoose.connection.readyState === 1) return cachedConnection;
+  try {
+    cachedConnection = await mongoose.connect(MONGODB_URI, {
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
     console.log('MongoDB Connected successfully.');
-    seedDatabase();
-  })
-  .catch(err => console.error('MongoDB Connection error:', err));
+    await seedDatabase();
+    return cachedConnection;
+  } catch (err) {
+    console.error('MongoDB Connection error:', err);
+    cachedConnection = null;
+  }
+}
+connectDB();
 
 // Helper: Make HTTP request to Paystack API
 function initializePaystackTransaction(email, amountKobo, reference, callbackUrl) {
@@ -641,8 +674,8 @@ app.post('/api/bookings/new', bookingLimiter, async (req, res) => {
     const useDb = mongoose.connection.readyState === 1;
     const bookingData = {
       reference_id,
-      clientName,
-      clientEmail: clientEmail.toLowerCase(),
+      clientName: sanitizeInput(clientName),
+      clientEmail: clientEmail.toLowerCase().trim(),
       clientPhone,
       services,
       expert,
@@ -654,8 +687,8 @@ app.post('/api/bookings/new', bookingLimiter, async (req, res) => {
       total,
       depositDue,
       serviceType,
-      address,
-      notes,
+      address: sanitizeInput(address),
+      notes: sanitizeInput(notes),
       status: 'pending',
       paymentStatus: 'pending',
       createdAt: new Date(),
@@ -826,7 +859,7 @@ app.patch('/api/bookings/cancel/:id', bookingLimiter, async (req, res) => {
 });
 
 // 4. Reschedule Slot Date/Time (PATCH /api/bookings/reschedule/:id)
-app.patch('/api/bookings/reschedule/:id', async (req, res) => {
+app.patch('/api/bookings/reschedule/:id', bookingLimiter, async (req, res) => {
   try {
     const { email, appointment_date, appointment_time } = req.body;
     const bookingId = req.params.id;
@@ -1223,7 +1256,7 @@ To schedule a new appointment, visit our site: https://sposh-appeal.vercel.app/b
     res.header('Content-Type', 'text/xml');
     res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Message>${replyMessage}</Message>
+  <Message>${escapeXml(replyMessage)}</Message>
 </Response>`);
   } catch (err) {
     console.error('[WhatsApp Webhook] Error:', err);
@@ -1555,14 +1588,28 @@ app.get('/api/services/experts', async (req, res) => {
   }
 });
 
-// Admin-only middleware/check helper
-function verifyAdmin(req, res, next) {
+// Admin-only middleware/check helper (supports both plaintext and bcrypt-hashed ADMIN_PASSWORD)
+async function verifyAdmin(req, res, next) {
   const passcode = req.headers['x-admin-passcode'];
   const expectedPasscode = ADMIN_PASSCODE;
-  if (!passcode || passcode !== expectedPasscode) {
+  if (!passcode || !expectedPasscode) {
     return res.status(401).json({ error: 'Unauthorized. Admin passcode required.' });
   }
-  next();
+  try {
+    let isValid = false;
+    if (expectedPasscode.startsWith('$2')) {
+      isValid = await bcrypt.compare(passcode, expectedPasscode);
+    } else {
+      isValid = (passcode === expectedPasscode);
+    }
+    if (!isValid) {
+      return res.status(401).json({ error: 'Unauthorized. Invalid admin passcode.' });
+    }
+    next();
+  } catch (err) {
+    console.error('[verifyAdmin] Error:', err);
+    return res.status(500).json({ error: 'Server error verifying passcode.' });
+  }
 }
 
 // 12. GET /api/admin/staff

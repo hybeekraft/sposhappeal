@@ -78,17 +78,29 @@ const BookingSchema = new mongoose.Schema({
   },
   paymentStatus: {
     type: String,
-    enum: ['pending', 'paid', 'unpaid', 'refunded'],
+    enum: ['pending', 'paid', 'unpaid', 'refunded', 'fully_paid'],
     default: 'pending'
   },
   status: {
     type: String,
-    enum: ['pending', 'confirmed', 'cancelled', 'rescheduled'],
+    enum: ['pending', 'confirmed', 'cancelled', 'rescheduled', 'completed'],
     default: 'pending'
   },
   paystackReference: {
     type: String,
     default: ''
+  },
+  completedAt: {
+    type: Date
+  },
+  completionNotes: {
+    type: String,
+    default: ''
+  },
+  balancePaymentMethod: {
+    type: String,
+    enum: ['cash', 'transfer', 'pos', 'paystack'],
+    default: 'cash'
   }
 }, {
   timestamps: true

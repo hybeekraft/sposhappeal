@@ -3,4 +3,4 @@ Allow: /
 Disallow: /staff.html
 Disallow: /api/
 
-Sitemap: https://sposhappeal.vercel.app/sitemap.xml
+Sitemap: https://sposh-appeal.vercel.app/sitemap.xml
