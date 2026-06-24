@@ -26,7 +26,7 @@ function esc(str) {
    falls back to the built-in data and localStorage below — nothing
    breaks either way.
    ────────────────────────────────────────────────────────────── */
-const API_BASE = (typeof window !== 'undefined' && window.SPOSH_API_URL) || 
+const API_BASE = (typeof window !== 'undefined' && window.SPOSH_API_URL) ||
   (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:5000/api' : '/api');
 const API_TIMEOUT_MS = 4000;
 
@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
           showDbWarningBanner();
         }
       })
-      .catch(() => {}); // silently ignore if health endpoint unreachable
+      .catch(() => { }); // silently ignore if health endpoint unreachable
   }
 
   // Check if page load has redirect query params for payment confirmation
@@ -546,16 +546,16 @@ function startSlideTimer() {
 /* ─── GALLERY: Slideshow ─────────────────────────────────── */
 const GALLERY_ITEMS = [
   { img: 'assets/gallery_lash_heart.jpg', title: 'Lash Extension Close-Up', tag: 'Lash & Brow' },
-  { img: 'assets/gallery_manicure_new.jpg', title: 'Burgundy Swirl Nail Art', tag: 'Nail Art' },
+  { img: 'assets/gallery_manicure_new.png', title: 'Burgundy Swirl Nail Art', tag: 'Nail Art' },
   { img: 'assets/gallery_makeup_bridal.jpg', title: 'Bridal Gele Glam', tag: 'Makeup' },
   { img: 'assets/gallery_chrome_nails.jpg', title: 'Rose Gold Chrome Tips', tag: 'Nail Art' },
   { img: 'assets/gallery_braids_boho.jpg', title: 'Boho Knotless Braids', tag: 'Hair Making' },
   { img: 'assets/gallery_makeup_glitter.jpg', title: 'Glitter Cut Crease', tag: 'Makeup' },
   { img: 'assets/gallery_facial.jpg', title: 'Glow Facial Treatment', tag: 'Spa & Wellness' },
   { img: 'assets/gallery_cornrows_men.jpg', title: 'Spiral Cornrow Design', tag: "Men's Grooming" },
-  { img: 'assets/gallery_cornrows_artistic.jpg', title: 'Artistic Cornrow Pattern', tag: "Men's Grooming" },
+  { img: 'assets/gallery_cornrows_artistic.png', title: 'Artistic Cornrow Pattern', tag: "Men's Grooming" },
   { img: 'assets/gallery_lemon_pedicure.jpg', title: 'Citrus Foot Detox Spa', tag: 'Pedicure' },
-  { img: 'assets/gallery_wig_new.jpg', title: 'Burgundy Lace Front Wig', tag: 'Wigs' },
+  { img: 'assets/gallery_wig_new.png', title: 'Burgundy Lace Front Wig', tag: 'Wigs' },
   { img: 'assets/gallery_massage.jpg', title: 'Hot Oil Body Massage', tag: 'Spa & Wellness' },
   { img: 'assets/gallery_makeup_rose.jpg', title: 'Rose Glitter Eye Look', tag: 'Makeup' },
   { img: 'assets/gallery_french_white.jpg', title: 'Classic French Manicure', tag: 'Manicure' },
@@ -612,16 +612,16 @@ function gsUpdateTrack() {
   if (!track) return;
   const slideWidthPct = 100 / gsPerView;
   track.style.transform = `translateX(-${gsIdx * slideWidthPct}%)`;
-  
+
   // Centered/Active slide based on screen layout:
   // If 3 slides are visible, make the middle one active. Otherwise, make the first visible slide active.
   const activeIdx = gsPerView === 3 ? (gsIdx + 1) : gsIdx;
-  
+
   document.querySelectorAll('.gs-slide').forEach((s, idx) => {
     s.style.flex = `0 0 ${slideWidthPct}%`;
     s.classList.toggle('active', idx === activeIdx);
   });
-  
+
   document.querySelectorAll('.gs-dot').forEach((d, i) => d.classList.toggle('active', i === gsIdx));
 }
 
@@ -738,15 +738,15 @@ function renderBookingsList(overrideList = null, hasSearched = false) {
         </div>
         <div class="ticket-actions">
           ${b.status === 'cancelled'
-            ? `<span style="font-size:0.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Cancelled</span>`
-            : !past
-              ? `<button class="btn-reschedule" id="br-${b.id}" onclick="rescheduleBooking('${b.id}', ${isRemote})">Reschedule</button>
-                 ${canCancel 
-                   ? `<button class="btn-cancel" id="bc-${b.id}" onclick="cancelBooking('${b.id}', ${isRemote})">Cancel</button>` 
-                   : `<button class="btn-cancel" id="bc-${b.id}" onclick="toast('Appointments cannot be cancelled within 24 hours of the scheduled time.')" style="opacity: 0.5; cursor: not-allowed;" title="Cancellation locked within 24 hours">Cancel</button>`
-                 }`
-              : `<span style="font-size:0.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Completed</span>`
-          }
+        ? `<span style="font-size:0.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Cancelled</span>`
+        : !past
+          ? `<button class="btn-reschedule" id="br-${b.id}" onclick="rescheduleBooking('${b.id}', ${isRemote})">Reschedule</button>
+                 ${canCancel
+            ? `<button class="btn-cancel" id="bc-${b.id}" onclick="cancelBooking('${b.id}', ${isRemote})">Cancel</button>`
+            : `<button class="btn-cancel" id="bc-${b.id}" onclick="toast('Appointments cannot be cancelled within 24 hours of the scheduled time.')" style="opacity: 0.5; cursor: not-allowed;" title="Cancellation locked within 24 hours">Cancel</button>`
+          }`
+          : `<span style="font-size:0.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Completed</span>`
+      }
         </div>
       </div>`;
   }).join('');
@@ -1383,7 +1383,7 @@ function pickExpert(id) {
 function populateExpertDropdown() {
   const select = document.getElementById('f-expert');
   if (!select) return;
-  
+
   const currentSel = state.expert || 'any';
   select.innerHTML = EXPERTS.map(e => `
     <option value="${e.id}" ${e.id === currentSel ? 'selected' : ''}>
@@ -2195,8 +2195,8 @@ async function checkRedirectPayment() {
     try {
       const result = await apiFetch(`/bookings/my?email=${encodeURIComponent(pending.clientEmail)}`);
       // Find the booking matching reference or reference_id
-      confirmedBooking = (result?.bookings || []).find(b => 
-        b.reference_id === pending.reference_id || 
+      confirmedBooking = (result?.bookings || []).find(b =>
+        b.reference_id === pending.reference_id ||
         b.paystackReference === reference ||
         b.reference_id === reference
       );
@@ -2258,7 +2258,7 @@ async function checkRedirectPayment() {
     // If webhook is delayed or failed, fall back to success display using pending details
     // but warn client confirmation is pending verification.
     toast('Payment received! We are confirming your slot.');
-    
+
     // Save locally anyway as a fallback
     saveBooking({
       id: pending.reference_id,
