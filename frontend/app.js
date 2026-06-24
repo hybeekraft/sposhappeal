@@ -553,7 +553,7 @@ const GALLERY_ITEMS = [
   { img: 'assets/gallery_makeup_glitter.jpg', title: 'Glitter Cut Crease', tag: 'Makeup' },
   { img: 'assets/gallery_facial.jpg', title: 'Glow Facial Treatment', tag: 'Spa & Wellness' },
   { img: 'assets/gallery_cornrows_men.jpg', title: 'Spiral Cornrow Design', tag: "Men's Grooming" },
-  { img: 'assets/gallery_pedicure_new.jpg', title: 'Artistic Cornrow Pattern', tag: "Men's Grooming" },
+  { img: 'assets/gallery_cornrows_artistic.jpg', title: 'Artistic Cornrow Pattern', tag: "Men's Grooming" },
   { img: 'assets/gallery_lemon_pedicure.jpg', title: 'Citrus Foot Detox Spa', tag: 'Pedicure' },
   { img: 'assets/gallery_wig_new.jpg', title: 'Burgundy Lace Front Wig', tag: 'Wigs' },
   { img: 'assets/gallery_massage.jpg', title: 'Hot Oil Body Massage', tag: 'Spa & Wellness' },
