@@ -1011,3 +1011,167 @@ body.admin-page-body {
   width: 16px;
   height: 16px;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS — Staff Portal
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ── Header ── */
+  .admin-header { padding: 14px 16px; }
+  .admin-header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .admin-brand { gap: 10px; }
+  .admin-logo-img { width: 36px; height: 36px; }
+  .admin-brand h1 { font-size: 1.1rem; }
+  .admin-brand p { font-size: 0.72rem; }
+  .admin-header-actions {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+  }
+  .admin-header-actions .btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+
+  /* ── Nav Tabs ── */
+  .admin-nav-tabs {
+    gap: 6px;
+    padding: 0 0 12px 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-btn {
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── Main content padding ── */
+  .admin-main-content { padding: 16px; }
+
+  /* ── Panel header ── */
+  .admin-panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .admin-panel-header h2 { font-size: 1.3rem; }
+  .filter-controls {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .admin-search-box,
+  .admin-select-box { width: 100%; }
+  .admin-search-box input,
+  .admin-select-box select { width: 100%; }
+
+  /* ── Booking cards ── */
+  .admin-bookings-grid { gap: 14px; }
+  .admin-booking-row {
+    padding: 14px;
+    border-radius: 10px;
+  }
+  .admin-booking-ref-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .admin-booking-info-block {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .admin-booking-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .admin-booking-actions button,
+  .admin-booking-actions .btn-confirm-complete {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+  }
+
+  /* ── Confirm complete button ── */
+  .btn-confirm-complete {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── Pricing panel ── */
+  .admin-pricing-container { gap: 14px; }
+  .admin-pricing-category { padding: 14px; }
+  .admin-pricing-category-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .admin-service-row {
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+  }
+  .admin-service-fields {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .admin-service-fields input { width: 100%; }
+  .admin-service-actions {
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+  }
+  .admin-service-actions button { flex: 1; }
+
+  /* ── Staff grid ── */
+  .admin-staff-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* ── Modals ── */
+  .admin-modal-card {
+    width: 95vw;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 16px;
+    border-radius: 12px;
+  }
+  .admin-modal-body { padding: 16px; }
+  .admin-modal-header { padding: 14px 16px; }
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .modal-actions button { width: 100%; justify-content: center; }
+
+  /* ── Status badges ── */
+  .status-badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+
+  /* ── Login card ── */
+  .login-card {
+    width: 92vw;
+    padding: 28px 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .admin-brand h1 { font-size: 1rem; }
+  .tab-btn { padding: 9px 10px; font-size: 0.72rem; }
+  .admin-panel-header h2 { font-size: 1.15rem; }
+}
