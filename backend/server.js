@@ -1297,11 +1297,35 @@ app.get('/api/staff/bookings', adminLimiter, async (req, res) => {
     if (!expectedPasscode || !expectedStaffPasscode) {
       return res.status(503).json({ error: 'Admin access is not configured on this server yet.' });
     }
-    if (!passcode || (passcode !== expectedPasscode && passcode !== expectedStaffPasscode)) {
-      return res.status(401).json({ error: 'Unauthorized. Invalid passcode.' });
+    if (!passcode) {
+      return res.status(401).json({ error: 'Unauthorized. Passcode required.' });
     }
 
-    const isAdmin = passcode === expectedPasscode;
+    // Enforce strict role-passcode match based on selected role
+    const selectedRole = req.headers['x-selected-role'] || '';
+    let isAdmin = false;
+
+    if (selectedRole === 'admin') {
+      // Admin dropdown selected — only admin passcode allowed
+      if (passcode !== expectedPasscode) {
+        return res.status(401).json({ error: 'Unauthorized. Invalid admin passcode.' });
+      }
+      isAdmin = true;
+    } else {
+      // Staff dropdown selected — only staff passcode allowed, admin passcode rejected
+      if (passcode === expectedPasscode) {
+        return res.status(401).json({ error: 'Unauthorized. Use the Admin login option for admin access.' });
+      }
+      if (passcode !== expectedStaffPasscode) {
+        // Also check individual staff passcodes in DB
+        const staffByPass = await getStaffMemberByPasscode(passcode);
+        if (!staffByPass) {
+          return res.status(401).json({ error: 'Unauthorized. Invalid staff passcode.' });
+        }
+      }
+      isAdmin = false;
+    }
+
     const role = isAdmin ? 'admin' : 'staff';
 
     // Resolve permissions and identity from the authenticated staff member
