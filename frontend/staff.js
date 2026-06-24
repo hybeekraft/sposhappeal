@@ -123,7 +123,15 @@ async function handleLogin(event) {
     sessionStorage.removeItem('sposh_role');
     card.classList.add('shake');
     setTimeout(() => card.classList.remove('shake'), 400);
-    errEl.textContent = err.status === 401 ? 'Incorrect passcode. Access Denied.' : 'Server connection failed.';
+    if (err.status === 401) {
+      errEl.textContent = err.message || 'Incorrect passcode. Access Denied.';
+    } else if (err.status === 503) {
+      errEl.textContent = 'Server not configured. Contact admin.';
+    } else if (err.name === 'AbortError') {
+      errEl.textContent = 'Connection timed out. Check your internet.';
+    } else {
+      errEl.textContent = err.message || 'Server connection failed. Try again.';
+    }
     input.value = '';
     input.focus();
   } finally {
