@@ -454,61 +454,6 @@
       };
       reader.readAsDataURL(file);
     }
-
-    // ── Confirm Complete Modal ──
-    let _completeBookingId = null;
-
-    function openConfirmCompleteModal(bookingId, refId, clientName, total, deposit) {
-      _completeBookingId = bookingId;
-      const balance = total - deposit;
-      document.getElementById('complete-ref-label').textContent = refId;
-      document.getElementById('complete-client-label').textContent = clientName;
-      document.getElementById('complete-balance-amount').textContent = '₦' + balance.toLocaleString();
-      document.getElementById('complete-balance-breakdown').textContent =
-        'Total: ₦' + total.toLocaleString() + ' · Deposit paid: ₦' + deposit.toLocaleString();
-      document.getElementById('complete-notes').value = '';
-      document.getElementById('complete-payment-method').value = 'cash';
-      document.getElementById('confirm-complete-modal').style.display = 'flex';
-    }
-
-    function closeConfirmCompleteModal() {
-      document.getElementById('confirm-complete-modal').style.display = 'none';
-      _completeBookingId = null;
-    }
-
-    async function submitConfirmComplete() {
-      if (!_completeBookingId) return;
-      const btn = document.getElementById('btn-submit-complete');
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Saving...';
-
-      const payload = {
-        status: 'completed',
-        paymentMethod: document.getElementById('complete-payment-method').value,
-        completionNotes: document.getElementById('complete-notes').value.trim(),
-      };
-
-      try {
-        const passcode = sessionStorage.getItem('sposh_admin_passcode') || '';
-        const res = await fetch(`${window.SPOSH_API_URL}/bookings/${_completeBookingId}/complete`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-admin-passcode': passcode,
-            'x-selected-role': sessionStorage.getItem('sposh_selected_role') || ''
-          },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('Failed');
-        closeConfirmCompleteModal();
-        if (typeof loadBookings === 'function') loadBookings();
-      } catch (err) {
-        alert('Could not mark complete. Please try again.');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Mark Complete & Collect Balance';
-      }
-    }
   </script>
   <script src="staff.js"></script>
 </body>
