@@ -481,7 +481,8 @@ const adminLimiter = rateLimit({
 app.use(cors({
   origin: (origin, callback) => {
     const allowed = [
-      'https://sposh-appeal.vercel.app',
+      'https://sposhappeal.vercel.app',
+      'https://sposhappeal.vercel.app',
       'http://localhost:3000',
       'http://localhost:5000',
       'http://127.0.0.1:3000',
@@ -574,7 +575,7 @@ function initializePaystackTransaction(email, amountKobo, reference, callbackUrl
       email: email,
       amount: amountKobo,
       reference: reference,
-      callback_url: callbackUrl || process.env.PAYSTACK_CALLBACK_URL || 'https://sposh-appeal.vercel.app/booking.html'
+      callback_url: callbackUrl || process.env.PAYSTACK_CALLBACK_URL || 'https://sposhappeal.vercel.app/booking.html'
     });
 
     const options = {
@@ -1187,7 +1188,7 @@ app.post('/api/webhook/whatsapp', async (req, res) => {
     if (msgBody === 'STATUS') {
       const booking = await findRecentBooking(fromNum, false);
       if (!booking) {
-        replyMessage = "We couldn't find any booking associated with your phone number. To book a slot, visit our scheduling portal: https://sposh-appeal.vercel.app/booking.html";
+        replyMessage = "We couldn't find any booking associated with your phone number. To book a slot, visit our scheduling portal: https://sposhappeal.vercel.app/booking.html";
       } else {
         const serviceNames = Array.isArray(booking.services) ? booking.services.map(s => s.name).join(', ') : booking.serviceNames || '';
         replyMessage = `Your most recent booking details:
@@ -1259,7 +1260,7 @@ Reply with:
 • STATUS - To check the details of your most recent booking.
 • CANCEL - To request cancellation of your active booking.
 
-To schedule a new appointment, visit our site: https://sposh-appeal.vercel.app/booking.html`;
+To schedule a new appointment, visit our site: https://sposhappeal.vercel.app/booking.html`;
     }
 
     res.header('Content-Type', 'text/xml');
