@@ -23,6 +23,7 @@ async function adminFetch(path, options = {}) {
       headers: {
         'Content-Type': 'application/json',
         'x-admin-passcode': passcode,
+        'x-selected-role': sessionStorage.getItem('sposh_selected_role') || '',
         ...(options.headers || {})
       },
       signal: controller.signal
@@ -98,8 +99,10 @@ async function handleLogin(event) {
   errEl.textContent = '';
 
   try {
-    // Save passcode first to include in header of subsequent request
+    // Save passcode + selected role before request
+    const selectedRole = document.getElementById('login-role').value;
     sessionStorage.setItem('sposh_admin_passcode', passcode);
+    sessionStorage.setItem('sposh_selected_role', selectedRole);
     const checkRes = await adminFetch('/staff/bookings');
     
     // Auth success: Load portal
