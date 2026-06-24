@@ -62,19 +62,11 @@ function applyRolePermissions(role, permissions) {
     if (pricingTabBtn) pricingTabBtn.style.display = 'inline-flex';
     if (staffTabBtn) staffTabBtn.style.display = 'inline-flex';
   } else {
+    // Staff members: bookings tab only — no pricing, no staff management
     if (headerBadge) headerBadge.textContent = 'Staff';
+    if (pricingTabBtn) pricingTabBtn.style.display = 'none';
     if (staffTabBtn) staffTabBtn.style.display = 'none';
-    
-    if (permissions && permissions.canEditCatalog) {
-      if (pricingTabBtn) pricingTabBtn.style.display = 'inline-flex';
-    } else {
-      if (pricingTabBtn) pricingTabBtn.style.display = 'none';
-      if (currentTab === 'pricing') {
-        switchTab('bookings');
-      }
-    }
-
-    if (currentTab === 'staff') {
+    if (currentTab === 'pricing' || currentTab === 'staff') {
       switchTab('bookings');
     }
   }
