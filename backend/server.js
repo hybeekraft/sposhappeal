@@ -1301,26 +1301,23 @@ app.get('/api/staff/bookings', adminLimiter, async (req, res) => {
       return res.status(401).json({ error: 'Unauthorized. Passcode required.' });
     }
 
-    // Enforce strict role-passcode match using bcrypt
+    // Enforce strict role-passcode match — env vars are plain text
     const selectedRole = req.headers['x-selected-role'] || '';
     let isAdmin = false;
 
-    const adminMatch = await bcrypt.compare(passcode, expectedPasscode).catch(() => false);
-    const staffMatch = await bcrypt.compare(passcode, expectedStaffPasscode).catch(() => false);
-
     if (selectedRole === 'admin') {
       // Admin dropdown — only admin passcode accepted
-      if (!adminMatch) {
+      if (passcode !== expectedPasscode) {
         return res.status(401).json({ error: 'Incorrect passcode. Access Denied.' });
       }
       isAdmin = true;
     } else {
       // Staff dropdown — admin passcode explicitly rejected
-      if (adminMatch) {
+      if (passcode === expectedPasscode) {
         return res.status(401).json({ error: 'Incorrect passcode. Access Denied.' });
       }
-      if (!staffMatch) {
-        // Check individual staff passcodes in DB
+      if (passcode !== expectedStaffPasscode) {
+        // Also check individual staff passcodes in DB
         const staffByPass = await getStaffMemberByPasscode(passcode);
         if (!staffByPass) {
           return res.status(401).json({ error: 'Incorrect passcode. Access Denied.' });
