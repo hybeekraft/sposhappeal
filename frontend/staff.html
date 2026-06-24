@@ -83,7 +83,7 @@
       <h3>Staff & Admin Login</h3>
       <p>Select your role and enter your passcode to access the workspace.</p>
       
-      <form id="login-form" onsubmit="handleLogin(event)">
+      <form id="login-form" onsubmit="return false;" action="javascript:void(0);">
         <div class="form-field">
           <select id="login-role" required>
             <option value="staff">Staff Member</option>
@@ -94,7 +94,7 @@
           <input type="password" id="admin-passcode" placeholder="Enter passcode" required autocomplete="current-password">
           <span class="login-error-msg" id="login-error-msg"></span>
         </div>
-        <button type="submit" class="btn btn-primary btn-block" id="btn-login">
+        <button type="button" class="btn btn-primary btn-block" id="btn-login">
           Log In &nbsp;<i class="fa-solid fa-right-to-bracket"></i>
         </button>
       </form>

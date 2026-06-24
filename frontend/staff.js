@@ -75,6 +75,26 @@ function applyRolePermissions(role, permissions) {
 
 // ─── LOGIN / AUTH ───────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('[S\'posh] staff.js loaded — attaching login handlers');
+
+  // Attach login button click handler (type="button" so no native form submit)
+  const loginBtn = document.getElementById('btn-login');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', handleLogin);
+    console.log('[S\'posh] Login button handler attached');
+  }
+
+  // Also catch form submit as fallback (Enter key)
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      handleLogin(e);
+      return false;
+    });
+  }
+
   const savedPass = sessionStorage.getItem('sposh_admin_passcode');
   if (savedPass) {
     checkPasscodeAndLoad(savedPass);
@@ -85,7 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function handleLogin(event) {
-  event.preventDefault();
+  if (event && event.preventDefault) event.preventDefault();
+  if (event && event.stopPropagation) event.stopPropagation();
+  console.log('[S\'posh] handleLogin called — type:', event?.type);
   const input = document.getElementById('admin-passcode');
   const passcode = input.value.trim();
   const errEl = document.getElementById('login-error-msg');
