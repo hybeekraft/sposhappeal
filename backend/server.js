@@ -985,7 +985,16 @@ app.patch('/api/bookings/:id/complete', adminLimiter, async (req, res) => {
 
     const adminPasscode = ADMIN_PASSCODE;
     let canComplete = false;
-    if (await bcrypt.compare(passcode, adminPasscode)) {
+    // Smart admin check: supports both plaintext and bcrypt-hashed ADMIN_PASSWORD
+    let isAdmin = false;
+    if (adminPasscode) {
+      if (adminPasscode.startsWith('$2')) {
+        isAdmin = await bcrypt.compare(passcode, adminPasscode);
+      } else {
+        isAdmin = (passcode === adminPasscode);
+      }
+    }
+    if (isAdmin) {
       canComplete = true;
     } else {
       const staff = await getStaffMemberByPasscode(passcode);
