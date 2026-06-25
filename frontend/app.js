@@ -2080,32 +2080,42 @@ async function initiatePayment() {
       }
     } catch (err) {
       console.warn('[Payment] Backend booking/payment initialization failed:', err.message);
+      if (btn) { btn.disabled = false; btn.innerHTML = 'Pay Deposit &nbsp;<i class="fa-solid fa-credit-card"></i>'; }
+      toast('Payment service temporarily unavailable. Please try again in a moment.');
     }
   }
 
+  // Paystack Inline fallback — use redirect mode on mobile for reliability
   if (typeof PaystackPop !== 'undefined' && PAYSTACK_PUBLIC_KEY && !PAYSTACK_PUBLIC_KEY.includes('xxxxxxxxxx')) {
-    const handler = PaystackPop.setup({
-      key: PAYSTACK_PUBLIC_KEY,
-      email: booking.clientEmail,
-      amount: booking.depositDue * 100,
-      currency: 'NGN',
-      metadata: {
-        custom_fields: [
-          { display_name: 'Client', variable_name: 'client_name', value: booking.clientName },
-          { display_name: 'Phone', variable_name: 'client_phone', value: booking.clientPhone },
-          { display_name: 'Services', variable_name: 'service_names', value: booking.serviceNames },
-          { display_name: 'Appointment', variable_name: 'appointment', value: `${booking.dateDisplay} at ${booking.time}` },
-          { display_name: 'Deposit', variable_name: 'deposit_due', value: `₦${booking.depositDue.toLocaleString()}` },
-        ],
-      },
-      callback: (response) => onPaymentSuccess(response.reference, booking),
-      onClose: () => {
-        if (btn) { btn.disabled = false; btn.innerHTML = 'Pay Deposit &nbsp;<i class="fa-solid fa-credit-card"></i>'; }
-        toast('Payment cancelled. Your slot is not confirmed until the deposit is paid.');
-      },
-    });
-    handler.openIframe();
-    return;
+    try {
+      const handler = PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: booking.clientEmail,
+        amount: booking.depositDue * 100,
+        currency: 'NGN',
+        ref: 'SP-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase(),
+        channels: ['card', 'bank', 'ussd', 'bank_transfer'],
+        metadata: {
+          custom_fields: [
+            { display_name: 'Client', variable_name: 'client_name', value: booking.clientName },
+            { display_name: 'Phone', variable_name: 'client_phone', value: booking.clientPhone },
+            { display_name: 'Services', variable_name: 'service_names', value: booking.serviceNames },
+            { display_name: 'Appointment', variable_name: 'appointment', value: `${booking.dateDisplay} at ${booking.time}` },
+            { display_name: 'Deposit', variable_name: 'deposit_due', value: `₦${booking.depositDue.toLocaleString()}` },
+          ],
+        },
+        callback: (response) => onPaymentSuccess(response.reference, booking),
+        onClose: () => {
+          if (btn) { btn.disabled = false; btn.innerHTML = 'Pay Deposit &nbsp;<i class="fa-solid fa-credit-card"></i>'; }
+          toast('Payment cancelled. Your slot is not confirmed until the deposit is paid.');
+        },
+      });
+      handler.openIframe();
+      return;
+    } catch (popupErr) {
+      console.warn('[Payment] PaystackPop failed (likely mobile popup block):', popupErr);
+      // Fall through to test modal
+    }
   }
 
   // Fallback to test payment popup modal for local environments
