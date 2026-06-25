@@ -1053,10 +1053,11 @@ app.patch('/api/bookings/:id/complete', adminLimiter, async (req, res) => {
 app.post('/api/payments/webhook', paymentLimiter, async (req, res) => {
   try {
     const signature = req.headers['x-paystack-signature'];
-    const webhookSecret = process.env.PAYSTACK_WEBHOOK_SECRET;
+    // Paystack uses the Secret Key (not a separate webhook secret) to sign webhooks
+    const webhookSecret = process.env.PAYSTACK_SECRET_KEY;
 
     if (!webhookSecret) {
-      console.error('[Paystack Webhook] PAYSTACK_WEBHOOK_SECRET is not configured. Rejecting webhook.');
+      console.error('[Paystack Webhook] PAYSTACK_SECRET_KEY is not configured. Rejecting webhook.');
       return res.status(503).send('Webhook not configured');
     }
     if (!signature) {
