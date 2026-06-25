@@ -37,7 +37,7 @@ const smtpHost = process.env.SMTP_HOST;
 const smtpPort = process.env.SMTP_PORT || 587;
 const smtpUser = process.env.SMTP_USER;
 const smtpPass = process.env.SMTP_PASS;
-const smtpFrom = process.env.SMTP_FROM || 'noreply@sposhappeal.com';
+const smtpFrom = process.env.SMTP_FROM || 'sposhappeal@gmail.com';
 const adminEmail = process.env.ADMIN_EMAIL || '';
 
 let emailTransporter = null;
@@ -389,7 +389,7 @@ let mockBookings = [
   {
     reference_id: 'SP-987123',
     clientName: 'Sarah Jenkins',
-    clientEmail: 'sarah@example.com',
+    clientEmail: 'client2@example.com',
     clientPhone: '08031234567',
     services: [
       { id: 'nails-pedi-mani', name: 'Pedicure and Manicure', price: 10000, durationMinutes: 75 }
@@ -415,7 +415,7 @@ let mockBookings = [
   {
     reference_id: 'SP-456789',
     clientName: 'Michael Obi',
-    clientEmail: 'michael@example.com',
+    clientEmail: 'client@example.com',
     clientPhone: '08099887766',
     services: [
       { id: 'haircut-fade', name: 'Fade Cut', price: 5000, durationMinutes: 60 },
