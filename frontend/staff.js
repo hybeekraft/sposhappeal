@@ -1055,6 +1055,34 @@ function closeAddStaffModal() {
   document.getElementById('add-staff-modal').style.display = 'none';
 }
 
+// ── Staff photo preview & base64 conversion ──
+let _staffPhotoBase64 = null;
+
+function previewAddStaffPhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Validate size — max 2MB
+  if (file.size > 2 * 1024 * 1024) {
+    adminToast('Photo must be under 2MB. Please choose a smaller image.', 'error');
+    event.target.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _staffPhotoBase64 = e.target.result; // data:image/jpeg;base64,...
+    const preview = document.getElementById('add-staff-photo-preview');
+    const icon    = document.getElementById('add-staff-photo-icon');
+    const hint    = document.getElementById('add-staff-photo-hint');
+    preview.src = _staffPhotoBase64;
+    preview.style.display = 'block';
+    icon.style.display = 'none';
+    hint.textContent = file.name;
+  };
+  reader.readAsDataURL(file);
+}
+
 async function submitAddStaff(event) {
   event.preventDefault();
 
@@ -1086,6 +1114,7 @@ async function submitAddStaff(event) {
         role: roleVal,
         bio: bioVal,
         ig: igVal,
+        img: _staffPhotoBase64 || null,
         passcode: passcodeVal,
         permissions: {
           canViewBookings: pView,
