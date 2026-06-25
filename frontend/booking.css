@@ -1355,3 +1355,17 @@ body.booking-page-body .footer-bottom {
 }
 
 
+
+/* Back button hidden state — overrides all media queries */
+#btn-wizard-back.wizard-back-hidden,
+#btn-wizard-back[style*="display:none"],
+#btn-wizard-back[style*="display: none"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
