@@ -556,6 +556,18 @@ async function connectDB() {
 }
 connectDB();
 
+// Middleware: ensure DB is connected before any /api route
+app.use('/api', async (req, res, next) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      await connectDB();
+    }
+  } catch (err) {
+    console.error('[DB Middleware] Failed to connect:', err.message);
+  }
+  next();
+});
+
 // Helper: Make HTTP request to Paystack API
 function initializePaystackTransaction(email, amountKobo, reference, callbackUrl) {
   return new Promise((resolve, reject) => {
