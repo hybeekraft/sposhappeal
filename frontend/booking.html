@@ -325,11 +325,16 @@
   </footer>
 
   <script>
+    // ── API Configuration ─────────────────────────────────────────
+    // HOW IT WORKS:
+    // - On Vercel (sposhappeal.vercel.app): connects to real backend
+    //   → Bookings saved to MongoDB, emails sent, Paystack payments live
+    // - On localhost (your computer): uses mock data for safe testing
+    //   → No real bookings or payments made
+    // DO NOT change this unless you move hosting away from Vercel.
     if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       window.SPOSH_API_URL = '/api';
     }
-    window.PAYSTACK_PUBLIC_KEY = 'pk_test_829af818203c1283217adbee3d56b39f535b47c8';
-
   </script>
   <script async src="https://js.paystack.co/v1/inline.js"></script>
   <script src="app.js"></script>
