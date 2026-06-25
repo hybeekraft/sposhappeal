@@ -1938,7 +1938,13 @@ function renderStep(n) {
 
   const back = document.getElementById('btn-wizard-back');
   const next = document.getElementById('btn-wizard-next');
-  back.style.display = (n === 1 || (state.isRescheduling && n === 3)) ? 'none' : 'inline-flex';
+  const hideBack = (n === 1 || (state.isRescheduling && n === 3));
+  back.style.display = hideBack ? 'none' : 'inline-flex';
+  if (hideBack) {
+    back.classList.add('wizard-back-hidden');
+  } else {
+    back.classList.remove('wizard-back-hidden');
+  }
   if (n === 5) {
     next.textContent = state.isRescheduling ? 'Confirm Reschedule' : 'Confirm & Pay Deposit';
   } else {
