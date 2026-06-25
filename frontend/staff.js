@@ -6,6 +6,126 @@
 const API_BASE = window.SPOSH_API_URL || '/api';
 const API_TIMEOUT_MS = 6000;
 
+// ─── INACTIVITY AUTO-LOGOUT ────────────────────────────────────
+const INACTIVITY_TIMEOUT_MS = 15 * 60 * 1000;  // 15 minutes
+const INACTIVITY_WARNING_MS = 13 * 60 * 1000;  // Show warning at 13 min (2 min before logout)
+let _inactivityTimer = null;
+let _warningTimer = null;
+let _warningOverlay = null;
+
+function resetInactivityTimer() {
+  // Clear existing timers
+  if (_inactivityTimer) clearTimeout(_inactivityTimer);
+  if (_warningTimer) clearTimeout(_warningTimer);
+  dismissInactivityWarning();
+
+  // Only track if user is logged in
+  if (!sessionStorage.getItem('sposh_admin_passcode')) return;
+
+  // Set warning timer (fires 2 min before logout)
+  _warningTimer = setTimeout(() => {
+    showInactivityWarning();
+  }, INACTIVITY_WARNING_MS);
+
+  // Set logout timer
+  _inactivityTimer = setTimeout(() => {
+    performInactivityLogout();
+  }, INACTIVITY_TIMEOUT_MS);
+}
+
+function showInactivityWarning() {
+  if (_warningOverlay) return; // Already showing
+
+  _warningOverlay = document.createElement('div');
+  _warningOverlay.id = 'inactivity-warning';
+  _warningOverlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(6, 4, 10, 0.85); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 99999; font-family: 'DM Sans', sans-serif;
+    animation: fadeIn 0.3s ease;
+  `;
+
+  const timeLeft = Math.ceil((INACTIVITY_TIMEOUT_MS - INACTIVITY_WARNING_MS) / 1000);
+
+  _warningOverlay.innerHTML = `
+    <div style="background: #160D22; border: 1px solid rgba(224, 68, 122, 0.3); border-radius: 16px;
+      padding: 32px; max-width: 400px; width: calc(100% - 32px); text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(224, 68, 122, 0.15);">
+      <div style="font-size: 3rem; color: #E0447A; margin-bottom: 16px;">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </div>
+      <h3 style="font-size: 1.3rem; font-weight: 700; color: #FAF0F5; margin-bottom: 8px;
+        font-family: 'Cormorant Garamond', serif;">Session Expiring Soon</h3>
+      <p style="font-size: 0.85rem; color: #B090A8; line-height: 1.5; margin-bottom: 24px;">
+        You've been inactive for a while. You'll be logged out in <strong style="color: #FF8FAB;" id="countdown-seconds">${timeLeft}</strong> seconds for security.
+      </p>
+      <button onclick="resetInactivityTimer()" style="background: linear-gradient(135deg, #E0447A, #FF8FAB);
+        border: none; color: #fff; padding: 14px 28px; border-radius: 8px; font-weight: 600;
+        cursor: pointer; font-size: 0.9rem; width: 100%; transition: all 0.25s ease;">
+        <i class="fa-solid fa-hand"></i> &nbsp; I'm Still Here
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(_warningOverlay);
+
+  // Countdown timer
+  let remaining = timeLeft;
+  const countdownEl = _warningOverlay.querySelector('#countdown-seconds');
+  const countdownInterval = setInterval(() => {
+    remaining--;
+    if (countdownEl) countdownEl.textContent = remaining;
+    if (remaining <= 0) clearInterval(countdownInterval);
+  }, 1000);
+  _warningOverlay._countdownInterval = countdownInterval;
+}
+
+function dismissInactivityWarning() {
+  if (_warningOverlay) {
+    if (_warningOverlay._countdownInterval) clearInterval(_warningOverlay._countdownInterval);
+    _warningOverlay.remove();
+    _warningOverlay = null;
+  }
+}
+
+function performInactivityLogout() {
+  dismissInactivityWarning();
+  // Clear all session data
+  sessionStorage.removeItem('sposh_admin_passcode');
+  sessionStorage.removeItem('sposh_selected_role');
+  sessionStorage.removeItem('sposh_permissions');
+  sessionStorage.removeItem('sposh_staff_id');
+  sessionStorage.removeItem('sposh_staff_name');
+
+  // Show login overlay
+  const overlay = document.getElementById('login-overlay');
+  if (overlay) overlay.style.display = 'flex';
+
+  // Hide dashboard
+  const dash = document.getElementById('admin-dashboard');
+  if (dash) dash.style.display = 'none';
+
+  // Show a toast-like message
+  const msg = document.createElement('div');
+  msg.style.cssText = `
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, #E0447A, #FF8FAB); color: #fff;
+    padding: 14px 24px; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+    z-index: 100000; box-shadow: 0 4px 20px rgba(224, 68, 122, 0.4);
+    font-family: 'DM Sans', sans-serif; animation: fadeIn 0.3s ease;
+  `;
+  msg.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> &nbsp; Logged out due to inactivity';
+  document.body.appendChild(msg);
+  setTimeout(() => msg.remove(), 5000);
+}
+
+// Track user activity — reset timer on any interaction
+['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(evt => {
+  document.addEventListener(evt, resetInactivityTimer, { passive: true });
+});
+
+
 let bookingsCache = [];
 let catalogCache = null;
 let currentTab = 'bookings';
