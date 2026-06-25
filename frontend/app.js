@@ -2315,19 +2315,7 @@ function to24Hour(time12h) {
 
 /* ─── TOAST ──────────────────────────────────────────────── */
 function showDbWarningBanner() {
-  if (document.getElementById('sp-db-banner')) return;
-  const banner = document.createElement('div');
-  banner.id = 'sp-db-banner';
-  banner.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="margin-right:8px;"></i>Booking system is temporarily limited. Your appointments are safe — please check back shortly.';
-  Object.assign(banner.style, {
-    position: 'fixed', top: '0', left: '0', width: '100%',
-    background: 'rgba(180, 120, 0, 0.95)', color: '#fff',
-    padding: '10px 20px', textAlign: 'center', zIndex: '99999',
-    fontFamily: 'Outfit, sans-serif', fontSize: '0.88rem', fontWeight: '500',
-    boxShadow: '0 2px 12px rgba(0,0,0,0.3)',
-    backdropFilter: 'blur(8px)',
-  });
-  document.body.prepend(banner);
+  // Banner disabled — system is live
 }
 
 function toast(msg) {
