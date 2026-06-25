@@ -881,15 +881,19 @@ function renderStaffList() {
 
   container.innerHTML = staffCache.map(s => {
     const avatarHtml = s.img 
-      ? `<img src="${s.img}" alt="${s.name}">` 
-      : `<i class="fa-solid fa-user" style="font-size: 1.5rem; color: var(--primary-rose);"></i>`;
+      ? `<img src="${s.img}" alt="${s.name}" id="staff-avatar-img-${s.id}">` 
+      : `<i class="fa-solid fa-user" style="font-size: 1.5rem; color: var(--primary-rose);" id="staff-avatar-icon-${s.id}"></i>`;
       
     const p = s.permissions || {};
 
     return `
       <div class="admin-staff-card" id="staff-card-${s.id}">
         <div class="admin-staff-header">
-          <div class="admin-staff-avatar">${avatarHtml}</div>
+          <div class="admin-staff-avatar" style="position: relative; cursor: pointer;" onclick="document.getElementById('staff-photo-input-${s.id}').click()" title="Click to change photo">
+            ${avatarHtml}
+            <div style="position: absolute; bottom: -4px; right: -4px; background: var(--primary-rose); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"><i class="fa-solid fa-camera"></i></div>
+            <input type="file" id="staff-photo-input-${s.id}" accept="image/*" style="display:none" onchange="handleStaffPhotoChange('${s.id}', event)">
+          </div>
           <div class="admin-staff-meta">
             <h3>${s.name}</h3>
             <p>${s.role}</p>
@@ -982,6 +986,10 @@ async function saveStaffMember(staffId) {
     }
   };
   if (passcodeVal) payload.passcode = passcodeVal;
+  // Include photo if admin selected a new one
+  if (_staffPhotoEdits[staffId]) {
+    payload.img = _staffPhotoEdits[staffId];
+  }
 
   try {
     const response = await adminFetch(`/admin/staff/${staffId}`, {
@@ -990,6 +998,7 @@ async function saveStaffMember(staffId) {
     });
 
     adminToast(`Staff member "${nameVal}" updated successfully!`);
+    delete _staffPhotoEdits[staffId]; // Clear photo edit cache
     btn.innerHTML = '<i class="fa-solid fa-check" style="color: #2ecc71;"></i> Saved';
     
     // Refresh staff cache locally
@@ -1057,6 +1066,41 @@ function closeAddStaffModal() {
 
 // ── Staff photo preview & base64 conversion ──
 let _staffPhotoBase64 = null;
+const _staffPhotoEdits = {};  // Track photo changes per staff ID
+
+function handleStaffPhotoChange(staffId, event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (file.size > 2 * 1024 * 1024) {
+    adminToast('Photo must be under 2MB.', 'error');
+    event.target.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _staffPhotoEdits[staffId] = e.target.result;
+    // Update avatar preview immediately
+    const avatarDiv = document.querySelector('#staff-card-' + staffId + ' .admin-staff-avatar');
+    if (avatarDiv) {
+      const existingImg = avatarDiv.querySelector('img');
+      const existingIcon = avatarDiv.querySelector('i.fa-user');
+      if (existingImg) {
+        existingImg.src = e.target.result;
+      } else if (existingIcon) {
+        existingIcon.style.display = 'none';
+        const newImg = document.createElement('img');
+        newImg.src = e.target.result;
+        newImg.alt = 'Staff photo';
+        newImg.id = 'staff-avatar-img-' + staffId;
+        avatarDiv.insertBefore(newImg, avatarDiv.firstChild);
+      }
+    }
+    adminToast('Photo selected — click Save to apply.');
+  };
+  reader.readAsDataURL(file);
+}
 
 function previewAddStaffPhoto(event) {
   const file = event.target.files[0];
@@ -1126,6 +1170,7 @@ async function submitAddStaff(event) {
     });
 
     adminToast(`Staff member "${nameVal}" added successfully!`);
+    _staffPhotoBase64 = null; // Reset for next add
     closeAddStaffModal();
     loadStaffList();
   } catch (err) {
