@@ -461,15 +461,13 @@
 
 
   <script>
-    // ─── Backend API (optional) ───────────────────────────────
-    // Once the S'posh APPEAL backend is deployed (e.g. on Railway),
-    // uncomment and set this to its base URL to enable live
-    // services/experts data, real bookings, emails, WhatsApp alerts,
-    // and Paystack payments. Leave commented out to use the
-    // built-in data + localStorage (current default — fully working).
-    //
-    // Auto-detect API: uses /api on production (Vercel), stays local-only on localhost
-    // Remove the condition below to force localStorage-only mode during testing
+    // ── API Configuration ─────────────────────────────────────────
+    // HOW IT WORKS:
+    // - On Vercel (sposhappeal.vercel.app): connects to real backend
+    //   → Bookings saved to MongoDB, emails sent, Paystack payments live
+    // - On localhost (your computer): uses mock data for safe testing
+    //   → No real bookings or payments made
+    // DO NOT change this unless you move hosting away from Vercel.
     if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       window.SPOSH_API_URL = '/api';
     }

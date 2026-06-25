@@ -325,14 +325,7 @@
   </footer>
 
   <script>
-    // ── API Configuration ─────────────────────────────────────────
-    // HOW IT WORKS:
-    // - On Vercel (sposhappeal.vercel.app): connects to real backend
-    //   → Bookings saved to MongoDB, emails sent, Paystack payments live
-    // - On localhost (your computer): uses mock data for safe testing
-    //   → No real bookings or payments made
-    // DO NOT change this unless you move hosting away from Vercel.
-    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       window.SPOSH_API_URL = '/api';
     }
   </script>
