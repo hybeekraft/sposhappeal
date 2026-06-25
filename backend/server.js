@@ -496,12 +496,12 @@ app.use(cors({
 }));
 // Capture raw body buffer for signature verification
 app.use(express.json({
-  limit: '50kb',
+  limit: '5mb', // Increased for base64 staff photo uploads
   verify: (req, res, buf) => {
     req.rawBody = buf;
   }
 }));
-app.use(express.urlencoded({ extended: true, limit: '50kb' }));
+app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
 async function seedDatabase() {
   try {
