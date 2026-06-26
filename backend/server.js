@@ -1674,6 +1674,8 @@ app.post('/api/admin/staff', adminLimiter, verifyAdmin, async (req, res) => {
       role: role || 'Stylist',
       bio: bio || '',
       ig: ig || '#',
+      fb: fb || '',
+      tiktok: tiktok || '',
       img: img || 'assets/stylist_kunle.jpg',
       passcodeHash: passcode,   // pre-save hook in Staff model will bcrypt this
       permissions: {
