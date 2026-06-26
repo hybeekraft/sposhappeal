@@ -1033,14 +1033,25 @@ function renderStaffList() {
 
           <div class="form-field-row" style="display: flex; gap: 12px;">
             <div class="form-field" style="flex: 1;">
-              <label class="admin-label-small">IG Handle</label>
-              <input type="text" class="admin-name-input" id="staff-ig-${s.id}" value="${s.ig || '#'}" style="font-size: 0.8rem;">
+              <label class="admin-label-small" style="display:flex;align-items:center;gap:5px;"><i class="fa-brands fa-instagram" style="color:#e0447a;font-size:0.75rem;"></i> Instagram</label>
+              <input type="text" class="admin-name-input" id="staff-ig-${s.id}" value="${s.ig && s.ig !== '#' ? s.ig : ''}" placeholder="sposhappeal" style="font-size: 0.8rem;">
             </div>
             <div class="form-field" style="flex: 1;">
               <label class="admin-label-small">Passcode</label>
-              <input type="password" class="admin-name-input" id="staff-passcode-${s.id}" value="" placeholder="Leave blank to keep current" style="font-size: 0.8rem;" autocomplete="new-password">
+              <input type="password" class="admin-name-input" id="staff-passcode-${s.id}" value="" placeholder="Leave blank to keep" style="font-size: 0.8rem;" autocomplete="new-password">
             </div>
           </div>
+
+           <div class="form-field-row" style="display: flex; gap: 12px;">
+             <div class="form-field" style="flex: 1;">
+               <label class="admin-label-small" style="display:flex;align-items:center;gap:5px;"><i class="fa-brands fa-facebook" style="color:#1877f2;font-size:0.75rem;"></i> Facebook</label>
+               <input type="text" class="admin-name-input" id="staff-fb-${s.id}" value="${s.fb || ''}" placeholder="sposhappeal" style="font-size: 0.8rem;">
+             </div>
+             <div class="form-field" style="flex: 1;">
+               <label class="admin-label-small" style="display:flex;align-items:center;gap:5px;"><i class="fa-brands fa-tiktok" style="font-size:0.75rem;"></i> TikTok</label>
+               <input type="text" class="admin-name-input" id="staff-tiktok-${s.id}" value="${s.tiktok || ''}" placeholder="sposhappeal" style="font-size: 0.8rem;">
+             </div>
+           </div>
 
           <div class="admin-staff-permissions">
             <h4>Access Permissions</h4>
