@@ -1720,6 +1720,8 @@ app.put('/api/admin/staff/:id', adminLimiter, verifyAdmin, async (req, res) => {
       if (role !== undefined) staff.role = role;
       if (bio !== undefined) staff.bio = bio;
       if (ig !== undefined) staff.ig = ig;
+      if (fb !== undefined) staff.fb = fb;
+      if (tiktok !== undefined) staff.tiktok = tiktok;
       if (img !== undefined) staff.img = img;
       if (passcode !== undefined) staff.passcodeHash = passcode; // pre-save hook will re-hash
       if (permissions !== undefined) {
@@ -1744,6 +1746,8 @@ app.put('/api/admin/staff/:id', adminLimiter, verifyAdmin, async (req, res) => {
       if (role !== undefined) staff.role = role;
       if (bio !== undefined) staff.bio = bio;
       if (ig !== undefined) staff.ig = ig;
+      if (fb !== undefined) staff.fb = fb;
+      if (tiktok !== undefined) staff.tiktok = tiktok;
       if (img !== undefined) staff.img = img;
       if (passcode !== undefined) staff.passcode = passcode;
       if (permissions !== undefined) {
