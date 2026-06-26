@@ -1076,7 +1076,9 @@ function renderStaffList() {
 async function saveStaffMember(staffId) {
   const nameVal = document.getElementById(`staff-name-${staffId}`).value.trim();
   const roleVal = document.getElementById(`staff-role-${staffId}`).value.trim();
-  const igVal = document.getElementById(`staff-ig-${staffId}`).value.trim();
+  const igVal     = document.getElementById(`staff-ig-${staffId}`).value.trim();
+  const fbVal     = document.getElementById(`staff-fb-${staffId}`).value.trim();
+  const tiktokVal = document.getElementById(`staff-tiktok-${staffId}`).value.trim();
   const passcodeVal = document.getElementById(`staff-passcode-${staffId}`).value.trim();
   const btn = document.getElementById(`btn-save-staff-${staffId}`);
 
@@ -1098,6 +1100,8 @@ async function saveStaffMember(staffId) {
     name: nameVal,
     role: roleVal,
     ig: igVal,
+    fb: fbVal,
+    tiktok: tiktokVal,
     permissions: {
       canViewBookings: pView,
       canCancelBookings: pCancel,
@@ -1253,7 +1257,9 @@ async function submitAddStaff(event) {
   const nameVal = document.getElementById('add-staff-name').value.trim();
   const roleVal = document.getElementById('add-staff-role').value.trim();
   const bioVal = document.getElementById('add-staff-bio').value.trim();
-  const igVal = document.getElementById('add-staff-ig').value.trim();
+  const igVal     = document.getElementById('add-staff-ig').value.trim();
+  const fbVal     = document.getElementById('add-staff-fb').value.trim();
+  const tiktokVal = document.getElementById('add-staff-tiktok').value.trim();
   const passcodeVal = document.getElementById('add-staff-passcode').value.trim();
 
   const pView = document.getElementById('p-view-bookings').checked;
@@ -1278,6 +1284,8 @@ async function submitAddStaff(event) {
         role: roleVal,
         bio: bioVal,
         ig: igVal,
+    fb: fbVal,
+    tiktok: tiktokVal,
         img: _staffPhotoBase64 || null,
         passcode: passcodeVal,
         permissions: {
