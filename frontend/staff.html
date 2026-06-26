@@ -407,15 +407,34 @@
             <textarea id="add-staff-bio" placeholder="e.g. 5+ years of custom nail design..." rows="2"></textarea>
           </div>
 
-          <div class="form-field-row" style="display: flex; gap: 16px;">
-            <div class="form-field" style="flex: 1;">
-              <label for="add-staff-ig">INSTAGRAM USERNAME</label>
-              <input type="text" id="add-staff-ig" placeholder="e.g. @janedoe">
+          <!-- Social Media -->
+          <div class="form-field">
+            <label style="margin-bottom:10px;display:block;">SOCIAL MEDIA HANDLES</label>
+            <div class="form-field-row" style="display:flex;gap:12px;flex-wrap:wrap;">
+              <div class="form-field" style="flex:1;min-width:140px;">
+                <label for="add-staff-ig" style="font-size:0.72rem;display:flex;align-items:center;gap:6px;">
+                  <i class="fa-brands fa-instagram" style="color:#e0447a;"></i> Instagram
+                </label>
+                <input type="text" id="add-staff-ig" placeholder="sposhappeal">
+              </div>
+              <div class="form-field" style="flex:1;min-width:140px;">
+                <label for="add-staff-fb" style="font-size:0.72rem;display:flex;align-items:center;gap:6px;">
+                  <i class="fa-brands fa-facebook" style="color:#1877f2;"></i> Facebook
+                </label>
+                <input type="text" id="add-staff-fb" placeholder="sposhappeal">
+              </div>
+              <div class="form-field" style="flex:1;min-width:140px;">
+                <label for="add-staff-tiktok" style="font-size:0.72rem;display:flex;align-items:center;gap:6px;">
+                  <i class="fa-brands fa-tiktok" style="color:#fff;"></i> TikTok
+                </label>
+                <input type="text" id="add-staff-tiktok" placeholder="sposhappeal">
+              </div>
             </div>
-            <div class="form-field" style="flex: 1;">
-              <label for="add-staff-passcode">LOGIN PASSCODE *</label>
-              <input type="password" id="add-staff-passcode" placeholder="e.g. jane123" required autocomplete="new-password">
-            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="add-staff-passcode">LOGIN PASSCODE *</label>
+            <input type="password" id="add-staff-passcode" placeholder="Enter a passcode for this staff member" required autocomplete="new-password">
           </div>
 
           <!-- Permissions checkboxes -->
