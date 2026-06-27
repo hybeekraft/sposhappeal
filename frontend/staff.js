@@ -172,6 +172,7 @@ document.addEventListener('visibilitychange', () => {
 
 
 let bookingsCache = [];
+let filteredRevenueCache = [];
 let catalogCache = null;
 let currentTab = 'bookings';
 let activeRescheduleId = null;
@@ -513,7 +514,7 @@ function renderRevenue() {
   }
 
   // Filter bookings (exclude cancelled ones)
-  const filtered = bookingsCache.filter(b => {
+  filteredRevenueCache = bookingsCache.filter(b => {
     if (b.status === 'cancelled') return false;
 
     // Timeframe filter
@@ -535,7 +536,7 @@ function renderRevenue() {
     return true;
   });
 
-  if (filtered.length === 0) {
+  if (filteredRevenueCache.length === 0) {
     if (grid) {
       grid.innerHTML = `
         <div class="empty-state" style="grid-column: 1 / -1;">
@@ -548,14 +549,14 @@ function renderRevenue() {
   }
 
   // Calculate stats
-  const totalBookings = filtered.length;
-  const totalDeposits = filtered.reduce((acc, b) => acc + (Number(b.depositDue) || 0), 0);
+  const totalBookings = filteredRevenueCache.length;
+  const totalDeposits = filteredRevenueCache.reduce((acc, b) => acc + (Number(b.depositDue) || 0), 0);
 
-  const completedBookings = filtered.filter(b => b.status === 'completed');
+  const completedBookings = filteredRevenueCache.filter(b => b.status === 'completed');
   const totalRevenue = completedBookings.reduce((acc, b) => acc + (Number(b.total) || 0), 0);
 
-  const confirmedBookingsCount = filtered.filter(b => b.status === 'confirmed').length;
-  const pendingBookingsCount = filtered.filter(b => b.status === 'pending').length;
+  const confirmedBookingsCount = filteredRevenueCache.filter(b => b.status === 'confirmed').length;
+  const pendingBookingsCount = filteredRevenueCache.filter(b => b.status === 'pending').length;
 
   if (grid) {
     grid.innerHTML = `
@@ -659,7 +660,7 @@ function renderBookingsList() {
     return true;
   });
 
-  if (filtered.length === 0) {
+  if (filteredRevenueCache.length === 0) {
     grid.innerHTML = `
       <div class="empty-state">
         <i class="fa-regular fa-calendar"></i>
@@ -1622,4 +1623,69 @@ function slotToMinutes(slot) {
     let [h, m] = slot.split(':').map(Number);
     return h * 60 + m;
   }
+}
+
+
+/* 📊 CSV Statement Exporter */
+function downloadRevenueStatement() {
+  if (!filteredRevenueCache || filteredRevenueCache.length === 0) {
+    adminToast('No revenue records available for download.');
+    return;
+  }
+
+  const headers = [
+    'Booking Reference',
+    'Client Name',
+    'Client Email',
+    'Client Phone',
+    'Appointment Date',
+    'Time Window',
+    'Service(s) Booked',
+    'Assigned Expert',
+    'Service Type',
+    'Total Cost (NGN)',
+    'Deposit Due (NGN)',
+    'Appointment Status',
+    'Payment Status'
+  ];
+
+  const rows = filteredRevenueCache.map(b => {
+    const serviceNames = Array.isArray(b.services)
+      ? b.services.map(s => s.name).join(' | ')
+      : b.serviceNames || 'N/A';
+
+    return [
+      b.reference_id,
+      b.clientName,
+      b.clientEmail,
+      b.clientPhone,
+      b.dateDisplay || (b.dateISO ? new Date(b.dateISO).toLocaleDateString('en-GB') : ''),
+      b.time,
+      serviceNames,
+      b.expertName,
+      b.serviceType === 'home' ? 'Home Service' : 'In-Studio (Salon)',
+      b.total,
+      b.depositDue,
+      b.status,
+      b.paymentStatus
+    ].map(val => {
+      const strVal = String(val || '').replace(/"/g, '""');
+      return strVal.includes(',') || strVal.includes('\n') || strVal.includes('"') ? `"${strVal}"` : strVal;
+    });
+  });
+
+  const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  const timeframe = document.getElementById('revenue-filter-timeframe')?.value || 'month';
+  const timestamp = new Date().toISOString().split('T')[0];
+  link.setAttribute('href', url);
+  link.setAttribute('download', `Sposh_Revenue_Statement_${timeframe}_${timestamp}.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }

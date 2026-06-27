@@ -201,9 +201,14 @@
       <section class="admin-tab-panel" id="panel-revenue">
         <div class="admin-panel-header" style="margin-bottom: 24px;">
           <h2>Revenue Dashboard</h2>
-          <button class="btn btn-outline-white" onclick="loadRevenue()" style="font-size:0.82rem;padding:8px 16px;">
-            <i class="fa-solid fa-rotate-right"></i> Refresh
-          </button>
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-outline-white" onclick="downloadRevenueStatement()" style="font-size:0.82rem;padding:8px 16px; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-download"></i> Download Statement
+            </button>
+            <button class="btn btn-outline-white" onclick="loadRevenue()" style="font-size:0.82rem;padding:8px 16px; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+          </div>
         </div>
 
         <div class="admin-loader" id="revenue-loader" style="display:none;">
