@@ -456,17 +456,44 @@ function renderRevenue() {
   const serviceType = document.getElementById('revenue-filter-type')?.value || 'all';
   const expertId = document.getElementById('revenue-filter-staff')?.value || 'all';
 
+  // Toggle custom date range inputs visibility
+  const customRangeContainer = document.getElementById('revenue-custom-range');
+  if (customRangeContainer) {
+    if (timeframe === 'custom') {
+      customRangeContainer.style.display = 'flex';
+    } else {
+      customRangeContainer.style.display = 'none';
+    }
+  }
+
   // Helper date logic
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  startOfToday.setHours(0, 0, 0, 0);
 
-  // Start of this week (Monday)
-  const day = now.getDay();
-  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-  const startOfWeek = new Date(now.getFullYear(), now.getMonth(), diff);
-  startOfWeek.setHours(0, 0, 0, 0);
+  const startOfYesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  startOfYesterday.setHours(0, 0, 0, 0);
+  const endOfYesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  endOfYesterday.setHours(23, 59, 59, 999);
 
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  startOfMonth.setHours(0, 0, 0, 0);
+
+  // Custom date bounds
+  let customStart = null;
+  let customEnd = null;
+  if (timeframe === 'custom') {
+    const startVal = document.getElementById('revenue-filter-start-date')?.value;
+    const endVal = document.getElementById('revenue-filter-end-date')?.value;
+    if (startVal) {
+      customStart = new Date(startVal);
+      customStart.setHours(0, 0, 0, 0);
+    }
+    if (endVal) {
+      customEnd = new Date(endVal);
+      customEnd.setHours(23, 59, 59, 999);
+    }
+  }
 
   // Filter bookings (exclude cancelled ones)
   const filtered = bookingsCache.filter(b => {
@@ -475,8 +502,12 @@ function renderRevenue() {
     // Timeframe filter
     const bDate = new Date(b.createdAt || b.dateISO);
     if (timeframe === 'today' && bDate < startOfToday) return false;
-    if (timeframe === 'week' && bDate < startOfWeek) return false;
+    if (timeframe === 'yesterday' && (bDate < startOfYesterday || bDate > endOfYesterday)) return false;
     if (timeframe === 'month' && bDate < startOfMonth) return false;
+    if (timeframe === 'custom') {
+      if (customStart && bDate < customStart) return false;
+      if (customEnd && bDate > customEnd) return false;
+    }
 
     // Service Type filter
     if (serviceType !== 'all' && b.serviceType !== serviceType) return false;
@@ -534,7 +565,23 @@ function renderRevenue() {
 
     const headerTitle = monthCard.querySelector('h4');
     if (headerTitle) {
-      const label = timeframe === 'today' ? 'Today' : timeframe === 'week' ? 'This Week' : timeframe === 'month' ? 'This Month' : 'All-Time';
+      let label = 'This Month';
+      if (timeframe === 'all') label = 'All-Time';
+      else if (timeframe === 'today') label = 'Today';
+      else if (timeframe === 'yesterday') label = 'Yesterday';
+      else if (timeframe === 'custom') {
+        const startVal = document.getElementById('revenue-filter-start-date')?.value;
+        const endVal = document.getElementById('revenue-filter-end-date')?.value;
+        if (startVal && endVal) {
+          label = `Custom (${startVal} to ${endVal})`;
+        } else if (startVal) {
+          label = `Custom (From ${startVal})`;
+        } else if (endVal) {
+          label = `Custom (To ${endVal})`;
+        } else {
+          label = 'Custom Range';
+        }
+      }
       headerTitle.innerHTML = `<i class="fa-regular fa-calendar" style="color:#e0447a;"></i> ${label}'s Breakdown`;
     }
 

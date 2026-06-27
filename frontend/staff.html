@@ -211,15 +211,21 @@
         </div>
 
         <!-- Revenue Filters -->
-        <div class="filter-controls" style="display:flex;gap:16px;align-items:center;margin-bottom:24px;flex-wrap:wrap;background:rgba(255,255,255,0.02);border:1px solid rgba(224,68,122,0.1);padding:16px;border-radius:12px;">
+        <div class="filter-controls" style="display:flex;gap:16px;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;background:rgba(255,255,255,0.02);border:1px solid rgba(224,68,122,0.1);padding:16px;border-radius:12px;">
           <div class="filter-group" style="display:flex;flex-direction:column;gap:6px;">
             <label style="color:#a59f95;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Timeframe</label>
             <select id="revenue-filter-timeframe" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;min-width:140px;cursor:pointer;">
               <option value="all">All-Time</option>
               <option value="today">Today</option>
-              <option value="week">This Week</option>
+              <option value="yesterday">Yesterday</option>
               <option value="month" selected>This Month</option>
+              <option value="custom">Customize</option>
             </select>
+          </div>
+          <div class="filter-group" id="revenue-custom-range" style="display:none;flex-direction:row;align-items:center;gap:8px;height:38px;">
+            <input type="date" id="revenue-filter-start-date" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;height:100%;box-sizing:border-box;">
+            <span style="color:#a59f95;font-size:0.85rem;">to</span>
+            <input type="date" id="revenue-filter-end-date" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;height:100%;box-sizing:border-box;">
           </div>
           <div class="filter-group" style="display:flex;flex-direction:column;gap:6px;">
             <label style="color:#a59f95;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Service Type</label>
