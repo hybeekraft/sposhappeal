@@ -182,6 +182,8 @@ function applyRolePermissions(role, permissions) {
     if (headerBadge) headerBadge.textContent = 'Admin';
     if (pricingTabBtn) pricingTabBtn.style.display = 'inline-flex';
     if (staffTabBtn) staffTabBtn.style.display = 'inline-flex';
+    const revTabBtn = document.getElementById('tab-revenue-btn');
+    if (revTabBtn) revTabBtn.style.display = 'inline-flex';
   } else {
     // Staff members: bookings tab only — no pricing, no staff management
     if (headerBadge) headerBadge.textContent = 'Staff';
@@ -571,6 +573,7 @@ async function submitConfirmComplete() {
     });
     closeConfirmCompleteModal();
     adminToast('Booking marked complete! Balance collected.');
+    checkDbMode();
     await loadBookings();
   } catch (err) {
     adminToast('Failed to mark complete: ' + err.message, 'error');
