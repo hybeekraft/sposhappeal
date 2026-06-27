@@ -251,9 +251,9 @@ async function dispatchBookingNotifications(booking, actionType) {
     <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
     <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
     <div style="margin-top:16px;margin-bottom:16px;">
-      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
-      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
-      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
     </div>
     <div style="color:#575249;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
@@ -373,9 +373,9 @@ async function dispatchBookingNotifications(booking, actionType) {
     <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
     <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
     <div style="margin-top:16px;margin-bottom:16px;">
-      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
-      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
-      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
     </div>
     <div style="color:#575249;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
@@ -476,9 +476,9 @@ async function dispatchBookingNotifications(booking, actionType) {
     <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
     <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
     <div style="margin-top:16px;margin-bottom:16px;">
-      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
-      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
-      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
     </div>
     <div style="color:#575249;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
@@ -588,9 +588,9 @@ async function dispatchBookingNotifications(booking, actionType) {
     <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
     <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
     <div style="margin-top:16px;margin-bottom:16px;">
-      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
-      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
-      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/FAF6F0/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
+      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
     </div>
     <div style="color:#575249;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
