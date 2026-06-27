@@ -668,6 +668,146 @@ app.get('/api/status', (req, res) => {
 });
 
 // ─── API ROUTES ─────────────────────────────────────────────────────────────
+// ─── CRON JOBS ────────────────────────────────────────────────────────────────
+
+// 24hr Appointment Reminder (POST /api/cron/reminders)
+// Called daily by Vercel Cron — sends WhatsApp reminder to clients
+// whose appointment is tomorrow. Protected by CRON_SECRET env var.
+app.post('/api/cron/reminders', async (req, res) => {
+  try {
+    // Verify cron secret to prevent unauthorized calls
+    const secret = req.headers['x-cron-secret'];
+    if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
+      return res.status(401).json({ error: 'Unauthorized cron request.' });
+    }
+
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split('T')[0]; // YYYY-MM-DD
+
+    const useDb = mongoose.connection.readyState === 1;
+    let bookings = [];
+
+    if (useDb) {
+      bookings = await Booking.find({
+        dateISO: tomorrowStr,
+        status: { $in: ['confirmed', 'rescheduled'] },
+        reminderSent: { $ne: true }
+      });
+    } else {
+      bookings = mockBookings.filter(b =>
+        b.dateISO === tomorrowStr &&
+        ['confirmed', 'rescheduled'].includes(b.status) &&
+        !b.reminderSent
+      );
+    }
+
+    let sent = 0;
+    let failed = 0;
+
+    for (const booking of bookings) {
+      try {
+        const serviceNames = Array.isArray(booking.services)
+          ? booking.services.map(s => s.name).join(', ')
+          : booking.serviceNames || 'your service';
+
+        const msg = `Hello ${booking.clientName}! 👋
+
+This is a reminder from *S'posh APPEAL* 💅
+
+` +
+          `Your appointment is *tomorrow* (${booking.dateDisplay || tomorrowStr}) at *${booking.time || booking.startTime}*.
+
+` +
+          `📍 Service: ${serviceNames}
+` +
+          `🔖 Booking Ref: ${booking.reference_id}
+
+` +
+          `Please arrive 5–10 minutes early. If you need to reschedule, contact us at least 24hrs before.
+
+` +
+          `See you tomorrow! ✨ — S'posh APPEAL`;
+
+        await sendWhatsAppMessage(booking.clientPhone, msg);
+
+        // Mark reminder as sent
+        if (useDb) {
+          await Booking.updateOne({ _id: booking._id }, { reminderSent: true, reminderSentAt: new Date() });
+        } else {
+          booking.reminderSent = true;
+          booking.reminderSentAt = new Date();
+        }
+        sent++;
+      } catch (err) {
+        console.error(`[Reminder] Failed for ${booking.reference_id}:`, err.message);
+        failed++;
+      }
+    }
+
+    res.json({ success: true, sent, failed, checked: bookings.length, date: tomorrowStr });
+  } catch (err) {
+    console.error('[Cron Reminder] Error:', err);
+    res.status(500).json({ error: 'Cron job failed.' });
+  }
+});
+
+// Revenue Summary (GET /api/admin/revenue)
+// Returns deposit totals for admin dashboard
+app.get('/api/admin/revenue', adminLimiter, async (req, res) => {
+  try {
+    const passcode = req.headers['x-admin-passcode'];
+    const expectedPasscode = ADMIN_PASSCODE;
+    if (!passcode || passcode !== expectedPasscode) {
+      return res.status(401).json({ error: 'Unauthorized.' });
+    }
+
+    const useDb = mongoose.connection.readyState === 1;
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    let allBookings = [];
+    if (useDb) {
+      allBookings = await Booking.find({ status: { $nin: ['cancelled'] } });
+    } else {
+      allBookings = mockBookings.filter(b => b.status !== 'cancelled');
+    }
+
+    const thisMonth = allBookings.filter(b => new Date(b.createdAt || b.dateISO) >= startOfMonth);
+    const today = allBookings.filter(b => new Date(b.createdAt || b.dateISO) >= startOfToday);
+    const completed = allBookings.filter(b => b.status === 'completed');
+
+    const sum = (arr, field) => arr.reduce((acc, b) => acc + (Number(b[field]) || 0), 0);
+
+    res.json({
+      today: {
+        bookings: today.length,
+        deposits: sum(today, 'depositDue'),
+      },
+      thisMonth: {
+        bookings: thisMonth.length,
+        deposits: sum(thisMonth, 'depositDue'),
+        completed: thisMonth.filter(b => b.status === 'completed').length,
+        totalRevenue: sum(thisMonth.filter(b => b.status === 'completed'), 'total'),
+      },
+      allTime: {
+        bookings: allBookings.length,
+        deposits: sum(allBookings, 'depositDue'),
+        completed: completed.length,
+        totalRevenue: sum(completed, 'total'),
+      },
+      pending: allBookings.filter(b => b.status === 'pending').length,
+      confirmed: allBookings.filter(b => b.status === 'confirmed').length,
+    });
+  } catch (err) {
+    console.error('[Revenue] Error:', err);
+    res.status(500).json({ error: 'Failed to load revenue data.' });
+  }
+});
+
+
 
 // Health Check
 app.get('/api/health', (req, res) => {
