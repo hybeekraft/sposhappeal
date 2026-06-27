@@ -1829,12 +1829,14 @@ app.get('/api/admin/staff', verifyAdmin, async (req, res) => {
 // 13. POST /api/admin/staff
 app.post('/api/admin/staff', adminLimiter, verifyAdmin, async (req, res) => {
   try {
-    const { name: _name, role: _role, bio: _bio, ig: _ig, img: _img, passcode, permissions } = req.body;
-    const name = _xss(_name);
-    const role = _xss(_role);
-    const bio = _xss(_bio);
-    const ig = _xss(_ig);
-    const img = _xss(_img);
+    const { name: _name, role: _role, bio: _bio, ig: _ig, fb: _fb, tiktok: _tiktok, img: _img, passcode, permissions } = req.body;
+    const name   = _xss(_name);
+    const role   = _xss(_role);
+    const bio    = _xss(_bio);
+    const ig     = _xss(_ig);
+    const fb     = _xss(_fb);
+    const tiktok = _xss(_tiktok);
+    const img    = _xss(_img);
     if (!name || !passcode) {
       return res.status(400).json({ error: 'Name and passcode are required.' });
     }
@@ -1858,7 +1860,8 @@ app.post('/api/admin/staff', adminLimiter, verifyAdmin, async (req, res) => {
         canViewBookings: permissions?.canViewBookings ?? true,
         canCancelBookings: permissions?.canCancelBookings ?? false,
         canRescheduleBookings: permissions?.canRescheduleBookings ?? false,
-        canEditCatalog: permissions?.canEditCatalog ?? false
+        canEditCatalog: permissions?.canEditCatalog ?? false,
+        canConfirmComplete: permissions?.canConfirmComplete ?? true
       }
     };
 
@@ -1885,7 +1888,9 @@ app.post('/api/admin/staff', adminLimiter, verifyAdmin, async (req, res) => {
 app.put('/api/admin/staff/:id', adminLimiter, verifyAdmin, async (req, res) => {
   try {
     const staffId = req.params.id;
-    const { name: _name, role: _role, bio: _bio, ig: _ig, img: _img, passcode, permissions } = req.body;
+    const { name: _name, role: _role, bio: _bio, ig: _ig, fb: _fb, tiktok: _tiktok, img: _img, passcode, permissions } = req.body;
+    const _fb_clean     = _fb     !== undefined ? _xss(_fb)     : undefined;
+    const _tiktok_clean = _tiktok !== undefined ? _xss(_tiktok) : undefined;
 
     const useDb = mongoose.connection.readyState === 1;
     if (useDb) {
@@ -1898,8 +1903,8 @@ app.put('/api/admin/staff/:id', adminLimiter, verifyAdmin, async (req, res) => {
       if (_role !== undefined) staff.role = _xss(_role);
       if (_bio !== undefined) staff.bio = _xss(_bio);
       if (_ig !== undefined) staff.ig = _xss(_ig);
-      if (req.body.fb !== undefined) staff.fb = _xss(req.body.fb);
-      if (req.body.tiktok !== undefined) staff.tiktok = _xss(req.body.tiktok);
+      if (_fb_clean !== undefined) staff.fb = _fb_clean;
+      if (_tiktok_clean !== undefined) staff.tiktok = _tiktok_clean;
       if (_img !== undefined) staff.img = _xss(_img);
       if (passcode !== undefined) staff.passcodeHash = passcode; // pre-save hook will re-hash
       if (permissions !== undefined) {
@@ -1907,7 +1912,8 @@ app.put('/api/admin/staff/:id', adminLimiter, verifyAdmin, async (req, res) => {
           canViewBookings: permissions.canViewBookings ?? staff.permissions.canViewBookings,
           canCancelBookings: permissions.canCancelBookings ?? staff.permissions.canCancelBookings,
           canRescheduleBookings: permissions.canRescheduleBookings ?? staff.permissions.canRescheduleBookings,
-          canEditCatalog: permissions.canEditCatalog ?? staff.permissions.canEditCatalog
+          canEditCatalog: permissions.canEditCatalog ?? staff.permissions.canEditCatalog,
+          canConfirmComplete: permissions.canConfirmComplete ?? staff.permissions.canConfirmComplete
         };
       }
 
@@ -1933,7 +1939,8 @@ app.put('/api/admin/staff/:id', adminLimiter, verifyAdmin, async (req, res) => {
           canViewBookings: permissions.canViewBookings ?? staff.permissions.canViewBookings,
           canCancelBookings: permissions.canCancelBookings ?? staff.permissions.canCancelBookings,
           canRescheduleBookings: permissions.canRescheduleBookings ?? staff.permissions.canRescheduleBookings,
-          canEditCatalog: permissions.canEditCatalog ?? staff.permissions.canEditCatalog
+          canEditCatalog: permissions.canEditCatalog ?? staff.permissions.canEditCatalog,
+          canConfirmComplete: permissions.canConfirmComplete ?? staff.permissions.canConfirmComplete
         };
       }
 
