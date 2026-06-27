@@ -211,10 +211,10 @@
         </div>
 
         <!-- Revenue Filters -->
-        <div class="filter-controls" style="display:flex;gap:16px;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;background:rgba(255,255,255,0.02);border:1px solid rgba(224,68,122,0.1);padding:16px;border-radius:12px;">
-          <div class="filter-group" style="display:flex;flex-direction:column;gap:6px;">
-            <label style="color:#a59f95;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Timeframe</label>
-            <select id="revenue-filter-timeframe" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;min-width:140px;cursor:pointer;">
+        <div class="revenue-filter-bar">
+          <div class="revenue-filter-group">
+            <label class="revenue-filter-label">Timeframe</label>
+            <select id="revenue-filter-timeframe" onchange="renderRevenue()" class="revenue-filter-select">
               <option value="all">All-Time</option>
               <option value="today">Today</option>
               <option value="yesterday">Yesterday</option>
@@ -222,22 +222,22 @@
               <option value="custom">Customize</option>
             </select>
           </div>
-          <div class="filter-group" id="revenue-custom-range" style="display:none;flex-direction:row;align-items:center;gap:8px;height:38px;">
-            <input type="date" id="revenue-filter-start-date" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;height:100%;box-sizing:border-box;">
-            <span style="color:#a59f95;font-size:0.85rem;">to</span>
-            <input type="date" id="revenue-filter-end-date" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;height:100%;box-sizing:border-box;">
+          <div class="revenue-custom-range-container" id="revenue-custom-range">
+            <input type="date" id="revenue-filter-start-date" onchange="renderRevenue()">
+            <span>to</span>
+            <input type="date" id="revenue-filter-end-date" onchange="renderRevenue()">
           </div>
-          <div class="filter-group" style="display:flex;flex-direction:column;gap:6px;">
-            <label style="color:#a59f95;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Service Type</label>
-            <select id="revenue-filter-type" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;min-width:140px;cursor:pointer;">
+          <div class="revenue-filter-group">
+            <label class="revenue-filter-label">Service Type</label>
+            <select id="revenue-filter-type" onchange="renderRevenue()" class="revenue-filter-select">
               <option value="all">All Types</option>
               <option value="salon">In-Studio (Salon)</option>
               <option value="home">Home Service</option>
             </select>
           </div>
-          <div class="filter-group" style="display:flex;flex-direction:column;gap:6px;">
-            <label style="color:#a59f95;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Staff Member</label>
-            <select id="revenue-filter-staff" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;min-width:160px;cursor:pointer;">
+          <div class="revenue-filter-group">
+            <label class="revenue-filter-label">Staff Member</label>
+            <select id="revenue-filter-staff" onchange="renderRevenue()" class="revenue-filter-select">
               <option value="all">All Staff</option>
             </select>
           </div>

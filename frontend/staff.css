@@ -818,7 +818,110 @@ body.admin-page-body {
 }
 
 /* ─── RESPONSIVE OVERRIDES ─────────────────────────────────── */
+
+/* 📊 Revenue filter bar styles */
+.revenue-filter-bar {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(224, 68, 122, 0.1);
+  padding: 16px;
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.revenue-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 140px;
+}
+
+.revenue-filter-label {
+  color: #a59f95;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.revenue-filter-select {
+  background: #160D22;
+  color: #fff;
+  border: 1px solid rgba(224, 68, 122, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 38px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.revenue-filter-select:focus {
+  border-color: rgba(224, 68, 122, 0.6);
+  box-shadow: 0 0 0 2px rgba(224, 68, 122, 0.15);
+}
+
+.revenue-custom-range-container {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  flex: 2;
+  min-width: 260px;
+}
+
+.revenue-custom-range-container input[type="date"] {
+  background: #160D22;
+  color: #fff;
+  border: 1px solid rgba(224, 68, 122, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  outline: none;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.revenue-custom-range-container span {
+  color: #a59f95;
+  font-size: 0.85rem;
+}
+
 @media (max-width: 768px) {
+
+  /* 📊 Revenue filter bar mobile styles */
+  .revenue-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+  }
+  .revenue-filter-group {
+    width: 100%;
+    min-width: unset;
+  }
+  .revenue-custom-range-container {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    width: 100%;
+    min-width: unset;
+    gap: 6px;
+  }
+  .revenue-custom-range-container input[type="date"] {
+    height: 38px;
+  }
   .admin-booking-row {
     flex-direction: column;
     align-items: stretch;
