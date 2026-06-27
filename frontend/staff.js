@@ -60,7 +60,7 @@ function showInactivityWarning() {
       <p style="font-size: 0.85rem; color: #B090A8; line-height: 1.5; margin-bottom: 24px;">
         You've been inactive for a while. You'll be logged out in <strong style="color: #FF8FAB;" id="countdown-seconds">${timeLeft}</strong> seconds for security.
       </p>
-      <button onclick="resetInactivityTimer()" style="background: linear-gradient(135deg, #E0447A, #FF8FAB);
+      <button id="inactivity-keep-alive-btn" style="background: linear-gradient(135deg, #E0447A, #FF8FAB);
         border: none; color: #fff; padding: 14px 28px; border-radius: 8px; font-weight: 600;
         cursor: pointer; font-size: 0.9rem; width: 100%; transition: all 0.25s ease;">
         <i class="fa-solid fa-hand"></i> &nbsp; I'm Still Here
@@ -69,6 +69,12 @@ function showInactivityWarning() {
   `;
 
   document.body.appendChild(_warningOverlay);
+
+  // Bind event programmatically
+  const btn = _warningOverlay.querySelector('#inactivity-keep-alive-btn');
+  if (btn) {
+    btn.addEventListener('click', resetInactivityTimer);
+  }
 
   // Countdown timer
   let remaining = timeLeft;
@@ -91,33 +97,18 @@ function dismissInactivityWarning() {
 
 function performInactivityLogout() {
   dismissInactivityWarning();
+  
   // Clear all session data
   sessionStorage.removeItem('sposh_admin_passcode');
+  sessionStorage.removeItem('sposh_role');
   sessionStorage.removeItem('sposh_selected_role');
   sessionStorage.removeItem('sposh_permissions');
   sessionStorage.removeItem('sposh_staff_id');
   sessionStorage.removeItem('sposh_staff_name');
 
-  // Show login overlay
-  const overlay = document.getElementById('login-overlay');
-  if (overlay) overlay.style.display = 'flex';
-
-  // Hide dashboard
-  const dash = document.getElementById('admin-dashboard');
-  if (dash) dash.style.display = 'none';
-
-  // Show a toast-like message
-  const msg = document.createElement('div');
-  msg.style.cssText = `
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-    background: linear-gradient(135deg, #E0447A, #FF8FAB); color: #fff;
-    padding: 14px 24px; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
-    z-index: 100000; box-shadow: 0 4px 20px rgba(224, 68, 122, 0.4);
-    font-family: 'DM Sans', sans-serif; animation: fadeIn 0.3s ease;
-  `;
-  msg.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> &nbsp; Logged out due to inactivity';
-  document.body.appendChild(msg);
-  setTimeout(() => msg.remove(), 5000);
+  // Set inactivity logged out flag and reload
+  sessionStorage.setItem('sposh_logged_out_inactivity', 'true');
+  window.location.reload();
 }
 
 // Track user activity — reset timer on any interaction
@@ -195,6 +186,25 @@ function applyRolePermissions(role, permissions) {
 
 // ─── LOGIN / AUTH ───────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // Check for inactivity logout toast
+  if (sessionStorage.getItem('sposh_logged_out_inactivity') === 'true') {
+    sessionStorage.removeItem('sposh_logged_out_inactivity');
+    const msg = document.createElement('div');
+    msg.style.cssText = `
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, #E0447A, #FF8FAB); color: #fff;
+      padding: 14px 24px; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+      z-index: 100000; box-shadow: 0 4px 20px rgba(224, 68, 122, 0.4);
+      font-family: 'DM Sans', sans-serif; animation: fadeIn 0.3s ease;
+    `;
+    msg.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> &nbsp; Logged out due to inactivity';
+    document.body.appendChild(msg);
+    setTimeout(() => {
+      msg.style.animation = 'fadeOut 0.3s ease';
+      setTimeout(() => msg.remove(), 300);
+    }, 5000);
+  }
+
   console.log('[S\'posh] staff.js loaded — attaching login handlers');
 
   // Attach login button click handler (type="button" so no native form submit)
@@ -259,6 +269,7 @@ async function handleLogin(event) {
     document.getElementById('admin-portal').style.display = 'block';
     
     loadDashboard();
+    resetInactivityTimer(); // Start inactivity auto-logout timer
   } catch (err) {
     // Auth failed: Reset & notify
     sessionStorage.removeItem('sposh_admin_passcode');
@@ -299,6 +310,7 @@ async function checkPasscodeAndLoad(passcode) {
     document.getElementById('login-overlay').style.display = 'none';
     document.getElementById('admin-portal').style.display = 'block';
     loadDashboard();
+    resetInactivityTimer(); // Start timer if session is restored
   } catch (err) {
     // Token is stale or invalid: Clear and prompt login
     sessionStorage.removeItem('sposh_admin_passcode');
