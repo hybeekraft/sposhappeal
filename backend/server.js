@@ -203,15 +203,15 @@ async function dispatchBookingNotifications(booking, actionType) {
         <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
-            <td style="padding:6px 0;color:#22c87a;font-weight:700;">₦${deposit.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
-            <td style="padding:6px 0;color:#c8a261;font-weight:700;font-size:1.1rem;">₦	ext{balanceDue.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦	ext{balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
@@ -327,15 +327,15 @@ async function dispatchBookingNotifications(booking, actionType) {
         <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
-            <td style="padding:6px 0;color:#22c87a;font-weight:700;">₦${deposit.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
-            <td style="padding:6px 0;color:#c8a261;font-weight:700;font-size:1.1rem;">₦	ext{balanceDue.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦	ext{balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
@@ -443,11 +443,11 @@ async function dispatchBookingNotifications(booking, actionType) {
         <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
-            <td style="padding:6px 0;color:#e74c3c;font-weight:700;">₦	ext{deposit.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;">₦	ext{deposit.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
@@ -548,15 +548,15 @@ async function dispatchBookingNotifications(booking, actionType) {
         <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Due</td>
-            <td style="padding:6px 0;color:#b38f36;font-weight:700;">₦${deposit.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#e74c3c;font-weight:900;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
-            <td style="padding:6px 0;color:#c8a261;font-weight:700;font-size:1.1rem;">₦	ext{balanceDue.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦	ext{balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
