@@ -1176,3 +1176,24 @@ body.admin-page-body {
   .tab-btn { padding: 9px 10px; font-size: 0.72rem; }
   .admin-panel-header h2 { font-size: 1.15rem; }
 }
+
+/* Responsive Navigation Tabs (Mobile: Icons Only) */
+@media (max-width: 600px) {
+  .admin-nav-tabs .tab-btn .tab-text {
+    display: none !important;
+  }
+  .admin-nav-tabs .tab-btn i {
+    font-size: 1.25rem !important;
+    margin: 0 !important;
+  }
+  .admin-nav-tabs .tab-btn {
+    padding: 12px 8px !important;
+    justify-content: center !important;
+    flex: 1 !important;
+    gap: 0 !important;
+  }
+  .admin-nav-tabs {
+    justify-content: space-around !important;
+    flex-wrap: nowrap !important;
+  }
+}
