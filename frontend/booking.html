@@ -47,6 +47,12 @@
       #btn-wizard-next {
         flex: 2;
       }
+      #btn-wizard-back.wizard-back-hidden ~ #btn-wizard-next {
+        flex: none !important;
+        width: auto !important;
+        min-width: 140px !important;
+        margin-left: auto !important;
+      }
     }
     /* Booked slot indicator */
     .slot-legend-booked {

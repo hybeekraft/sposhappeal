@@ -1369,3 +1369,13 @@ body.booking-page-body .footer-bottom {
   margin: 0 !important;
   overflow: hidden !important;
 }
+
+/* Ensure next/continue button aligns to the right when back button is hidden */
+#btn-wizard-back.wizard-back-hidden ~ #btn-wizard-next,
+#btn-wizard-back[style*="display:none"] ~ #btn-wizard-next,
+#btn-wizard-back[style*="display: none"] ~ #btn-wizard-next {
+  flex: none !important;
+  width: auto !important;
+  min-width: 140px !important;
+  margin-left: auto !important;
+}
