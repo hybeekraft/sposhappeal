@@ -1255,6 +1255,7 @@ function openAddStaffModal() {
   document.getElementById('p-cancel-bookings').checked = false;
   document.getElementById('p-resched-bookings').checked = false;
   document.getElementById('p-edit-catalog').checked = false;
+  document.getElementById('p-confirm-complete').checked = true;
 
   document.getElementById('add-staff-modal').style.display = 'flex';
 }
@@ -1341,6 +1342,7 @@ async function submitAddStaff(event) {
   const pCancel = document.getElementById('p-cancel-bookings').checked;
   const pResched = document.getElementById('p-resched-bookings').checked;
   const pCatalog = document.getElementById('p-edit-catalog').checked;
+  const pConfirm = document.getElementById('p-confirm-complete').checked;
 
   if (!nameVal || !passcodeVal) {
     adminToast('Staff Name and Login Passcode are required.');
@@ -1367,7 +1369,8 @@ async function submitAddStaff(event) {
           canViewBookings: pView,
           canCancelBookings: pCancel,
           canRescheduleBookings: pResched,
-          canEditCatalog: pCatalog
+          canEditCatalog: pCatalog,
+          canConfirmComplete: pConfirm
         }
       })
     });
