@@ -449,6 +449,25 @@ app.set('trust proxy', 1);
 // ─── Security Headers ───────────────────────────────────────
 app.use(helmet());
 
+// ── Inline NoSQL injection protection ──────────────────────────
+app.use((req, _res, next) => {
+  const strip = (obj) => {
+    if (obj && typeof obj === 'object') {
+      Object.keys(obj).forEach(k => {
+        if (k.startsWith('$') || k.startsWith('.')) delete obj[k];
+        else strip(obj[k]);
+      });
+    }
+  };
+  strip(req.body); strip(req.query); strip(req.params);
+  next();
+});
+
+// ── Inline XSS sanitizer ───────────────────────────────────────
+const _xss = (v) => typeof v === 'string'
+  ? v.trim().replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;')
+  : v;
+
 // ─── Rate Limiting ──────────────────────────────────────────
 // Booking creation: 10 per IP per hour
 const bookingLimiter = rateLimit({
@@ -641,6 +660,13 @@ async function getStaffMemberByPasscode(passcode) {
   }
 }
 
+
+// ── DB Status endpoint (for staff portal mock-mode indicator) ──
+app.get('/api/status', (req, res) => {
+  const isLive = mongoose.connection.readyState === 1;
+  res.json({ db: isLive ? 'live' : 'mock', timestamp: new Date().toISOString() });
+});
+
 // ─── API ROUTES ─────────────────────────────────────────────────────────────
 
 // Health Check
@@ -652,11 +678,16 @@ app.get('/api/health', (req, res) => {
 app.post('/api/bookings/new', bookingLimiter, async (req, res) => {
   try {
     const {
-      clientName, clientEmail, clientPhone,
+      clientName: _cn, clientEmail: _ce, clientPhone: _cp,
       services, expert, expertName,
       dateISO, dateDisplay, time, startTime,
-      total, depositDue, serviceType, address, notes
+      total, depositDue, serviceType, address: _addr, notes: _notes
     } = req.body;
+    const clientName  = _xss(_cn);
+    const clientEmail = _xss(_ce);
+    const clientPhone = _xss(_cp);
+    const address     = _xss(_addr);
+    const notes       = _xss(_notes);
 
     // Validate request fields
     if (!clientName || !clientEmail || !clientPhone || !services || services.length === 0 || !dateISO || !time || !startTime) {
