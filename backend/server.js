@@ -106,24 +106,24 @@ async function dispatchBookingNotifications(booking, actionType) {
     const balanceDue = booking.paymentStatus === 'fully_paid' ? 0 : (total - deposit);
   
   let paymentStatusBadge = 'Pending ⚠️';
-  let badgeBg = 'rgba(212,175,55,0.1)';
+  let badgeBorder = '#ebdcb9';
   let badgeColor = '#b38f36';
   
   if (booking.paymentStatus === 'paid') {
     paymentStatusBadge = 'Deposit Paid ✅';
-    badgeBg = 'rgba(34,200,122,0.1)';
+    badgeBorder = '#22c87a';
     badgeColor = '#22c87a';
   } else if (booking.paymentStatus === 'fully_paid') {
     paymentStatusBadge = 'Fully Paid ✅';
-    badgeBg = 'rgba(34,200,122,0.1)';
+    badgeBorder = '#22c87a';
     badgeColor = '#22c87a';
   } else if (booking.paymentStatus === 'unpaid') {
     paymentStatusBadge = 'Unpaid ❌';
-    badgeBg = 'rgba(231,76,60,0.1)';
+    badgeBorder = '#e74c3c';
     badgeColor = '#e74c3c';
   } else if (booking.paymentStatus === 'refunded') {
     paymentStatusBadge = 'Refunded ↩️';
-    badgeBg = 'rgba(52,152,219,0.1)';
+    badgeBorder = '#3498db';
     badgeColor = '#3498db';
   }
 
@@ -161,62 +161,62 @@ async function dispatchBookingNotifications(booking, actionType) {
     clientSubject = `Appointment Confirmed! — Ref: ${ref}`;
     clientHtml = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#0b0a0d;font-family:'Helvetica Neue',Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#0b0a0d;padding:40px 16px;">
+<body style="margin:0;padding:0;background:#FAF6F0;font-family:'Helvetica Neue',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FAF6F0;padding:40px 16px;">
 <tr><td align="center">
-<table width="100%" style="max-width:580px;background:#131116;border-radius:16px;overflow:hidden;border:1px solid rgba(212,175,55,0.18);">
-  <tr><td style="background:linear-gradient(135deg,#1b1712,#0b0a0d);padding:36px 32px;text-align:center;border-bottom:2px solid #d4af37;">
-    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:54px;width:auto;"></div>
-    <div style="color:#d4af37;font-size:0.75rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
-    <div style="color:#fff;font-size:1.6rem;font-weight:700;font-family:Georgia,serif;letter-spacing:0.5px;">You're All Set!</div>
+<table width="100%" style="max-width:580px;background:#FAF6F0;border-radius:0;overflow:hidden;border:1px solid #e5dac1;">
+  <tr><td style="background:#1a1917;padding:40px 32px;text-align:center;border-bottom:2px solid #c8a261;">
+    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
+    <div style="color:#c8a261;font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
+    <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">You're All Set!</div>
   </td></tr>
-  <tr><td style="padding:32px;">
-    <p style="color:#e0d6f0;font-size:0.95rem;line-height:1.6;margin:0 0 24px;">Hi <strong style="color:#fff;">${name}</strong>,</p>
-    <p style="color:#c0afd8;font-size:0.88rem;line-height:1.7;margin:0 0 24px;">Your appointment at S'posh APPEAL has been confirmed and your deposit secured. We can't wait to glam you up! ✨</p>
+  <tr><td style="padding:36px 32px;background:#FAF6F0;">
+    <p style="color:#2d2b27;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
+    <p style="color:#575249;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">Your appointment at S'posh APPEAL has been confirmed and your deposit secured. We have set aside this time exclusively for you. We look forward to welcoming you to the salon. ✨</p>
     
-    <div style="background:#ffffff;border-radius:12px;padding:24px;border:1px solid rgba(212,175,55,0.15);box-shadow:0 4px 12px rgba(0,0,0,0.15);margin-bottom:24px;">
-      <div style="color:#131116;font-size:0.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #f2eef6;padding-bottom:10px;">📋 Booking Summary</div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="color:#131116;font-size:0.88rem;line-height:1.6;">
+    <div style="background:#FAF6F0;border-radius:8px;padding:24px;border:1px solid #ebdcb9;box-shadow:none;margin-bottom:28px;">
+      <div style="color:#1a1917;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #ebdcb9;padding-bottom:10px;font-family:sans-serif;">📋 Booking Details</div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;width:130px;font-weight:600;">Reference ID</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#e0447a;font-weight:700;">${ref}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#c8a261;font-weight:700;">${ref}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Service(s)</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#131116;font-weight:700;">${serviceNames}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${serviceNames}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Date</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#131116;font-weight:700;">${dateStr}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Date</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${dateStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Time / Slot</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#131116;font-weight:700;">	ext{timeStr}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Time / Slot</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${timeStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Expert</td>
-          <td style="padding:10px 0;color:#131116;font-weight:700;">${booking.expertName || 'Any Available Expert'}</td>
+          <td style="padding:10px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Expert</td>
+          <td style="padding:10px 0;color:#1a1917;font-weight:700;">${booking.expertName || 'Any Available Expert'}</td>
         </tr>
       </table>
       
-      <div style="background:#fcfaff;border-top:1px solid #f2eef6;margin-top:16px;padding-top:16px;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="color:#131116;font-size:0.88rem;line-height:1.6;">
+      <div style="border-top:1px solid #ebdcb9;margin-top:16px;padding-top:16px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#131116;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Deposit Paid</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
             <td style="padding:6px 0;color:#22c87a;font-weight:700;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Balance Due</td>
-            <td style="padding:6px 0;color:#e0447a;font-weight:700;font-size:1.1rem;">₦	ext{balanceDue.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
+            <td style="padding:6px 0;color:#c8a261;font-weight:700;font-size:1.1rem;">₦	ext{balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:8px 0 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Payment Status</td>
+            <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
             <td style="padding:8px 0 0;">
-              <span style="background:${badgeBg};color:${badgeColor};padding:4px 10px;border-radius:20px;font-size:0.75rem;font-weight:700;display:inline-block;">
+              <span style="border:1px solid ${badgeBorder};color:${badgeColor};padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1px;background:transparent;">
                 ${paymentStatusBadge}
               </span>
             </td>
@@ -226,39 +226,38 @@ async function dispatchBookingNotifications(booking, actionType) {
     </div>
     
     <div style="text-align:center;margin:28px 0 16px;">
-      <a href="https://sposhappeal.vercel.app/booking.html?email=${encodeURIComponent(email)}" style="display:inline-block;background:#ffffff;border:1px solid #e0447a;color:#e0447a;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(0,0,0,0.05);">View Booking</a>
-      <a href="${calendarUrl}" target="_blank" style="display:inline-block;background:#d4af37;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(212,175,55,0.25);">📅 Add to Calendar</a>
-      <a href="https://sposhappeal.vercel.app/booking.html?reschedule=	ext{ref}&remote=true&email=	ext{encodeURIComponent(email)}" style="display:inline-block;background:#e0447a;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(224,68,122,0.25);">Reschedule Slot</a>
-      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(37,211,102,0.25);">
+      <a href="https://sposhappeal.vercel.app/booking.html?email=	ext{encodeURIComponent(email)}" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">View Booking</a>
+      <a href="${calendarUrl}" target="_blank" style="display:inline-block;background:#c8a261;color:#fff;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #c8a261;">📅 Add to Calendar</a>
+      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
         💬 WhatsApp Support
       </a>
     </div>
 
-    <div style="background:rgba(212,175,55,0.04);border:1px dashed rgba(212,175,55,0.25);border-radius:10px;padding:20px;margin-top:28px;">
-      <h4 style="color:#d4af37;margin:0 0 12px;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
-      <ul style="color:#c0afd8;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;">
+    <div style="background:#FAF6F0;border:1px dashed #c8a261;border-radius:4px;padding:20px;margin-top:28px;">
+      <h4 style="color:#1a1917;margin:0 0 12px;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
+      <ul style="color:#575249;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
         ${booking.serviceType === 'home'
-          ? `<li style="margin-bottom:8px;"><strong style="color:#fff;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#d4af37;font-weight:600;">	ext{booking.address}</span>)</li>
-             <li style="margin-bottom:8px;"><strong style="color:#fff;">Preparation:</strong> Please prepare a clean space with power access for our expert prior to arrival.</li>`
-          : `<li style="margin-bottom:8px;"><strong style="color:#fff;">Location:</strong> <a href="https://maps.google.com/?q=Plot+15,+Admiralty+Way,+Lekki+Phase+1,+Lagos" target="_blank" style="color:#d4af37;text-decoration:underline;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos (Open Map)</a></li>
-             <li style="margin-bottom:8px;"><strong style="color:#fff;">Arrival:</strong> Please arrive <span style="color:#e0447a;font-weight:600;">10 minutes early</span> to ensure a relaxed experience.</li>`
+          ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#c8a261;font-weight:600;">	ext{booking.address}</span>)</li>
+             <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Preparation:</strong> Please prepare a clean space with power access for our expert prior to arrival.</li>`
+          : `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Location:</strong> <a href="https://maps.google.com/?q=Plot+15,+Admiralty+Way,+Lekki+Phase+1,+Lagos" target="_blank" style="color:#c8a261;text-decoration:underline;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos (Open Map)</a></li>
+             <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Arrival:</strong> Please arrive <span style="color:#c8a261;font-weight:600;">10 minutes early</span> to ensure a relaxed experience.</li>`
         }
-        <li style="margin-bottom:8px;"><strong style="color:#fff;">Contact Number:</strong> <a href="tel:+2349131282016" style="color:#e0447a;text-decoration:none;font-weight:600;">09131282016</a></li>
-        <li><strong style="color:#fff;">Policy:</strong> Need to change your slot? Contact us at least <span style="color:#e0447a;font-weight:600;">24 hours before</span> your appointment. Rescheduling or cancellation within 24 hours is locked.</li>
+        <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Contact Number:</strong> <a href="tel:+2349131282016" style="color:#c8a261;text-decoration:none;font-weight:600;">09131282016</a></li>
+        <li><strong style="color:#1a1917;">Policy:</strong> Need to change your slot? Contact us at least <span style="color:#c8a261;font-weight:600;">24 hours before</span> your appointment. Rescheduling or cancellation within 24 hours is locked.</li>
       </ul>
     </div>
   </td></tr>
-  <tr><td style="padding:24px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
-    <div style="color:#d4af37;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
-    <div style="color:#6a5a80;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
-    <div style="margin-top:12px;margin-bottom:12px;">
-      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">Instagram</a>
-      <span style="color:#6a5a80;">&bull;</span>
-      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">Facebook</a>
-      <span style="color:#6a5a80;">&bull;</span>
-      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">TikTok</a>
+  <tr><td style="padding:32px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
+    <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
+    <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
+    <div style="margin-top:16px;margin-bottom:16px;">
+      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Instagram</a>
+      <span style="color:#575249;">&bull;</span>
+      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Facebook</a>
+      <span style="color:#575249;">&bull;</span>
+      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">TikTok</a>
     </div>
-    <div style="color:#6a5a80;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
+    <div style="color:#575249;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
@@ -286,62 +285,62 @@ async function dispatchBookingNotifications(booking, actionType) {
     clientSubject = `Appointment Rescheduled — Ref: ${ref}`;
     clientHtml = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#0b0a0d;font-family:'Helvetica Neue',Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#0b0a0d;padding:40px 16px;">
+<body style="margin:0;padding:0;background:#FAF6F0;font-family:'Helvetica Neue',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FAF6F0;padding:40px 16px;">
 <tr><td align="center">
-<table width="100%" style="max-width:580px;background:#131116;border-radius:16px;overflow:hidden;border:1px solid rgba(52,152,219,0.25);">
-  <tr><td style="background:linear-gradient(135deg,#0a2240,#0f3560);padding:36px 32px;text-align:center;border-bottom:2px solid #3498db;">
-    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:54px;width:auto;"></div>
-    <div style="color:#3498db;font-size:0.75rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
-    <div style="color:#fff;font-size:1.6rem;font-weight:700;font-family:Georgia,serif;letter-spacing:0.5px;">Appointment Moved!</div>
+<table width="100%" style="max-width:580px;background:#FAF6F0;border-radius:0;overflow:hidden;border:1px solid #ebdcb9;">
+  <tr><td style="background:#1a1917;padding:40px 32px;text-align:center;border-bottom:2px solid #3498db;">
+    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
+    <div style="color:#3498db;font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
+    <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">Appointment Moved!</div>
   </td></tr>
-  <tr><td style="padding:32px;">
-    <p style="color:#e0d6f0;font-size:0.95rem;line-height:1.6;margin:0 0 24px;">Hi <strong style="color:#fff;">${name}</strong>,</p>
-    <p style="color:#c0afd8;font-size:0.88rem;line-height:1.7;margin:0 0 24px;">Your S'posh APPEAL appointment has been successfully rescheduled. Below are your updated booking details:</p>
+  <tr><td style="padding:36px 32px;background:#FAF6F0;">
+    <p style="color:#2d2b27;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
+    <p style="color:#575249;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">Your S'posh APPEAL appointment has been successfully rescheduled. Below are your updated booking details:</p>
     
-    <div style="background:#ffffff;border-radius:12px;padding:24px;border:1px solid rgba(52,152,219,0.15);box-shadow:0 4px 12px rgba(0,0,0,0.15);margin-bottom:24px;">
-      <div style="color:#131116;font-size:0.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #f2eef6;padding-bottom:10px;">📅 Updated Summary</div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="color:#131116;font-size:0.88rem;line-height:1.6;">
+    <div style="background:#FAF6F0;border-radius:8px;padding:24px;border:1px solid #ebdcb9;box-shadow:none;margin-bottom:28px;">
+      <div style="color:#1a1917;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #ebdcb9;padding-bottom:10px;font-family:sans-serif;">📅 Updated Summary</div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;width:130px;font-weight:600;">Reference ID</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#e0447a;font-weight:700;">${ref}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#e0447a;font-weight:700;">${ref}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Service(s)</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#131116;font-weight:700;">${serviceNames}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">	ext{serviceNames}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">New Date</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#3498db;font-weight:700;font-size:0.95rem;">${dateStr}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">New Date</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:0.95rem;">	ext{dateStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">New Time</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#3498db;font-weight:700;font-size:0.95rem;">	ext{timeStr}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">New Time</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:0.95rem;">	ext{timeStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Expert</td>
-          <td style="padding:10px 0;color:#131116;font-weight:700;">	ext{booking.expertName || 'Any Available Expert'}</td>
+          <td style="padding:10px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Expert</td>
+          <td style="padding:10px 0;color:#1a1917;font-weight:700;">	ext{booking.expertName || 'Any Available Expert'}</td>
         </tr>
       </table>
       
-      <div style="background:#fcfaff;border-top:1px solid #f2eef6;margin-top:16px;padding-top:16px;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="color:#131116;font-size:0.88rem;line-height:1.6;">
+      <div style="border-top:1px solid #ebdcb9;margin-top:16px;padding-top:16px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#131116;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Deposit Paid</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
             <td style="padding:6px 0;color:#22c87a;font-weight:700;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Balance Due</td>
-            <td style="padding:6px 0;color:#e0447a;font-weight:700;font-size:1.1rem;">₦	ext{balanceDue.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
+            <td style="padding:6px 0;color:#c8a261;font-weight:700;font-size:1.1rem;">₦	ext{balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:8px 0 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Payment Status</td>
+            <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
             <td style="padding:8px 0 0;">
-              <span style="background:${badgeBg};color:${badgeColor};padding:4px 10px;border-radius:20px;font-size:0.75rem;font-weight:700;display:inline-block;">
+              <span style="border:1px solid ${badgeBorder};color:${badgeColor};padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1px;background:transparent;">
                 ${paymentStatusBadge}
               </span>
             </td>
@@ -351,39 +350,38 @@ async function dispatchBookingNotifications(booking, actionType) {
     </div>
     
     <div style="text-align:center;margin:28px 0 16px;">
-      <a href="https://sposhappeal.vercel.app/booking.html?email=${encodeURIComponent(email)}" style="display:inline-block;background:#ffffff;border:1px solid #e0447a;color:#e0447a;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(0,0,0,0.05);">View Booking</a>
-      <a href="	ext{calendarUrl}" target="_blank" style="display:inline-block;background:#d4af37;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(212,175,55,0.25);">📅 Add to Calendar</a>
-      <a href="https://sposhappeal.vercel.app/booking.html?reschedule=	ext{ref}&remote=true&email=	ext{encodeURIComponent(email)}" style="display:inline-block;background:#e0447a;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(224,68,122,0.25);">Reschedule Slot</a>
-      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(37,211,102,0.25);">
+      <a href="https://sposhappeal.vercel.app/booking.html?email=	ext{encodeURIComponent(email)}" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">View Booking</a>
+      <a href="	ext{calendarUrl}" target="_blank" style="display:inline-block;background:#c8a261;color:#fff;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #c8a261;">📅 Add to Calendar</a>
+      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
         💬 WhatsApp Support
       </a>
     </div>
 
-    <div style="background:rgba(52,152,219,0.04);border:1px dashed rgba(52,152,219,0.25);border-radius:10px;padding:20px;margin-top:28px;">
-      <h4 style="color:#3498db;margin:0 0 12px;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
-      <ul style="color:#c0afd8;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;">
+    <div style="background:#FAF6F0;border:1px dashed #3498db;border-radius:4px;padding:20px;margin-top:28px;">
+      <h4 style="color:#3498db;margin:0 0 12px;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
+      <ul style="color:#575249;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
         ${booking.serviceType === 'home'
-          ? `<li style="margin-bottom:8px;"><strong style="color:#fff;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#3498db;font-weight:600;">	ext{booking.address}</span>)</li>
-             <li style="margin-bottom:8px;"><strong style="color:#fff;">Preparation:</strong> Please prepare a clean space with power access for our expert prior to arrival.</li>`
-          : `<li style="margin-bottom:8px;"><strong style="color:#fff;">Location:</strong> <a href="https://maps.google.com/?q=Plot+15,+Admiralty+Way,+Lekki+Phase+1,+Lagos" target="_blank" style="color:#3498db;text-decoration:underline;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos (Open Map)</a></li>
-             <li style="margin-bottom:8px;"><strong style="color:#fff;">Arrival:</strong> Please arrive <span style="color:#e0447a;font-weight:600;">10 minutes early</span> to ensure a relaxed experience.</li>`
+          ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#3498db;font-weight:600;">	ext{booking.address}</span>)</li>
+             <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Preparation:</strong> Please prepare a clean space with power access for our expert prior to arrival.</li>`
+          : `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Location:</strong> <a href="https://maps.google.com/?q=Plot+15,+Admiralty+Way,+Lekki+Phase+1,+Lagos" target="_blank" style="color:#3498db;text-decoration:underline;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos (Open Map)</a></li>
+             <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Arrival:</strong> Please arrive <span style="color:#e0447a;font-weight:600;">10 minutes early</span> to ensure a relaxed experience.</li>`
         }
-        <li style="margin-bottom:8px;"><strong style="color:#fff;">Contact Number:</strong> <a href="tel:+2349131282016" style="color:#e0447a;text-decoration:none;font-weight:600;">09131282016</a></li>
-        <li><strong style="color:#fff;">Policy:</strong> Need to change your slot? Contact us at least <span style="color:#e0447a;font-weight:600;">24 hours before</span> your appointment. Rescheduling or cancellation within 24 hours is locked.</li>
+        <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Contact Number:</strong> <a href="tel:+2349131282016" style="color:#e0447a;text-decoration:none;font-weight:600;">09131282016</a></li>
+        <li><strong style="color:#1a1917;">Policy:</strong> Need to change your slot? Contact us at least <span style="color:#e0447a;font-weight:600;">24 hours before</span> your appointment. Rescheduling or cancellation within 24 hours is locked.</li>
       </ul>
     </div>
   </td></tr>
-  <tr><td style="padding:24px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
-    <div style="color:#d4af37;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
-    <div style="color:#6a5a80;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
-    <div style="margin-top:12px;margin-bottom:12px;">
-      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">Instagram</a>
-      <span style="color:#6a5a80;">&bull;</span>
-      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">Facebook</a>
-      <span style="color:#6a5a80;">&bull;</span>
-      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">TikTok</a>
+  <tr><td style="padding:32px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
+    <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
+    <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
+    <div style="margin-top:16px;margin-bottom:16px;">
+      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Instagram</a>
+      <span style="color:#575249;">&bull;</span>
+      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Facebook</a>
+      <span style="color:#575249;">&bull;</span>
+      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">TikTok</a>
     </div>
-    <div style="color:#6a5a80;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
+    <div style="color:#575249;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
@@ -396,9 +394,9 @@ async function dispatchBookingNotifications(booking, actionType) {
         <p>Client ${name} has rescheduled their booking.</p>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
           <tr><td style="padding: 8px; font-weight: bold; width: 120px;">Reference ID:</td><td style="padding: 8px; font-weight: bold; color: #E0447A;">${ref}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Client:</td><td style="padding: 8px;">	ext{name}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">New Date/Time:</td><td style="padding: 8px; font-weight: bold; color: #3498db;">	ext{dateStr} (	ext{timeStr})</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Services:</td><td style="padding: 8px;">	ext{serviceNames}</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold;">Client:</td><td style="padding: 8px;">${name}</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold;">New Date/Time:</td><td style="padding: 8px; font-weight: bold; color: #3498db;">${dateStr} (${timeStr})</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold;">Services:</td><td style="padding: 8px;">${serviceNames}</td></tr>
         </table>
       </div>`;
     adminWa = `[ALERT] Booking Rescheduled!\n\nRef: ${ref}\nClient: ${name}\nNew Date/Time: ${dateStr} (${timeStr})`;
@@ -407,54 +405,54 @@ async function dispatchBookingNotifications(booking, actionType) {
     clientSubject = `Appointment Cancelled — Ref: ${ref}`;
     clientHtml = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#0b0a0d;font-family:'Helvetica Neue',Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#0b0a0d;padding:40px 16px;">
+<body style="margin:0;padding:0;background:#FAF6F0;font-family:'Helvetica Neue',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FAF6F0;padding:40px 16px;">
 <tr><td align="center">
-<table width="100%" style="max-width:580px;background:#131116;border-radius:16px;overflow:hidden;border:1px solid rgba(231,76,60,0.25);">
-  <tr><td style="background:linear-gradient(135deg,#210505,#400f0f);padding:36px 32px;text-align:center;border-bottom:2px solid #e74c3c;">
-    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:54px;width:auto;"></div>
-    <div style="color:#e74c3c;font-size:0.75rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
-    <div style="color:#fff;font-size:1.6rem;font-weight:700;font-family:Georgia,serif;letter-spacing:0.5px;">Appointment Cancelled</div>
+<table width="100%" style="max-width:580px;background:#FAF6F0;border-radius:0;overflow:hidden;border:1px solid #ebdcb9;">
+  <tr><td style="background:#1a1917;padding:40px 32px;text-align:center;border-bottom:2px solid #e74c3c;">
+    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
+    <div style="color:#e74c3c;font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
+    <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">Appointment Cancelled</div>
   </td></tr>
-  <tr><td style="padding:32px;">
-    <p style="color:#e0d6f0;font-size:0.95rem;line-height:1.6;margin:0 0 24px;">Hi <strong style="color:#fff;">${name}</strong>,</p>
-    <p style="color:#c0afd8;font-size:0.88rem;line-height:1.7;margin:0 0 24px;">Your S'posh APPEAL appointment has been cancelled. Below are the details for your records:</p>
+  <tr><td style="padding:36px 32px;background:#FAF6F0;">
+    <p style="color:#2d2b27;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
+    <p style="color:#575249;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">Your S'posh APPEAL appointment has been cancelled. Below are the details for your records:</p>
     
-    <div style="background:#ffffff;border-radius:12px;padding:24px;border:1px solid rgba(231,76,60,0.15);box-shadow:0 4px 12px rgba(0,0,0,0.15);margin-bottom:24px;">
-      <div style="color:#131116;font-size:0.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #f2eef6;padding-bottom:10px;">📅 Cancelled Booking Details</div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="color:#131116;font-size:0.88rem;line-height:1.6;">
+    <div style="background:#ffffff;border-radius:8px;padding:24px;border:1px solid #ebdcb9;box-shadow:none;margin-bottom:28px;">
+      <div style="color:#1a1917;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #ebdcb9;padding-bottom:10px;font-family:sans-serif;">📅 Cancelled Details</div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;width:130px;font-weight:600;">Reference ID</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#e0447a;font-weight:700;">${ref}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#e0447a;font-weight:700;">${ref}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Service(s)</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#131116;font-weight:700;">${serviceNames}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">	ext{serviceNames}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Original Date</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#131116;font-weight:700;">	ext{dateStr}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Original Date</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">	ext{dateStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Time / Slot</td>
-          <td style="padding:10px 0;color:#131116;font-weight:700;">${timeStr}</td>
+          <td style="padding:10px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Time / Slot</td>
+          <td style="padding:10px 0;color:#1a1917;font-weight:700;">	ext{timeStr}</td>
         </tr>
       </table>
       
-      <div style="background:#fcfaff;border-top:1px solid #f2eef6;margin-top:16px;padding-top:16px;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="color:#131116;font-size:0.88rem;line-height:1.6;">
+      <div style="border-top:1px solid #ebdcb9;margin-top:16px;padding-top:16px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#131116;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Deposit Paid</td>
-            <td style="padding:6px 0;color:#e74c3c;font-weight:700;">₦${deposit.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
+            <td style="padding:6px 0;color:#e74c3c;font-weight:700;">₦	ext{deposit.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:8px 0 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Payment Status</td>
+            <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
             <td style="padding:8px 0 0;">
-              <span style="background:rgba(231,76,60,0.1);color:#e74c3c;padding:4px 10px;border-radius:20px;font-size:0.75rem;font-weight:700;display:inline-block;">
+              <span style="border:1px solid #e74c3c;color:#e74c3c;padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1px;background:transparent;">
                 Cancelled ❌
               </span>
             </td>
@@ -464,35 +462,35 @@ async function dispatchBookingNotifications(booking, actionType) {
     </div>
     
     <div style="text-align:center;margin:28px 0 16px;">
-      <a href="https://sposhappeal.vercel.app/booking.html" style="display:inline-block;background:#e0447a;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(224,68,122,0.25);">Book Again</a>
-      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(37,211,102,0.25);">
+      <a href="https://sposhappeal.vercel.app/booking.html" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">Book Again</a>
+      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
         💬 WhatsApp Support
       </a>
     </div>
 
-    <div style="background:rgba(231,76,60,0.04);border:1px dashed rgba(231,76,60,0.25);border-radius:10px;padding:20px;margin-top:28px;">
-      <h4 style="color:#e74c3c;margin:0 0 12px;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
-      <ul style="color:#c0afd8;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;">
-        <li style="margin-bottom:8px;"><strong style="color:#fff;">Refunds:</strong> If you did not request this cancellation or have questions about a deposit refund, please contact us on WhatsApp as soon as possible.</li>
-        <li style="margin-bottom:8px;"><strong style="color:#fff;">Contact Number:</strong> <a href="tel:+2349131282016" style="color:#e0447a;text-decoration:none;font-weight:600;">09131282016</a></li>
+    <div style="background:#FAF6F0;border:1px dashed #e74c3c;border-radius:4px;padding:20px;margin-top:28px;">
+      <h4 style="color:#e74c3c;margin:0 0 12px;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">📍 Refunds & Info</h4>
+      <ul style="color:#575249;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
+        <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Refunds:</strong> If you did not request this cancellation or have questions about a deposit refund, please contact us on WhatsApp as soon as possible.</li>
+        <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Contact Number:</strong> <a href="tel:+2349131282016" style="color:#e0447a;text-decoration:none;font-weight:600;">09131282016</a></li>
       </ul>
     </div>
   </td></tr>
-  <tr><td style="padding:24px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
-    <div style="color:#d4af37;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
-    <div style="color:#6a5a80;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
-    <div style="margin-top:12px;margin-bottom:12px;">
-      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">Instagram</a>
-      <span style="color:#6a5a80;">&bull;</span>
-      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">Facebook</a>
-      <span style="color:#6a5a80;">&bull;</span>
-      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">TikTok</a>
+  <tr><td style="padding:32px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
+    <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
+    <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
+    <div style="margin-top:16px;margin-bottom:16px;">
+      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Instagram</a>
+      <span style="color:#575249;">&bull;</span>
+      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Facebook</a>
+      <span style="color:#575249;">&bull;</span>
+      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">TikTok</a>
     </div>
-    <div style="color:#6a5a80;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
+    <div style="color:#575249;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
-    clientWa = `Hi ${name}, your S'posh APPEAL booking ${ref} scheduled for ${dateStr} has been CANCELLED. If you did not request this, please contact us immediately.`;
+    clientWa = `Hi ${name}, your S'posh APPEAL booking 	ext{ref} scheduled for 	ext{dateStr} has been CANCELLED. If you did not request this, please contact us immediately.`;
 
     adminSubject = `[ALERT] Appointment Cancelled — Ref: ${ref}`;
     adminHtml = `
@@ -509,61 +507,61 @@ async function dispatchBookingNotifications(booking, actionType) {
 
   } else if (actionType === 'pending') {
     const serviceNames = Array.isArray(booking.services) ? booking.services.map(s => s.name).join(', ') : booking.serviceNames || '';
-    clientSubject = `Booking Received — Complete Your Payment | Ref: ${ref}`;
+    clientSubject = `Booking Received — Complete Your Payment | Ref: 	ext{ref}`;
     clientHtml = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#0b0a0d;font-family:'Helvetica Neue',Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#0b0a0d;padding:40px 16px;">
+<body style="margin:0;padding:0;background:#FAF6F0;font-family:'Helvetica Neue',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#FAF6F0;padding:40px 16px;">
 <tr><td align="center">
-<table width="100%" style="max-width:580px;background:#131116;border-radius:16px;overflow:hidden;border:1px solid rgba(212,175,55,0.18);">
-  <tr><td style="background:linear-gradient(135deg,#1c0525,#320c43);padding:36px 32px;text-align:center;border-bottom:2px solid #d4af37;">
-    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:54px;width:auto;"></div>
-    <div style="color:#d4af37;font-size:0.75rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
-    <div style="color:#fff;font-size:1.6rem;font-weight:700;font-family:Georgia,serif;letter-spacing:0.5px;">Booking Received!</div>
+<table width="100%" style="max-width:580px;background:#FAF6F0;border-radius:0;overflow:hidden;border:1px solid #ebdcb9;">
+  <tr><td style="background:#1a1917;padding:40px 32px;text-align:center;border-bottom:2px solid #c8a261;">
+    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
+    <div style="color:#c8a261;font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
+    <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">Booking Received!</div>
   </td></tr>
-  <tr><td style="padding:32px;">
-    <p style="color:#e0d6f0;font-size:0.95rem;line-height:1.6;margin:0 0 24px;">Hi <strong style="color:#fff;">${name}</strong>,</p>
-    <p style="color:#c0afd8;font-size:0.88rem;line-height:1.7;margin:0 0 24px;">We've reserved your slot at S'posh APPEAL! Complete your deposit payment below to confirm your appointment.</p>
+  <tr><td style="padding:36px 32px;background:#FAF6F0;">
+    <p style="color:#2d2b27;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
+    <p style="color:#575249;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">We have reserved your slot at S'posh APPEAL! Complete your deposit payment below to confirm your appointment.</p>
     
-    <div style="background:#ffffff;border-radius:12px;padding:24px;border:1px solid rgba(212,175,55,0.15);box-shadow:0 4px 12px rgba(0,0,0,0.15);margin-bottom:24px;">
-      <div style="color:#131116;font-size:0.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #f2eef6;padding-bottom:10px;">📅 Booking Summary</div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="color:#131116;font-size:0.88rem;line-height:1.6;">
+    <div style="background:#ffffff;border-radius:8px;padding:24px;border:1px solid #ebdcb9;box-shadow:none;margin-bottom:28px;">
+      <div style="color:#1a1917;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #ebdcb9;padding-bottom:10px;font-family:sans-serif;">📋 Booking Summary</div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;width:130px;font-weight:600;">Reference ID</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#e0447a;font-weight:700;">${ref}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#e0447a;font-weight:700;">${ref}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Service(s)</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#131116;font-weight:700;">${serviceNames}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${serviceNames}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Date</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#131116;font-weight:700;">${dateStr}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Date</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${dateStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Time / Slot</td>
-          <td style="padding:10px 0;border-bottom:1px solid #f5f2f9;color:#131116;font-weight:700;">${timeStr}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Time / Slot</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${timeStr}</td>
         </tr>
       </table>
       
-      <div style="background:#fcfaff;border-top:1px solid #f2eef6;margin-top:16px;padding-top:16px;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="color:#131116;font-size:0.88rem;line-height:1.6;">
+      <div style="border-top:1px solid #ebdcb9;margin-top:16px;padding-top:16px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#131116;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:700;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Deposit Due</td>
-            <td style="padding:6px 0;color:#f0c040;font-weight:700;">₦${deposit.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Due</td>
+            <td style="padding:6px 0;color:#b38f36;font-weight:700;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Balance Due</td>
-            <td style="padding:6px 0;color:#e0447a;font-weight:700;font-size:1.1rem;">₦${balanceDue.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
+            <td style="padding:6px 0;color:#c8a261;font-weight:700;font-size:1.1rem;">₦	ext{balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:8px 0 0;color:#7e6c9a;font-size:0.8rem;font-weight:600;">Payment Status</td>
+            <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
             <td style="padding:8px 0 0;">
-              <span style="background:rgba(212,175,55,0.1);color:#b38f36;padding:4px 10px;border-radius:20px;font-size:0.75rem;font-weight:700;display:inline-block;">
+              <span style="border:1px solid ${badgeBorder};color:${badgeColor};padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1px;background:transparent;">
                 Awaiting Deposit ⚠️
               </span>
             </td>
@@ -573,54 +571,54 @@ async function dispatchBookingNotifications(booking, actionType) {
     </div>
     
     <div style="text-align:center;margin:28px 0 16px;">
-      <a href="https://sposhappeal.vercel.app/booking.html?email=	ext{encodeURIComponent(email)}" style="display:inline-block;background:#e0447a;color:#fff;text-decoration:none;padding:14px 28px;border-radius:8px;font-size:0.85rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(224,68,122,0.25);">Complete Payment →</a>
-      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:0.82rem;font-weight:700;margin:6px 4px;box-shadow:0 2px 6px rgba(37,211,102,0.25);">
+      <a href="https://sposhappeal.vercel.app/booking.html?email=	ext{encodeURIComponent(email)}" style="display:inline-block;background:#c8a261;color:#fff;text-decoration:none;padding:14px 28px;border-radius:4px;font-size:0.85rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #c8a261;">Complete Payment →</a>
+      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 22px;border-radius:4px;font-size:0.82rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
         💬 WhatsApp Support
       </a>
     </div>
 
-    <div style="background:rgba(212,175,55,0.04);border:1px dashed rgba(212,175,55,0.25);border-radius:10px;padding:20px;margin-top:28px;">
-      <h4 style="color:#d4af37;margin:0 0 12px;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
-      <ul style="color:#c0afd8;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;">
-        <li style="margin-bottom:8px;color:#d4af37;font-weight:700;">⚠️ Your slot is NOT confirmed until the deposit is paid. Please complete payment using the button above.</li>
+    <div style="background:#FAF6F0;border:1px dashed #ebdcb9;border-radius:4px;padding:20px;margin-top:28px;">
+      <h4 style="color:#c8a261;margin:0 0 12px;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
+      <ul style="color:#575249;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
+        <li style="margin-bottom:8px;color:#c8a261;font-weight:700;">⚠️ Your slot is NOT confirmed until the deposit is paid. Please complete payment using the button above.</li>
         ${booking.serviceType === 'home'
-          ? `<li style="margin-bottom:8px;"><strong style="color:#fff;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#d4af37;font-weight:600;">	ext{booking.address}</span>)</li>`
-          : `<li style="margin-bottom:8px;"><strong style="color:#fff;">Location:</strong> <a href="https://maps.google.com/?q=Plot+15,+Admiralty+Way,+Lekki+Phase+1,+Lagos" target="_blank" style="color:#d4af37;text-decoration:underline;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos (Open Map)</a></li>`
+          ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#c8a261;font-weight:600;">	ext{booking.address}</span>)</li>`
+          : `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Location:</strong> <a href="https://maps.google.com/?q=Plot+15,+Admiralty+Way,+Lekki+Phase+1,+Lagos" target="_blank" style="color:#c8a261;text-decoration:underline;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos (Open Map)</a></li>`
         }
-        <li style="margin-bottom:8px;"><strong style="color:#fff;">Contact Number:</strong> <a href="tel:+2349131282016" style="color:#e0447a;text-decoration:none;font-weight:600;">09131282016</a></li>
-        <li><strong style="color:#fff;">Policy:</strong> Need to change your slot? Contact us at least <span style="color:#e0447a;font-weight:600;">24 hours before</span> your appointment. Rescheduling or cancellation within 24 hours is locked.</li>
+        <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Contact Number:</strong> <a href="tel:+2349131282016" style="color:#e0447a;text-decoration:none;font-weight:600;">09131282016</a></li>
+        <li><strong style="color:#1a1917;">Policy:</strong> Need to change your slot? Contact us at least <span style="color:#e0447a;font-weight:600;">24 hours before</span> your appointment. Rescheduling or cancellation within 24 hours is locked.</li>
       </ul>
     </div>
   </td></tr>
-  <tr><td style="padding:24px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
-    <div style="color:#d4af37;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
-    <div style="color:#6a5a80;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
-    <div style="margin-top:12px;margin-bottom:12px;">
-      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">Instagram</a>
-      <span style="color:#6a5a80;">&bull;</span>
-      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">Facebook</a>
-      <span style="color:#6a5a80;">&bull;</span>
-      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="color:#e0447a;text-decoration:none;margin:0 8px;font-size:0.8rem;font-weight:600;">TikTok</a>
+  <tr><td style="padding:32px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
+    <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
+    <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
+    <div style="margin-top:16px;margin-bottom:16px;">
+      <a href="https://instagram.com/sposhappeal_001" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Instagram</a>
+      <span style="color:#575249;">&bull;</span>
+      <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Facebook</a>
+      <span style="color:#575249;">&bull;</span>
+      <a href="https://tiktok.com/@sposhappeal" target="_blank" style="color:#c8a261;text-decoration:none;margin:0 12px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;">TikTok</a>
     </div>
-    <div style="color:#6a5a80;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
+    <div style="color:#575249;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
-    clientWa = `Hi ${name}, your S'posh APPEAL booking has been received! 🌸\n\nRef: ${ref}\nServices: ${serviceNames}\nDate: ${dateStr}\nTime: ${timeStr}\nDeposit Due: ₦${deposit.toLocaleString()}\n\n⚠️ Your slot is NOT confirmed until the deposit is paid. Please complete payment on our booking page.`;
+    clientWa = `Hi ${name}, your S'posh APPEAL booking has been received! 🌸\n\nRef: ${ref}\nServices: ${serviceNames}\nDate: 	ext{dateStr}\nTime: 	ext{timeStr}\nDeposit Due: ₦${deposit.toLocaleString()}\n\n⚠️ Your slot is NOT confirmed until the deposit is paid. Please complete payment on our booking page.`;
 
-    adminSubject = `[NEW] Pending Booking — Ref: ${ref}`;
+    adminSubject = `[ALERT] Pending Booking — Ref: ${ref}`;
     adminHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; color: #333; line-height: 1.6;">
         <h2 style="color: #f39c12;">New Pending Booking (Awaiting Payment)</h2>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
           <tr><td style="padding: 8px; font-weight: bold; width: 120px;">Reference ID:</td><td style="padding: 8px; font-weight: bold; color: #E0447A;">${ref}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Client:</td><td style="padding: 8px;">${name} &bull; 	ext{phone} &bull; 	ext{email}</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold;">Client:</td><td style="padding: 8px;">${name} &bull; ${phone} &bull; ${email}</td></tr>
           <tr><td style="padding: 8px; font-weight: bold;">Services:</td><td style="padding: 8px;">${serviceNames}</td></tr>
           <tr><td style="padding: 8px; font-weight: bold;">Date & Time:</td><td style="padding: 8px;">${dateStr} (${timeStr})</td></tr>
           <tr><td style="padding: 8px; font-weight: bold;">Status:</td><td style="padding: 8px; color: #f39c12; font-weight: bold;">PENDING PAYMENT</td></tr>
         </table>
       </div>`;
-    adminWa = `[ALERT] Pending Booking!\n\nRef: ${ref}\nClient: 	ext{name} (${phone})\nServices: ${serviceNames}\nDate/Time: ${dateStr} (${timeStr})\nStatus: AWAITING PAYMENT`;
+    adminWa = `[ALERT] Pending Booking!\n\nRef: ${ref}\nClient: ${name} (${phone})\nServices: ${serviceNames}\nDate/Time: ${dateStr} (${timeStr})\nStatus: AWAITING PAYMENT`;
   }
   if (email) {
     await sendEmail(email, clientSubject, clientHtml);
