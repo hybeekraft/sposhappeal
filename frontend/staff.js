@@ -7,7 +7,7 @@ const API_BASE = window.SPOSH_API_URL || '/api';
 const API_TIMEOUT_MS = 6000;
 
 // ─── INACTIVITY AUTO-LOGOUT ────────────────────────────────────
-const INACTIVITY_TIMEOUT_MS = 15 * 60 * 1000;  // 15 minutes
+const INACTIVITY_TIMEOUT_MS = 90 * 1000;  // 90 seconds
 const INACTIVITY_WARNING_MS = INACTIVITY_TIMEOUT_MS - (15 * 1000);  // Show warning 15 seconds before logout
 let _inactivityTimer = null;
 let _warningTimer = null;
@@ -156,6 +156,18 @@ function handleUserActivity(event) {
 // Track user activity using capturing phase to capture actions even if stopPropagation() is called
 ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(evt => {
   document.addEventListener(evt, handleUserActivity, { capture: true, passive: true });
+});
+
+// Handle inactivity auto-logout when page visibility changes (minimized or tab switched)
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && sessionStorage.getItem('sposh_admin_passcode')) {
+    const elapsed = Date.now() - _lastActivityTime;
+    if (elapsed >= INACTIVITY_TIMEOUT_MS) {
+      performInactivityLogout();
+    } else {
+      resetInactivityTimer();
+    }
+  }
 });
 
 
