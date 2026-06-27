@@ -112,23 +112,43 @@ async function dispatchBookingNotifications(booking, actionType) {
 
   if (actionType === 'confirmed') {
     clientSubject = `Appointment Confirmed! — Ref: ${ref}`;
-    clientHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; color: #333; line-height: 1.6;">
-        <h2 style="color: #E0447A;">Your S'posh APPEAL Booking is Confirmed!</h2>
-        <p>Hi ${name},</p>
-        <p>Thank you for choosing S'posh APPEAL. Your booking has been confirmed successfully. Here are the details:</p>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-          <tr><td style="padding: 8px; font-weight: bold; width: 120px;">Reference ID:</td><td style="padding: 8px; color: #E0447A; font-weight: bold;">${ref}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Services:</td><td style="padding: 8px;">${serviceNames}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Date:</td><td style="padding: 8px;">${dateStr}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Time / Slot:</td><td style="padding: 8px;">${timeStr}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Total Cost:</td><td style="padding: 8px;">₦${total.toLocaleString()}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Deposit Paid:</td><td style="padding: 8px; color: green; font-weight: bold;">₦${deposit.toLocaleString()}</td></tr>
-        </table>
-        <p>If you booked a <strong>Home Service</strong>, our expert will arrive at your specified delivery address. Otherwise, we look forward to welcoming you at our salon!</p>
-        <hr style="border: 0; border-top: 1px solid #eee; margin-top: 30px;">
-        <p style="font-size: 0.85rem; color: #777;">S'posh APPEAL Unisex Salon &bull; Live Scheduling Portal</p>
-      </div>`;
+    clientHtml = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#0d0816;font-family:'Helvetica Neue',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0816;padding:40px 16px;">
+<tr><td align="center">
+<table width="100%" style="max-width:580px;background:#1a1130;border-radius:16px;overflow:hidden;border:1px solid rgba(224,68,122,0.2);">
+  <tr><td style="background:linear-gradient(135deg,#1a0825,#2d1045);padding:36px 32px;text-align:center;border-bottom:2px solid #e0447a;">
+    <div style="font-size:2.4rem;margin-bottom:10px;">💅</div>
+    <div style="color:#e0447a;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;">S'posh APPEAL</div>
+    <div style="color:#fff;font-size:1.5rem;font-weight:700;font-family:Georgia,serif;">Booking Confirmed!</div>
+  </td></tr>
+  <tr><td style="padding:32px;">
+    <p style="color:#e0d6f0;font-size:1rem;margin:0 0 20px;">Hi <strong style="color:#fff;">${name}</strong>,</p>
+    <p style="color:#c0afd8;font-size:0.88rem;line-height:1.7;margin:0 0 24px;">Your appointment at S'posh APPEAL has been confirmed and your deposit secured. We can't wait to glam you up! ✨</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;width:130px;">Reference ID</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#e0447a;font-size:0.9rem;font-weight:700;">${ref}</td></tr>
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;">Service(s)</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#fff;font-size:0.88rem;font-weight:600;">${serviceNames}</td></tr>
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;">Date</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#e0d6f0;font-size:0.88rem;font-weight:600;">${dateStr}</td></tr>
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;">Time / Slot</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#e0d6f0;font-size:0.88rem;font-weight:600;">${timeStr}</td></tr>
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;">Total Cost</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#e0d6f0;font-size:0.88rem;">₦${total.toLocaleString()}</td></tr>
+      <tr><td style="padding:12px 0;color:#9080a8;font-size:0.78rem;">Deposit Paid</td><td style="padding:12px 0;color:#22c87a;font-size:0.95rem;font-weight:700;">₦${deposit.toLocaleString()} ✓</td></tr>
+    </table>
+    <div style="background:rgba(224,68,122,0.08);border-left:3px solid #e0447a;border-radius:0 8px 8px 0;padding:14px 16px;font-size:0.82rem;color:#c0afd8;line-height:1.6;">
+      Please arrive <strong style="color:#fff;">5–10 minutes early</strong>. If you booked a <strong style="color:#fff;">Home Service</strong>, our expert will come to your address. Appointments cannot be cancelled within 24 hours.
+    </div>
+  </td></tr>
+  <tr><td style="padding:20px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+    <div style="color:#e0447a;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
+    <div style="color:#6a5a80;font-size:0.7rem;">Premium Unisex Salon &bull; Lagos, Nigeria</div>
+    <div style="margin-top:8px;">
+      <a href="https://wa.me/2347011083217" style="color:#e0447a;font-size:0.7rem;text-decoration:none;">WhatsApp Us</a>
+      &nbsp;&bull;&nbsp;
+      <a href="https://sposhappeal.vercel.app" style="color:#e0447a;font-size:0.7rem;text-decoration:none;">sposhappeal.vercel.app</a>
+    </div>
+  </td></tr>
+</table></td></tr></table>
+</body></html>`;
     clientWa = `Hi ${name}, your booking at S'posh APPEAL is CONFIRMED! 🎉\n\nRef: ${ref}\nServices: ${serviceNames}\nDate: ${dateStr}\nTime: ${timeStr}\nDeposit Paid: ₦${deposit.toLocaleString()}\n\nThank you for choosing S'posh APPEAL!`;
 
     adminSubject = `[ALERT] New Confirmed Booking — Ref: ${ref}`;
@@ -151,19 +171,41 @@ async function dispatchBookingNotifications(booking, actionType) {
 
   } else if (actionType === 'rescheduled') {
     clientSubject = `Appointment Rescheduled — Ref: ${ref}`;
-    clientHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; color: #333; line-height: 1.6;">
-        <h2 style="color: #3498db;">Your Appointment has been Rescheduled</h2>
-        <p>Hi ${name},</p>
-        <p>Your S'posh APPEAL appointment ${ref} has been updated to a new slot:</p>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-          <tr><td style="padding: 8px; font-weight: bold; width: 120px;">Reference ID:</td><td style="padding: 8px; font-weight: bold;">${ref}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">New Date:</td><td style="padding: 8px; color: #E0447A; font-weight: bold;">${dateStr}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">New Time:</td><td style="padding: 8px; color: #E0447A; font-weight: bold;">${timeStr}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Services:</td><td style="padding: 8px;">${serviceNames}</td></tr>
-        </table>
-        <p>We look forward to seeing you at the updated time!</p>
-      </div>`;
+    clientHtml = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#0d0816;font-family:'Helvetica Neue',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0816;padding:40px 16px;">
+<tr><td align="center">
+<table width="100%" style="max-width:580px;background:#1a1130;border-radius:16px;overflow:hidden;border:1px solid rgba(52,152,219,0.25);">
+  <tr><td style="background:linear-gradient(135deg,#0a1a2e,#0d2440);padding:36px 32px;text-align:center;border-bottom:2px solid #3498db;">
+    <div style="font-size:2.4rem;margin-bottom:10px;">📅</div>
+    <div style="color:#3498db;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;">S'posh APPEAL</div>
+    <div style="color:#fff;font-size:1.5rem;font-weight:700;font-family:Georgia,serif;">Appointment Rescheduled</div>
+  </td></tr>
+  <tr><td style="padding:32px;">
+    <p style="color:#e0d6f0;font-size:1rem;margin:0 0 20px;">Hi <strong style="color:#fff;">${name}</strong>,</p>
+    <p style="color:#c0afd8;font-size:0.88rem;line-height:1.7;margin:0 0 24px;">Your S'posh APPEAL appointment has been moved to a new slot. Here are your updated details:</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;width:130px;">Reference ID</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#e0d6f0;font-size:0.88rem;font-weight:600;">${ref}</td></tr>
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;">Service(s)</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#fff;font-size:0.88rem;font-weight:600;">${serviceNames}</td></tr>
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;">New Date</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#3498db;font-size:0.9rem;font-weight:700;">${dateStr}</td></tr>
+      <tr><td style="padding:12px 0;color:#9080a8;font-size:0.78rem;">New Time</td><td style="padding:12px 0;color:#3498db;font-size:0.9rem;font-weight:700;">${timeStr}</td></tr>
+    </table>
+    <div style="background:rgba(52,152,219,0.08);border-left:3px solid #3498db;border-radius:0 8px 8px 0;padding:14px 16px;font-size:0.82rem;color:#c0afd8;line-height:1.6;">
+      Please note your new appointment time. If this change was unexpected, please contact us on WhatsApp immediately.
+    </div>
+  </td></tr>
+  <tr><td style="padding:20px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+    <div style="color:#e0447a;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
+    <div style="color:#6a5a80;font-size:0.7rem;">Premium Unisex Salon &bull; Lagos, Nigeria</div>
+    <div style="margin-top:8px;">
+      <a href="https://wa.me/2347011083217" style="color:#e0447a;font-size:0.7rem;text-decoration:none;">WhatsApp Us</a>
+      &nbsp;&bull;&nbsp;
+      <a href="https://sposhappeal.vercel.app" style="color:#e0447a;font-size:0.7rem;text-decoration:none;">sposhappeal.vercel.app</a>
+    </div>
+  </td></tr>
+</table></td></tr></table>
+</body></html>`;
     clientWa = `Hi ${name}, your S'posh APPEAL appointment ${ref} has been RESCHEDULED to:\n\nDate: ${dateStr}\nTime: ${timeStr}\n\nWe look forward to seeing you then!`;
 
     adminSubject = `[ALERT] Appointment Rescheduled — Ref: ${ref}`;
@@ -182,13 +224,38 @@ async function dispatchBookingNotifications(booking, actionType) {
 
   } else if (actionType === 'cancelled') {
     clientSubject = `Appointment Cancelled — Ref: ${ref}`;
-    clientHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; color: #333; line-height: 1.6;">
-        <h2 style="color: #e74c3c;">Your Appointment has been Cancelled</h2>
-        <p>Hi ${name},</p>
-        <p>Your S'posh APPEAL booking ${ref} scheduled for ${dateStr} has been cancelled.</p>
-        <p>If you did not request this or have any questions regarding your refund, please get in touch with our team.</p>
-      </div>`;
+    clientHtml = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#0d0816;font-family:'Helvetica Neue',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0816;padding:40px 16px;">
+<tr><td align="center">
+<table width="100%" style="max-width:580px;background:#1a1130;border-radius:16px;overflow:hidden;border:1px solid rgba(231,76,60,0.2);">
+  <tr><td style="background:linear-gradient(135deg,#1a0808,#2a0f0f);padding:36px 32px;text-align:center;border-bottom:2px solid #e74c3c;">
+    <div style="font-size:2.4rem;margin-bottom:10px;">❌</div>
+    <div style="color:#e74c3c;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;">S'posh APPEAL</div>
+    <div style="color:#fff;font-size:1.5rem;font-weight:700;font-family:Georgia,serif;">Appointment Cancelled</div>
+  </td></tr>
+  <tr><td style="padding:32px;">
+    <p style="color:#e0d6f0;font-size:1rem;margin:0 0 20px;">Hi <strong style="color:#fff;">${name}</strong>,</p>
+    <p style="color:#c0afd8;font-size:0.88rem;line-height:1.7;margin:0 0 24px;">Your S'posh APPEAL booking <strong style="color:#fff;">${ref}</strong> scheduled for <strong style="color:#fff;">${dateStr}</strong> has been cancelled.</p>
+    <div style="background:rgba(231,76,60,0.08);border-left:3px solid #e74c3c;border-radius:0 8px 8px 0;padding:14px 16px;font-size:0.82rem;color:#c0afd8;line-height:1.6;">
+      If you did not request this cancellation or have questions about a refund, please contact us on WhatsApp as soon as possible.
+    </div>
+    <div style="text-align:center;margin-top:28px;">
+      <a href="https://sposhappeal.vercel.app/booking.html" style="display:inline-block;background:#e0447a;color:#fff;text-decoration:none;padding:12px 28px;border-radius:6px;font-size:0.85rem;font-weight:600;">Book Again</a>
+    </div>
+  </td></tr>
+  <tr><td style="padding:20px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+    <div style="color:#e0447a;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
+    <div style="color:#6a5a80;font-size:0.7rem;">Premium Unisex Salon &bull; Lagos, Nigeria</div>
+    <div style="margin-top:8px;">
+      <a href="https://wa.me/2347011083217" style="color:#e0447a;font-size:0.7rem;text-decoration:none;">WhatsApp Us</a>
+      &nbsp;&bull;&nbsp;
+      <a href="https://sposhappeal.vercel.app" style="color:#e0447a;font-size:0.7rem;text-decoration:none;">sposhappeal.vercel.app</a>
+    </div>
+  </td></tr>
+</table></td></tr></table>
+</body></html>`;
     clientWa = `Hi ${name}, your S'posh APPEAL booking ${ref} scheduled for ${dateStr} has been CANCELLED. If you did not request this, please contact us immediately.`;
 
     adminSubject = `[ALERT] Appointment Cancelled — Ref: ${ref}`;
@@ -207,22 +274,45 @@ async function dispatchBookingNotifications(booking, actionType) {
   } else if (actionType === 'pending') {
     const serviceNames = Array.isArray(booking.services) ? booking.services.map(s => s.name).join(', ') : booking.serviceNames || '';
     clientSubject = `Booking Received — Complete Your Payment | Ref: ${ref}`;
-    clientHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; color: #333; line-height: 1.6;">
-        <h2 style="color: #E0447A;">Your S'posh APPEAL Booking is Received!</h2>
-        <p>Hi ${name},</p>
-        <p>Thank you for choosing S'posh APPEAL! We've reserved your slot. Please complete your deposit payment to confirm your appointment.</p>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-          <tr><td style="padding: 8px; font-weight: bold; width: 120px;">Reference ID:</td><td style="padding: 8px; color: #E0447A; font-weight: bold;">${ref}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Services:</td><td style="padding: 8px;">${serviceNames}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Date:</td><td style="padding: 8px;">${dateStr}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Time:</td><td style="padding: 8px;">${timeStr}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Deposit Due:</td><td style="padding: 8px; font-weight: bold;">₦${deposit.toLocaleString()}</td></tr>
-        </table>
-        <p style="color: #e74c3c;"><strong>Your slot is not confirmed until the deposit is paid.</strong> Please complete payment on the booking page.</p>
-        <hr style="border: 0; border-top: 1px solid #eee; margin-top: 30px;">
-        <p style="font-size: 0.85rem; color: #777;">S'posh APPEAL Unisex Salon &bull; Live Scheduling Portal</p>
-      </div>`;
+    clientHtml = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#0d0816;font-family:'Helvetica Neue',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0816;padding:40px 16px;">
+<tr><td align="center">
+<table width="100%" style="max-width:580px;background:#1a1130;border-radius:16px;overflow:hidden;border:1px solid rgba(224,68,122,0.2);">
+  <tr><td style="background:linear-gradient(135deg,#1a0825,#2d1045);padding:36px 32px;text-align:center;border-bottom:2px solid #e0447a;">
+    <div style="font-size:2.4rem;margin-bottom:10px;">🌸</div>
+    <div style="color:#e0447a;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;">S'posh APPEAL</div>
+    <div style="color:#fff;font-size:1.5rem;font-weight:700;font-family:Georgia,serif;">Booking Received!</div>
+  </td></tr>
+  <tr><td style="padding:32px;">
+    <p style="color:#e0d6f0;font-size:1rem;margin:0 0 20px;">Hi <strong style="color:#fff;">${name}</strong>,</p>
+    <p style="color:#c0afd8;font-size:0.88rem;line-height:1.7;margin:0 0 24px;">We've reserved your slot at S'posh APPEAL! Complete your deposit payment below to confirm your appointment.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;width:130px;">Reference ID</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#e0447a;font-size:0.9rem;font-weight:700;">${ref}</td></tr>
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;">Service(s)</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#fff;font-size:0.88rem;font-weight:600;">${serviceNames}</td></tr>
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;">Date</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#e0d6f0;font-size:0.88rem;font-weight:600;">${dateStr}</td></tr>
+      <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#9080a8;font-size:0.78rem;">Time</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#e0d6f0;font-size:0.88rem;font-weight:600;">${timeStr}</td></tr>
+      <tr><td style="padding:12px 0;color:#9080a8;font-size:0.78rem;">Deposit Due</td><td style="padding:12px 0;color:#f0c040;font-size:0.95rem;font-weight:700;">₦${deposit.toLocaleString()}</td></tr>
+    </table>
+    <div style="background:rgba(240,192,64,0.08);border-left:3px solid #f0c040;border-radius:0 8px 8px 0;padding:14px 16px;font-size:0.82rem;color:#c0afd8;line-height:1.6;margin-bottom:24px;">
+      ⚠️ <strong style="color:#f0c040;">Your slot is not confirmed until the deposit is paid.</strong> Please complete payment on our booking page.
+    </div>
+    <div style="text-align:center;">
+      <a href="https://sposhappeal.vercel.app/booking.html" style="display:inline-block;background:linear-gradient(135deg,#e0447a,#ff6b9d);color:#fff;text-decoration:none;padding:14px 32px;border-radius:8px;font-size:0.88rem;font-weight:700;letter-spacing:0.5px;">Complete Payment →</a>
+    </div>
+  </td></tr>
+  <tr><td style="padding:20px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+    <div style="color:#e0447a;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
+    <div style="color:#6a5a80;font-size:0.7rem;">Premium Unisex Salon &bull; Lagos, Nigeria</div>
+    <div style="margin-top:8px;">
+      <a href="https://wa.me/2347011083217" style="color:#e0447a;font-size:0.7rem;text-decoration:none;">WhatsApp Us</a>
+      &nbsp;&bull;&nbsp;
+      <a href="https://sposhappeal.vercel.app" style="color:#e0447a;font-size:0.7rem;text-decoration:none;">sposhappeal.vercel.app</a>
+    </div>
+  </td></tr>
+</table></td></tr></table>
+</body></html>`;
     clientWa = `Hi ${name}, your S'posh APPEAL booking has been received! 🌸\n\nRef: ${ref}\nServices: ${serviceNames}\nDate: ${dateStr}\nTime: ${timeStr}\nDeposit Due: ₦${deposit.toLocaleString()}\n\n⚠️ Your slot is NOT confirmed until the deposit is paid. Please complete payment on our booking page.`;
 
     adminSubject = `[NEW] Pending Booking — Ref: ${ref}`;
