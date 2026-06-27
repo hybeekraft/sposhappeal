@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Attempt to load live catalog from backend (falls back silently)
   tryLoadCatalog();
 
-  // Health check: warn if backend DB is disconnected (silent fail, non-blocking)
+  // Health check: warn if backend DB is disconnected or server is offline
   if (API_BASE) {
     fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(5000) })
       .then(r => r.json())
@@ -338,7 +338,9 @@ document.addEventListener('DOMContentLoaded', () => {
           showDbWarningBanner();
         }
       })
-      .catch(() => { }); // silently ignore if health endpoint unreachable
+      .catch(() => {
+        showDbWarningBanner(); // Show warning if backend is unreachable
+      });
   }
 
   // Check if page load has redirect query params for payment confirmation
@@ -2334,7 +2336,10 @@ function to24Hour(time12h) {
 
 /* ─── TOAST ──────────────────────────────────────────────── */
 function showDbWarningBanner() {
-  // Banner disabled — system is live
+  const banner = document.getElementById('booking-db-warning-banner');
+  if (banner) {
+    banner.style.display = 'flex';
+  }
 }
 
 function toast(msg) {
