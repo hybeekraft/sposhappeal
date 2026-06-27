@@ -288,6 +288,11 @@ async function handleLogin(event) {
   const btn = document.getElementById('btn-login');
   const card = document.querySelector('.login-card');
 
+  const selectedRole = document.getElementById('login-role').value;
+  if (!selectedRole) {
+    errEl.textContent = 'Please select a personnel role.';
+    return;
+  }
   if (!passcode) return;
 
   btn.disabled = true;
