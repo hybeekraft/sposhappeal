@@ -1127,6 +1127,9 @@ function renderStaffList() {
               <label class="staff-perm-item">
                 <input type="checkbox" id="staff-perm-catalog-${s.id}" ${p.canEditCatalog ? 'checked' : ''}> Edit Catalog
               </label>
+              <label class="staff-perm-item">
+                <input type="checkbox" id="staff-perm-confirm-${s.id}" ${p.canConfirmComplete !== false ? 'checked' : ''}> Confirm Complete
+              </label>
             </div>
           </div>
         </div>
@@ -1152,10 +1155,11 @@ async function saveStaffMember(staffId) {
   const passcodeVal = document.getElementById(`staff-passcode-${staffId}`).value.trim();
   const btn = document.getElementById(`btn-save-staff-${staffId}`);
 
-  const pView = document.getElementById(`staff-perm-view-${staffId}`).checked;
-  const pCancel = document.getElementById(`staff-perm-cancel-${staffId}`).checked;
+  const pView    = document.getElementById(`staff-perm-view-${staffId}`).checked;
+  const pCancel  = document.getElementById(`staff-perm-cancel-${staffId}`).checked;
   const pResched = document.getElementById(`staff-perm-resched-${staffId}`).checked;
   const pCatalog = document.getElementById(`staff-perm-catalog-${staffId}`).checked;
+  const pConfirm = document.getElementById(`staff-perm-confirm-${staffId}`)?.checked ?? true;
 
   if (!nameVal || !roleVal) {
     adminToast('Name and Role are required.');
@@ -1176,7 +1180,8 @@ async function saveStaffMember(staffId) {
       canViewBookings: pView,
       canCancelBookings: pCancel,
       canRescheduleBookings: pResched,
-      canEditCatalog: pCatalog
+      canEditCatalog: pCatalog,
+      canConfirmComplete: pConfirm
     }
   };
   if (passcodeVal) payload.passcode = passcodeVal;
