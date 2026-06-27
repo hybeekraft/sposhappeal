@@ -149,6 +149,9 @@
         <button class="tab-btn active" onclick="switchTab('bookings')" id="tab-bookings-btn">
           <i class="fa-regular fa-calendar-check"></i> Manage Bookings
         </button>
+        <button class="tab-btn" onclick="switchTab('revenue')" id="tab-revenue-btn" style="display: none;">
+          <i class="fa-solid fa-chart-line"></i> Revenue
+        </button>
         <button class="tab-btn" onclick="switchTab('pricing')" id="tab-pricing-btn" style="display: none;">
           <i class="fa-solid fa-tags"></i> Edit Service Pricing
         </button>
@@ -191,7 +194,40 @@
         </div>
       </section>
 
-      <!-- TAB 2: PRICING -->
+      <!-- TAB 2: REVENUE -->
+      <section class="admin-tab-panel" id="panel-revenue">
+        <div class="admin-panel-header" style="margin-bottom: 24px;">
+          <h2>Revenue Dashboard</h2>
+          <button class="btn btn-outline-white" onclick="loadRevenue()" style="font-size:0.82rem;padding:8px 16px;">
+            <i class="fa-solid fa-rotate-right"></i> Refresh
+          </button>
+        </div>
+
+        <div class="admin-loader" id="revenue-loader" style="display:none;">
+          <i class="fa-solid fa-circle-notch fa-spin"></i> Loading revenue data...
+        </div>
+
+        <!-- Stats cards -->
+        <div id="revenue-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;">
+          <!-- Populated by staff.js -->
+        </div>
+
+        <!-- This month breakdown -->
+        <div id="revenue-month-card" style="display:none;background:rgba(255,255,255,0.03);border:1px solid rgba(224,68,122,0.15);border-radius:14px;padding:24px;">
+          <h4 style="color:#fff;font-size:1rem;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+            <i class="fa-regular fa-calendar" style="color:#e0447a;"></i> This Month's Breakdown
+          </h4>
+          <div id="revenue-month-rows" style="display:flex;flex-direction:column;gap:12px;"></div>
+        </div>
+
+        <!-- Mock mode warning -->
+        <div id="revenue-mock-warning" style="display:none;margin-top:20px;background:rgba(180,120,0,0.1);border:1px solid rgba(180,120,0,0.3);border-radius:10px;padding:16px;font-size:0.85rem;color:#f0c040;">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          Running on mock data — figures shown are from demo bookings, not real transactions. Connect MongoDB to see live revenue.
+        </div>
+      </section>
+
+      <!-- TAB 3: PRICING -->
       <section class="admin-tab-panel" id="panel-pricing">
         <div class="admin-panel-header">
           <h2>Service Categories &amp; Pricing</h2>
