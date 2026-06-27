@@ -1000,6 +1000,9 @@ app.post('/api/cron/reminders', async (req, res) => {
     startOfTomorrow.setHours(0, 0, 0, 0);
     const endOfTomorrow = new Date(tomorrow);
     endOfTomorrow.setHours(23, 59, 59, 999);
+    const tomorrowStr = tomorrow.toLocaleDateString('en-GB', {
+      weekday: 'short', day: 'numeric', month: 'long', year: 'numeric'
+    });
 
     const useDb = mongoose.connection.readyState === 1;
     let bookings = [];
