@@ -203,7 +203,7 @@ async function dispatchBookingNotifications(booking, actionType) {
         <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦${total.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
@@ -211,7 +211,7 @@ async function dispatchBookingNotifications(booking, actionType) {
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦	ext{balanceDue.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦${balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
@@ -226,7 +226,7 @@ async function dispatchBookingNotifications(booking, actionType) {
     </div>
     
     <div style="text-align:center;margin:28px 0 16px;">
-      <a href="https://sposhappeal.vercel.app/booking.html?email=	ext{encodeURIComponent(email)}" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">View Booking</a>
+      <a href="https://sposhappeal.vercel.app/booking.html?email=${encodeURIComponent(email)}" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">View Booking</a>
       <a href="${calendarUrl}" target="_blank" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">📅 Add to Calendar</a>
       <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
         💬 WhatsApp Support
@@ -237,7 +237,7 @@ async function dispatchBookingNotifications(booking, actionType) {
       <h4 style="color:#1a1917;margin:0 0 12px;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
       <ul style="color:#575249;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
         ${booking.serviceType === 'home'
-          ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#c8a261;font-weight:600;">	ext{booking.address}</span>)</li>
+          ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#c8a261;font-weight:600;">${booking.address}</span>)</li>
              <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Preparation:</strong> Please prepare a clean space with power access for our expert prior to arrival.</li>`
           : `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Location:</strong> <a href="https://maps.google.com/?q=Plot+15,+Admiralty+Way,+Lekki+Phase+1,+Lagos" target="_blank" style="color:#c8a261;text-decoration:underline;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos (Open Map)</a></li>
              <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Arrival:</strong> Please arrive <span style="color:#c8a261;font-weight:600;">10 minutes early</span> to ensure a relaxed experience.</li>`
@@ -259,7 +259,7 @@ async function dispatchBookingNotifications(booking, actionType) {
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
-    clientWa = `Hi ${name}, your booking at S'posh APPEAL is CONFIRMED! 🎉\n\nRef: ${ref}\nServices: ${serviceNames}\nDate: 	ext{dateStr}\nTime: 	ext{timeStr}\nDeposit Paid: ₦${deposit.toLocaleString()}\n\nThank you for choosing S'posh APPEAL!`;
+    clientWa = `Hi ${name}, your booking at S'posh APPEAL is CONFIRMED! 🎉\n\nRef: ${ref}\nServices: ${serviceNames}\nDate: ${dateStr}\nTime: ${timeStr}\nDeposit Paid: ₦${deposit.toLocaleString()}\n\nThank you for choosing S'posh APPEAL!`;
 
     adminSubject = `[ALERT] New Confirmed Booking — Ref: ${ref}`;
     adminHtml = `
@@ -305,19 +305,19 @@ async function dispatchBookingNotifications(booking, actionType) {
         </tr>
         <tr>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">	ext{serviceNames}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${serviceNames}</td>
         </tr>
         <tr>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">New Date</td>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:0.95rem;">	ext{dateStr}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:0.95rem;">${dateStr}</td>
         </tr>
         <tr>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">New Time</td>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:0.95rem;">	ext{timeStr}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:0.95rem;">${timeStr}</td>
         </tr>
         <tr>
           <td style="padding:10px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Expert</td>
-          <td style="padding:10px 0;color:#1a1917;font-weight:700;">	ext{booking.expertName || 'Any Available Expert'}</td>
+          <td style="padding:10px 0;color:#1a1917;font-weight:700;">${booking.expertName || 'Any Available Expert'}</td>
         </tr>
       </table>
       
@@ -325,7 +325,7 @@ async function dispatchBookingNotifications(booking, actionType) {
         <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦${total.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
@@ -333,7 +333,7 @@ async function dispatchBookingNotifications(booking, actionType) {
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦	ext{balanceDue.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦${balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
@@ -348,8 +348,8 @@ async function dispatchBookingNotifications(booking, actionType) {
     </div>
     
     <div style="text-align:center;margin:28px 0 16px;">
-      <a href="https://sposhappeal.vercel.app/booking.html?email=	ext{encodeURIComponent(email)}" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">View Booking</a>
-      <a href="	ext{calendarUrl}" target="_blank" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">📅 Add to Calendar</a>
+      <a href="https://sposhappeal.vercel.app/booking.html?email=${encodeURIComponent(email)}" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">View Booking</a>
+      <a href="${calendarUrl}" target="_blank" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">📅 Add to Calendar</a>
       <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
         💬 WhatsApp Support
       </a>
@@ -359,7 +359,7 @@ async function dispatchBookingNotifications(booking, actionType) {
       <h4 style="color:#3498db;margin:0 0 12px;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
       <ul style="color:#575249;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
         ${booking.serviceType === 'home'
-          ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#3498db;font-weight:600;">	ext{booking.address}</span>)</li>
+          ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#3498db;font-weight:600;">${booking.address}</span>)</li>
              <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Preparation:</strong> Please prepare a clean space with power access for our expert prior to arrival.</li>`
           : `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Location:</strong> <a href="https://maps.google.com/?q=Plot+15,+Admiralty+Way,+Lekki+Phase+1,+Lagos" target="_blank" style="color:#3498db;text-decoration:underline;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos (Open Map)</a></li>
              <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Arrival:</strong> Please arrive <span style="color:#e0447a;font-weight:600;">10 minutes early</span> to ensure a relaxed experience.</li>`
@@ -423,15 +423,15 @@ async function dispatchBookingNotifications(booking, actionType) {
         </tr>
         <tr>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">	ext{serviceNames}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${serviceNames}</td>
         </tr>
         <tr>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Original Date</td>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">	ext{dateStr}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${dateStr}</td>
         </tr>
         <tr>
           <td style="padding:10px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Time / Slot</td>
-          <td style="padding:10px 0;color:#1a1917;font-weight:700;">	ext{timeStr}</td>
+          <td style="padding:10px 0;color:#1a1917;font-weight:700;">${timeStr}</td>
         </tr>
       </table>
       
@@ -439,11 +439,11 @@ async function dispatchBookingNotifications(booking, actionType) {
         <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦${total.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:800;">₦	ext{deposit.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
@@ -484,7 +484,7 @@ async function dispatchBookingNotifications(booking, actionType) {
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
-    clientWa = `Hi ${name}, your S'posh APPEAL booking 	ext{ref} scheduled for 	ext{dateStr} has been CANCELLED. If you did not request this, please contact us immediately.`;
+    clientWa = `Hi ${name}, your S'posh APPEAL booking ${ref} scheduled for ${dateStr} has been CANCELLED. If you did not request this, please contact us immediately.`;
 
     adminSubject = `[ALERT] Appointment Cancelled — Ref: ${ref}`;
     adminHtml = `
@@ -501,7 +501,7 @@ async function dispatchBookingNotifications(booking, actionType) {
 
   } else if (actionType === 'pending') {
     const serviceNames = Array.isArray(booking.services) ? booking.services.map(s => s.name).join(', ') : booking.serviceNames || '';
-    clientSubject = `Booking Received — Complete Your Payment | Ref: 	ext{ref}`;
+    clientSubject = `Booking Received — Complete Your Payment | Ref: ${ref}`;
     clientHtml = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
 <body style="margin:0;padding:0;background:#FAF6F0;font-family:'Helvetica Neue',Arial,sans-serif;">
@@ -542,7 +542,7 @@ async function dispatchBookingNotifications(booking, actionType) {
         <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦	ext{total.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦${total.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Due</td>
@@ -550,7 +550,7 @@ async function dispatchBookingNotifications(booking, actionType) {
           </tr>
           <tr>
             <td style="padding:6px 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
-            <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦	ext{balanceDue.toLocaleString()}</td>
+            <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦${balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
             <td style="padding:8px 0 0;color:#7d7568;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
@@ -565,7 +565,7 @@ async function dispatchBookingNotifications(booking, actionType) {
     </div>
     
     <div style="text-align:center;margin:28px 0 16px;">
-      <a href="https://sposhappeal.vercel.app/booking.html?email=	ext{encodeURIComponent(email)}" style="display:inline-block;background:#c8a261;color:#fff;text-decoration:none;padding:14px 28px;border-radius:4px;font-size:0.85rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #c8a261;">Complete Payment →</a>
+      <a href="https://sposhappeal.vercel.app/booking.html?email=${encodeURIComponent(email)}" style="display:inline-block;background:#c8a261;color:#fff;text-decoration:none;padding:14px 28px;border-radius:4px;font-size:0.85rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #c8a261;">Complete Payment →</a>
       <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 22px;border-radius:4px;font-size:0.82rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
         💬 WhatsApp Support
       </a>
@@ -576,7 +576,7 @@ async function dispatchBookingNotifications(booking, actionType) {
       <ul style="color:#575249;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
         <li style="margin-bottom:8px;color:#c8a261;font-weight:700;">⚠️ Your slot is NOT confirmed until the deposit is paid. Please complete payment using the button above.</li>
         ${booking.serviceType === 'home'
-          ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#c8a261;font-weight:600;">	ext{booking.address}</span>)</li>`
+          ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#c8a261;font-weight:600;">${booking.address}</span>)</li>`
           : `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Location:</strong> <a href="https://maps.google.com/?q=Plot+15,+Admiralty+Way,+Lekki+Phase+1,+Lagos" target="_blank" style="color:#c8a261;text-decoration:underline;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos (Open Map)</a></li>`
         }
         <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Contact Number:</strong> <a href="tel:+2349131282016" style="color:#e0447a;text-decoration:none;font-weight:600;">09131282016</a></li>
@@ -596,7 +596,7 @@ async function dispatchBookingNotifications(booking, actionType) {
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
-    clientWa = `Hi ${name}, your S'posh APPEAL booking has been received! 🌸\n\nRef: ${ref}\nServices: ${serviceNames}\nDate: 	ext{dateStr}\nTime: 	ext{timeStr}\nDeposit Due: ₦${deposit.toLocaleString()}\n\n⚠️ Your slot is NOT confirmed until the deposit is paid. Please complete payment on our booking page.`;
+    clientWa = `Hi ${name}, your S'posh APPEAL booking has been received! 🌸\n\nRef: ${ref}\nServices: ${serviceNames}\nDate: ${dateStr}\nTime: ${timeStr}\nDeposit Due: ₦${deposit.toLocaleString()}\n\n⚠️ Your slot is NOT confirmed until the deposit is paid. Please complete payment on our booking page.`;
 
     adminSubject = `[ALERT] Pending Booking — Ref: ${ref}`;
     adminHtml = `
