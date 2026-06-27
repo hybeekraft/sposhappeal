@@ -101,13 +101,9 @@ const BookingSchema = new mongoose.Schema({
     type: String,
     enum: ['cash', 'transfer', 'pos', 'paystack'],
     default: 'cash'
-  }
+  },
   reminderSent:    { type: Boolean, default: false },
   reminderSentAt:  { type: Date, default: null },
-  completedAt:     { type: Date, default: null },
-  completionNotes: { type: String, default: '' },
-  balancePaymentMethod: { type: String, default: '' },
-  paymentStatus:   { type: String, default: 'deposit_paid' },
 }, {
   timestamps: true
 });

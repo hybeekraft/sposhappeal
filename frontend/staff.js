@@ -12,6 +12,8 @@ const INACTIVITY_WARNING_MS = 13 * 60 * 1000;  // Show warning at 13 min (2 min 
 let _inactivityTimer = null;
 let _warningTimer = null;
 let _warningOverlay = null;
+let _lastActivityTime = Date.now();
+const ACTIVITY_THROTTLE_MS = 5000; // Only reset timer at most once every 5 seconds
 
 function resetInactivityTimer() {
   // Clear existing timers
@@ -73,7 +75,10 @@ function showInactivityWarning() {
   // Bind event programmatically
   const btn = _warningOverlay.querySelector('#inactivity-keep-alive-btn');
   if (btn) {
-    btn.addEventListener('click', resetInactivityTimer);
+    btn.addEventListener('click', () => {
+      _lastActivityTime = Date.now();
+      resetInactivityTimer();
+    });
   }
 
   // Countdown timer
@@ -111,9 +116,25 @@ function performInactivityLogout() {
   window.location.reload();
 }
 
-// Track user activity — reset timer on any interaction
+function handleUserActivity(event) {
+  // If the warning overlay is visible, ignore passive events (mousemove, scroll, touchstart).
+  // Only allow explicit clicks on the keep-alive button or active keystrokes to extend the session.
+  if (_warningOverlay) {
+    if (event.type !== 'click' && event.type !== 'keydown') {
+      return;
+    }
+  }
+
+  const now = Date.now();
+  if (now - _lastActivityTime > ACTIVITY_THROTTLE_MS || _warningOverlay) {
+    _lastActivityTime = now;
+    resetInactivityTimer();
+  }
+}
+
+// Track user activity using capturing phase to capture actions even if stopPropagation() is called
 ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(evt => {
-  document.addEventListener(evt, resetInactivityTimer, { passive: true });
+  document.addEventListener(evt, handleUserActivity, { capture: true, passive: true });
 });
 
 
