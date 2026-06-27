@@ -55,7 +55,8 @@ if (smtpHost && smtpUser && smtpPass && !smtpHost.startsWith('smtp_mock')) {
 
 // Notifications Dispatcher Helper
 async function sendWhatsAppMessage(to, body) {
-  const formattedTo = to.startsWith('whatsapp:') ? to : `whatsapp:${to}`;
+  const normalizedTo = normalizeToE164(to);
+  const formattedTo = normalizedTo.startsWith('whatsapp:') ? normalizedTo : `whatsapp:${normalizedTo}`;
   if (twilioClient) {
     try {
       await twilioClient.messages.create({
@@ -774,23 +775,28 @@ app.post('/api/cron/reminders', async (req, res) => {
     const now = new Date();
     const tomorrow = new Date(now);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowStr = tomorrow.toISOString().split('T')[0]; // YYYY-MM-DD
+    
+    const startOfTomorrow = new Date(tomorrow);
+    startOfTomorrow.setHours(0, 0, 0, 0);
+    const endOfTomorrow = new Date(tomorrow);
+    endOfTomorrow.setHours(23, 59, 59, 999);
 
     const useDb = mongoose.connection.readyState === 1;
     let bookings = [];
 
     if (useDb) {
       bookings = await Booking.find({
-        dateISO: tomorrowStr,
+        dateISO: { $gte: startOfTomorrow, $lte: endOfTomorrow },
         status: { $in: ['confirmed', 'rescheduled'] },
         reminderSent: { $ne: true }
       });
     } else {
-      bookings = mockBookings.filter(b =>
-        b.dateISO === tomorrowStr &&
-        ['confirmed', 'rescheduled'].includes(b.status) &&
-        !b.reminderSent
-      );
+      bookings = mockBookings.filter(b => {
+        const bDate = new Date(b.dateISO);
+        return bDate >= startOfTomorrow && bDate <= endOfTomorrow &&
+               ['confirmed', 'rescheduled'].includes(b.status) &&
+               !b.reminderSent;
+      });
     }
 
     let sent = 0;
@@ -848,8 +854,7 @@ This is a reminder from *S'posh APPEAL* 💅
 app.get('/api/admin/revenue', adminLimiter, async (req, res) => {
   try {
     const passcode = req.headers['x-admin-passcode'];
-    const expectedPasscode = ADMIN_PASSCODE;
-    if (!passcode || passcode !== expectedPasscode) {
+    if (!passcode || !(await verifyAdminPasscode(passcode))) {
       return res.status(401).json({ error: 'Unauthorized.' });
     }
 
@@ -1072,13 +1077,12 @@ app.patch('/api/bookings/cancel/:id', bookingLimiter, async (req, res) => {
 
     // Check staff permissions if passcode is provided
     const passcode = req.headers['x-admin-passcode'];
-    const adminPasscode = ADMIN_PASSCODE;
 
     let isAuthorizedStaff = false;
     let canCancel = false;
 
     if (passcode) {
-      if (passcode === adminPasscode) {
+      if (await verifyAdminPasscode(passcode)) {
         isAuthorizedStaff = true;
         canCancel = true;
       } else {
@@ -1167,13 +1171,12 @@ app.patch('/api/bookings/reschedule/:id', bookingLimiter, async (req, res) => {
 
     // Check staff permissions if passcode is provided
     const passcode = req.headers['x-admin-passcode'];
-    const adminPasscode = ADMIN_PASSCODE;
 
     let isAuthorizedStaff = false;
     let canReschedule = false;
 
     if (passcode) {
-      if (passcode === adminPasscode) {
+      if (await verifyAdminPasscode(passcode)) {
         isAuthorizedStaff = true;
         canReschedule = true;
       } else {
@@ -1193,6 +1196,20 @@ app.patch('/api/bookings/reschedule/:id', bookingLimiter, async (req, res) => {
       // Ensure matching email request ownership
       if (targetBooking.clientEmail.toLowerCase() !== email.toLowerCase()) {
         return res.status(403).json({ error: 'Unauthorized to reschedule this booking.' });
+      }
+
+      // Check cancellation/reschedule policy (24-hour limit) for clients
+      const appointmentDate = new Date(targetBooking.dateISO);
+      const [time, period] = targetBooking.startTime.split(' ');
+      let [h, m] = time.split(':').map(Number);
+      if (period === 'PM' && h !== 12) h += 12;
+      if (period === 'AM' && h === 12) h = 0;
+      appointmentDate.setHours(h, m, 0, 0);
+
+      const now = new Date();
+      const hoursDiff = (appointmentDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+      if (hoursDiff < 24) {
+        return res.status(400).json({ error: 'Appointments cannot be rescheduled within 24 hours of the scheduled time.' });
       }
     }
 
@@ -1257,17 +1274,9 @@ app.patch('/api/bookings/:id/complete', adminLimiter, async (req, res) => {
     const passcode = req.headers['x-admin-passcode'];
     if (!passcode) return res.status(401).json({ error: 'Passcode required.' });
 
-    const adminPasscode = ADMIN_PASSCODE;
     let canComplete = false;
     // Smart admin check: supports both plaintext and bcrypt-hashed ADMIN_PASSWORD
-    let isAdmin = false;
-    if (adminPasscode) {
-      if (adminPasscode.startsWith('$2')) {
-        isAdmin = await bcrypt.compare(passcode, adminPasscode);
-      } else {
-        isAdmin = (passcode === adminPasscode);
-      }
-    }
+    const isAdmin = await verifyAdminPasscode(passcode);
     if (isAdmin) {
       canComplete = true;
     } else {
@@ -1381,6 +1390,18 @@ function cleanPhoneSuffix(phoneStr) {
   return digits.length >= 10 ? digits.slice(-10) : digits;
 }
 
+function normalizeToE164(phone) {
+  if (!phone) return '';
+  let digits = phone.replace(/\D/g, '');
+  if (digits.startsWith('0') && digits.length === 11) {
+    digits = '234' + digits.substring(1);
+  }
+  if (!digits.startsWith('234') && digits.length === 10) {
+    digits = '234' + digits;
+  }
+  return digits.startsWith('+') ? digits : '+' + digits;
+}
+
 async function findRecentBooking(phoneNum, mustBeActive = false) {
   const targetSuffix = cleanPhoneSuffix(phoneNum);
   if (!targetSuffix) return null;
@@ -1403,11 +1424,20 @@ async function findRecentBooking(phoneNum, mustBeActive = false) {
 app.get('/api/bookings/busy', async (req, res) => {
   try {
     const useDb = mongoose.connection.readyState === 1;
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
     let bookings = [];
     if (useDb) {
-      bookings = await Booking.find({ status: { $ne: 'cancelled' } }).lean();
+      bookings = await Booking.find({
+        status: { $ne: 'cancelled' },
+        dateISO: { $gte: startOfToday }
+      }).lean();
     } else {
-      bookings = mockBookings.filter(b => b.status !== 'cancelled');
+      bookings = mockBookings.filter(b => {
+        const bDate = new Date(b.dateISO);
+        return b.status !== 'cancelled' && bDate >= startOfToday;
+      });
     }
 
     const busySlots = bookings.map(b => {
@@ -1608,29 +1638,30 @@ app.get('/api/services', async (req, res) => {
 app.get('/api/staff/bookings', adminLimiter, async (req, res) => {
   try {
     const passcode = req.headers['x-admin-passcode'];
-    const expectedPasscode = ADMIN_PASSCODE;
     const expectedStaffPasscode = STAFF_PASSCODE;
 
-    if (!expectedPasscode || !expectedStaffPasscode) {
+    if (!ADMIN_PASSCODE || !expectedStaffPasscode) {
       return res.status(503).json({ error: 'Admin access is not configured on this server yet.' });
     }
     if (!passcode) {
       return res.status(401).json({ error: 'Unauthorized. Passcode required.' });
     }
 
-    // Enforce strict role-passcode match — env vars are plain text
+    // Enforce strict role-passcode match
     const selectedRole = req.headers['x-selected-role'] || '';
     let isAdmin = false;
 
+    const matchesAdmin = await verifyAdminPasscode(passcode);
+
     if (selectedRole === 'admin') {
-      // Admin dropdown — only admin passcode accepted
-      if (passcode !== expectedPasscode) {
+      // Admin dropdown - only admin passcode accepted
+      if (!matchesAdmin) {
         return res.status(401).json({ error: 'Incorrect passcode. Access Denied.' });
       }
       isAdmin = true;
     } else {
-      // Staff dropdown — admin passcode explicitly rejected
-      if (passcode === expectedPasscode) {
+      // Staff dropdown - admin passcode explicitly rejected
+      if (matchesAdmin) {
         return res.status(401).json({ error: 'Incorrect passcode. Access Denied.' });
       }
       if (passcode !== expectedStaffPasscode) {
@@ -1692,12 +1723,11 @@ app.get('/api/admin/bookings', (req, res) => {
 app.put('/api/admin/services/:id', adminLimiter, async (req, res) => {
   try {
     const passcode = req.headers['x-admin-passcode'];
-    const expectedPasscode = ADMIN_PASSCODE;
 
-    if (!expectedPasscode) {
+    if (!ADMIN_PASSCODE) {
       return res.status(503).json({ error: 'Admin access is not configured on this server yet.' });
     }
-    if (!passcode || passcode !== expectedPasscode) {
+    if (!passcode || !(await verifyAdminPasscode(passcode))) {
       return res.status(401).json({ error: 'Unauthorized. Invalid passcode.' });
     }
 
@@ -1742,12 +1772,11 @@ app.put('/api/admin/services/:id', adminLimiter, async (req, res) => {
 app.post('/api/admin/services', adminLimiter, async (req, res) => {
   try {
     const passcode = req.headers['x-admin-passcode'];
-    const expectedPasscode = ADMIN_PASSCODE;
 
-    if (!expectedPasscode) {
+    if (!ADMIN_PASSCODE) {
       return res.status(503).json({ error: 'Admin access is not configured on this server yet.' });
     }
-    if (!passcode || passcode !== expectedPasscode) {
+    if (!passcode || !(await verifyAdminPasscode(passcode))) {
       return res.status(401).json({ error: 'Unauthorized. Invalid passcode.' });
     }
 
@@ -1812,12 +1841,11 @@ app.post('/api/admin/services', adminLimiter, async (req, res) => {
 app.delete('/api/admin/services/:id', adminLimiter, async (req, res) => {
   try {
     const passcode = req.headers['x-admin-passcode'];
-    const expectedPasscode = ADMIN_PASSCODE;
 
-    if (!expectedPasscode) {
+    if (!ADMIN_PASSCODE) {
       return res.status(503).json({ error: 'Admin access is not configured on this server yet.' });
     }
-    if (!passcode || passcode !== expectedPasscode) {
+    if (!passcode || !(await verifyAdminPasscode(passcode))) {
       return res.status(401).json({ error: 'Unauthorized. Invalid passcode.' });
     }
 
@@ -1872,20 +1900,27 @@ app.get('/api/services/experts', async (req, res) => {
   }
 });
 
+async function verifyAdminPasscode(passcode) {
+  if (!passcode || !ADMIN_PASSCODE) return false;
+  try {
+    if (ADMIN_PASSCODE.startsWith('$2')) {
+      return await bcrypt.compare(passcode, ADMIN_PASSCODE);
+    }
+    return passcode === ADMIN_PASSCODE;
+  } catch (err) {
+    console.error('[verifyAdminPasscode] Error:', err);
+    return false;
+  }
+}
+
 // Admin-only middleware/check helper (supports both plaintext and bcrypt-hashed ADMIN_PASSWORD)
 async function verifyAdmin(req, res, next) {
   const passcode = req.headers['x-admin-passcode'];
-  const expectedPasscode = ADMIN_PASSCODE;
-  if (!passcode || !expectedPasscode) {
+  if (!passcode || !ADMIN_PASSCODE) {
     return res.status(401).json({ error: 'Unauthorized. Admin passcode required.' });
   }
   try {
-    let isValid = false;
-    if (expectedPasscode.startsWith('$2')) {
-      isValid = await bcrypt.compare(passcode, expectedPasscode);
-    } else {
-      isValid = (passcode === expectedPasscode);
-    }
+    const isValid = await verifyAdminPasscode(passcode);
     if (!isValid) {
       return res.status(401).json({ error: 'Unauthorized. Invalid admin passcode.' });
     }

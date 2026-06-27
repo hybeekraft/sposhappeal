@@ -740,7 +740,10 @@ function renderBookingsList(overrideList = null, hasSearched = false) {
           ${b.status === 'cancelled'
         ? `<span style="font-size:0.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Cancelled</span>`
         : !past
-          ? `<button class="btn-reschedule" id="br-${b.id}" onclick="rescheduleBooking('${b.id}', ${isRemote})">Reschedule</button>
+          ? `${canCancel
+            ? `<button class="btn-reschedule" id="br-${b.id}" onclick="rescheduleBooking('${b.id}', ${isRemote})">Reschedule</button>`
+            : `<button class="btn-reschedule" id="br-${b.id}" onclick="toast('Appointments cannot be rescheduled within 24 hours of the scheduled time.')" style="opacity: 0.5; cursor: not-allowed;" title="Rescheduling locked within 24 hours">Reschedule</button>`
+          }
                  ${canCancel
             ? `<button class="btn-cancel" id="bc-${b.id}" onclick="cancelBooking('${b.id}', ${isRemote})">Cancel</button>`
             : `<button class="btn-cancel" id="bc-${b.id}" onclick="toast('Appointments cannot be cancelled within 24 hours of the scheduled time.')" style="opacity: 0.5; cursor: not-allowed;" title="Cancellation locked within 24 hours">Cancel</button>`
