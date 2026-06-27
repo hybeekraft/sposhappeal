@@ -572,7 +572,7 @@ function renderRevenue() {
       </div>
       <div style="background: var(--admin-card); border: 1px solid rgba(224, 68, 122, 0.15); border-radius: 12px; padding: 20px;">
         <div style="color: #a59f95; font-size: 0.85rem; margin-bottom: 8px;">Total Completed Revenue</div>
-        <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">₦	ext{totalRevenue.toLocaleString()}</div>
+        <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">₦${totalRevenue.toLocaleString()}</div>
         <div style="color: #e0447a; font-size: 0.75rem; margin-top: 4px;">From completed sessions</div>
       </div>
     `;
@@ -610,7 +610,7 @@ function renderRevenue() {
       </div>
       <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
         <span style="color:#a59f95;">Completed Service Revenue</span>
-        <span style="color:#e0447a;font-weight:700;">₦	ext{totalRevenue.toLocaleString()}</span>
+        <span style="color:#e0447a;font-weight:700;">₦${totalRevenue.toLocaleString()}</span>
       </div>
       <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
         <span style="color:#a59f95;">Confirmed Bookings (Pending Attendance)</span>
