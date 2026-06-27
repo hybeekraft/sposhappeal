@@ -1653,13 +1653,13 @@ app.get('/api/bookings/busy', async (req, res) => {
     let bookings = [];
     if (useDb) {
       bookings = await Booking.find({
-        status: { $ne: 'cancelled' },
+        status: { $in: ['confirmed', 'rescheduled', 'completed'] },
         dateISO: { $gte: startOfToday }
       }).lean();
     } else {
       bookings = mockBookings.filter(b => {
         const bDate = new Date(b.dateISO);
-        return b.status !== 'cancelled' && bDate >= startOfToday;
+        return ['confirmed', 'rescheduled', 'completed'].includes(b.status) && bDate >= startOfToday;
       });
     }
 
