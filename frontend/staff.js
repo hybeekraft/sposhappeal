@@ -394,12 +394,99 @@ function switchTab(tabName) {
     document.getElementById('tab-staff-btn').classList.add('active');
     document.getElementById('panel-staff').classList.add('active');
     loadStaffList();
+  } else if (tabName === 'revenue') {
+    document.getElementById('tab-revenue-btn').classList.add('active');
+    document.getElementById('panel-revenue').classList.add('active');
+    loadRevenue();
   }
 }
 
 function loadDashboard() {
   switchTab('bookings');
 }
+
+async function loadRevenue() {
+  const loader = document.getElementById('revenue-loader');
+  if (loader) loader.style.display = 'flex';
+
+  const grid = document.getElementById('revenue-grid');
+  const monthCard = document.getElementById('revenue-month-card');
+  const monthRows = document.getElementById('revenue-month-rows');
+
+  if (grid) grid.innerHTML = '';
+  if (monthCard) monthCard.style.display = 'none';
+
+  try {
+    const res = await adminFetch('/admin/revenue');
+
+    if (!res || !res.allTime || res.allTime.bookings === 0) {
+      if (grid) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <i class="fa-solid fa-chart-line"></i>
+            <h4>No Revenue Found</h4>
+            <p>No customer appointments or deposit payments recorded in the database.</p>
+          </div>`;
+      }
+      return;
+    }
+
+    if (grid) {
+      grid.innerHTML = `
+        <div style="background: var(--admin-card); border: 1px solid rgba(224, 68, 122, 0.15); border-radius: 12px; padding: 20px;">
+          <div style="color: #a59f95; font-size: 0.85rem; margin-bottom: 8px;">Today's Deposits</div>
+          <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">₦${res.today.deposits.toLocaleString()}</div>
+          <div style="color: #e0447a; font-size: 0.75rem; margin-top: 4px;">${res.today.bookings} bookings today</div>
+        </div>
+        <div style="background: var(--admin-card); border: 1px solid rgba(224, 68, 122, 0.15); border-radius: 12px; padding: 20px;">
+          <div style="color: #a59f95; font-size: 0.85rem; margin-bottom: 8px;">This Month's Deposits</div>
+          <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">₦	ext{res.thisMonth.deposits.toLocaleString()}</div>
+          <div style="color: #e0447a; font-size: 0.75rem; margin-top: 4px;">${res.thisMonth.bookings} bookings this month</div>
+        </div>
+        <div style="background: var(--admin-card); border: 1px solid rgba(224, 68, 122, 0.15); border-radius: 12px; padding: 20px;">
+          <div style="color: #a59f95; font-size: 0.85rem; margin-bottom: 8px;">All-Time Deposits</div>
+          <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">₦	ext{res.allTime.deposits.toLocaleString()}</div>
+          <div style="color: #e0447a; font-size: 0.75rem; margin-top: 4px;">${res.allTime.bookings} bookings total</div>
+        </div>
+      `;
+    }
+
+    if (monthCard && monthRows) {
+      monthCard.style.display = 'block';
+      monthRows.innerHTML = `
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
+          <span style="color:#a59f95;">Completed Appointments</span>
+          <span style="color:#fff;font-weight:700;">${res.thisMonth.completed}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
+          <span style="color:#a59f95;">Completed Service Revenue</span>
+          <span style="color:#e0447a;font-weight:700;">₦	ext{res.thisMonth.totalRevenue.toLocaleString()}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
+          <span style="color:#a59f95;">Confirmed Bookings</span>
+          <span style="color:#fff;font-weight:700;">${res.confirmed}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding-bottom:8px;">
+          <span style="color:#a59f95;">Pending Bookings</span>
+          <span style="color:#fff;font-weight:700;">${res.pending}</span>
+        </div>
+      `;
+    }
+  } catch (err) {
+    adminToast('Failed to load revenue: ' + err.message);
+    if (grid) {
+      grid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1 / -1;">
+          <i class="fa-solid fa-triangle-exclamation" style="color:#e74c3c;"></i>
+          <h4>Failed to Load Data</h4>
+          <p>${err.message || 'Error communicating with server.'}</p>
+        </div>`;
+    }
+  } finally {
+    if (loader) loader.style.display = 'none';
+  }
+}
+
 
 // ─── MANAGE BOOKINGS TAB ────────────────────────────────────
 async function loadBookings() {
