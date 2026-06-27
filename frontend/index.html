@@ -10,13 +10,13 @@
   <meta property="og:description" content="Look good. Feel posh. Book your glam appointment today.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sposhappeal.vercel.app/">
-  <meta property="og:image" content="https://sposhappeal.vercel.app/assets/sposh_logo.png">
+  <meta property="og:image" content="https://sposhappeal.vercel.app/assets/sposh_logo.webp">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="S'posh APPEAL | Premium Unisex Beauty Salon">
   <meta name="twitter:description" content="Look good. Feel posh. Book your glam appointment today.">
-  <meta name="twitter:image" content="https://sposhappeal.vercel.app/assets/sposh_logo.png">
-  <link rel="icon" href="assets/sposh_logo.png" type="image/png" sizes="32x32">
-  <link rel="apple-touch-icon" href="assets/sposh_logo.png">
+  <meta name="twitter:image" content="https://sposhappeal.vercel.app/assets/sposh_logo.webp">
+  <link rel="icon" href="assets/sposh_logo.webp" type="image/webp" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/sposh_logo.webp">
   <link rel="canonical" href="https://sposhappeal.vercel.app/">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1a1025">
@@ -42,9 +42,11 @@
     "description": "Premium Unisex Salon offering Hair Making, Wigs, Nail Art, Lash Extensions, Makeup, and Home Service.",
     "url": "https://sposhappeal.vercel.app",
     "telephone": "+2349131282016",
-    "image": "https://sposhappeal.vercel.app/assets/sposh_logo.png",
+    "image": "https://sposhappeal.vercel.app/assets/sposh_logo.webp",
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "Plot 15, Admiralty Way, Lekki Phase 1",
+      "addressLocality": "Lekki",
       "addressRegion": "Lagos",
       "addressCountry": "NG"
     },
@@ -432,7 +434,7 @@
           <ul class="footer-contact">
             <li>
               <i class="fa-solid fa-location-dot"></i>
-              <span>Lagos State, Nigeria</span>
+              <span>Plot 15, Admiralty Way, Lekki Phase 1, Lagos</span>
             </li>
             <li>
               <i class="fa-solid fa-envelope"></i>
@@ -479,6 +481,14 @@
   </button>
 
   <script src="app.js"></script>
+  <!-- Service Worker PWA Offline Support -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+  </script>
 </body>
 
 </html>

@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="S'posh APPEAL Staff Portal — Manage salon appointments and service pricing dynamically.">
-  <link rel="icon" href="assets/sposh_logo.png" type="image/png" sizes="32x32">
-  <link rel="apple-touch-icon" href="assets/sposh_logo.png">
+  <link rel="icon" href="assets/sposh_logo.webp" type="image/webp" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/sposh_logo.webp">
   <meta name="theme-color" content="#1a1025">
   <title>Staff Portal | S'posh APPEAL</title>
 
@@ -90,7 +90,7 @@
   <div class="admin-login-overlay" id="login-overlay">
     <div class="login-card">
       <div class="login-logo-container logo-flex" style="justify-content: center; margin-bottom: 24px; gap: 12px;">
-        <img src="assets/sposh_logo.png" alt="S'posh APPEAL Logo" class="logo-img" style="width: 52px; height: 52px; filter: drop-shadow(0 0 8px rgba(224, 68, 122, 0.3));">
+        <img src="assets/sposh_logo.webp" alt="S'posh APPEAL Logo" class="logo-img" style="width: 52px; height: 52px; filter: drop-shadow(0 0 8px rgba(224, 68, 122, 0.3));">
         <div class="logo-text" style="text-align: left;">
           <span class="logo-name">S'posh APPEAL</span>
           <span class="logo-tagline">Premium Unisex Salon</span>
@@ -119,12 +119,15 @@
 
   <!-- ═══════════ MAIN PORTAL ═══════════ -->
   <div class="admin-portal-wrapper" id="admin-portal" style="display: none;">
+    <div id="db-mock-banner" style="display: none; background: linear-gradient(135deg, #d97706, #b45309); color: #fff; text-align: center; padding: 12px 24px; font-weight: 600; font-size: 0.88rem; border-bottom: 1px solid rgba(255,255,255,0.1); z-index: 9999; font-family: 'DM Sans', sans-serif;">
+      <i class="fa-solid fa-triangle-exclamation"></i> &nbsp; Running in Offline Mock Database Mode. Changes will not be saved permanently.
+    </div>
     
     <!-- HEADER -->
     <header class="admin-header">
       <div class="container admin-header-flex">
         <div class="admin-brand">
-          <img src="assets/sposh_logo.png" alt="S'posh APPEAL Logo" class="admin-logo-img">
+          <img src="assets/sposh_logo.webp" alt="S'posh APPEAL Logo" class="admin-logo-img">
           <div>
             <h1>S'posh APPEAL <span class="accent-text" id="header-role-badge">Staff</span></h1>
             <p>Salon Portal &bull; Live Scheduling & Catalog Management</p>
@@ -527,5 +530,13 @@
     }
   </script>
   <script src="staff.js"></script>
+  <!-- Service Worker PWA Offline Support -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+  </script>
 </body>
 </html>

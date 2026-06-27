@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
     content="Book your appointment at S'posh APPEAL — Premium Unisex Salon. Choose your service, date, and time in a few simple steps.">
-  <link rel="icon" href="assets/sposh_logo.png" type="image/png" sizes="32x32">
-  <link rel="apple-touch-icon" href="assets/sposh_logo.png">
+  <link rel="icon" href="assets/sposh_logo.webp" type="image/webp" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/sposh_logo.webp">
   <link rel="canonical" href="https://sposhappeal.vercel.app/booking.html">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1a1025">
@@ -15,11 +15,11 @@
   <meta property="og:description" content="Book your glam appointment at S'posh APPEAL — Hair, Nails, Lashes, Makeup & more.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sposhappeal.vercel.app/booking.html">
-  <meta property="og:image" content="https://sposhappeal.vercel.app/assets/sposh_logo.png">
+  <meta property="og:image" content="https://sposhappeal.vercel.app/assets/sposh_logo.webp">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Book an Appointment | S'posh APPEAL">
   <meta name="twitter:description" content="Book your glam appointment at S'posh APPEAL — Hair, Nails, Lashes, Makeup & more.">
-  <meta name="twitter:image" content="https://sposhappeal.vercel.app/assets/sposh_logo.png">
+  <meta name="twitter:image" content="https://sposhappeal.vercel.app/assets/sposh_logo.webp">
   <title>Book an Appointment | S'posh APPEAL</title>
 
   <!-- Font Awesome -->
@@ -249,9 +249,7 @@
                   <h5>S'posh APPEAL Appointment Summary</h5>
                 </div>
                 <div class="summary-rows">
-                  <div class="srow">
-                    <span class="srow-label">Expert</span>
-</div>
+                  
                   <div class="srow">
                     <span class="srow-label">Date &amp; Time</span>
                     <span class="srow-val" id="sum-datetime">--</span>
@@ -332,6 +330,14 @@
   <script async src="https://js.paystack.co/v1/inline.js"></script>
   <script src="app.js"></script>
   <script src="booking.js"></script>
+  <!-- Service Worker PWA Offline Support -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+  </script>
 </body>
 
 </html>

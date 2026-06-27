@@ -35,6 +35,27 @@ function resetInactivityTimer() {
   }, INACTIVITY_TIMEOUT_MS);
 }
 
+
+async function checkDatabaseStatus() {
+  try {
+    const res = await fetch(`${API_BASE}/status`);
+    if (res.ok) {
+      const data = await res.json();
+      const banner = document.getElementById('db-mock-banner');
+      const revWarning = document.getElementById('revenue-mock-warning');
+      if (data.db === 'mock') {
+        if (banner) banner.style.display = 'block';
+        if (revWarning) revWarning.style.display = 'block';
+      } else {
+        if (banner) banner.style.display = 'none';
+        if (revWarning) revWarning.style.display = 'none';
+      }
+    }
+  } catch (err) {
+    // Suppress console.error in production, but let's do a quiet fallback
+  }
+}
+
 function showInactivityWarning() {
   if (_warningOverlay) return; // Already showing
 
@@ -228,13 +249,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
   }
 
-  console.log('[S\'posh] staff.js loaded — attaching login handlers');
+  
 
   // Attach login button click handler (type="button" so no native form submit)
   const loginBtn = document.getElementById('btn-login');
   if (loginBtn) {
     loginBtn.addEventListener('click', handleLogin);
-    console.log('[S\'posh] Login button handler attached');
+    
   }
 
   // Also catch form submit as fallback (Enter key)
@@ -260,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function handleLogin(event) {
   if (event && event.preventDefault) event.preventDefault();
   if (event && event.stopPropagation) event.stopPropagation();
-  console.log('[S\'posh] handleLogin called — type:', event?.type);
+  
   const input = document.getElementById('admin-passcode');
   const passcode = input.value.trim();
   const errEl = document.getElementById('login-error-msg');
@@ -292,7 +313,8 @@ async function handleLogin(event) {
     document.getElementById('admin-portal').style.display = 'block';
     
     loadDashboard();
-    resetInactivityTimer(); // Start inactivity auto-logout timer
+    resetInactivityTimer();
+    checkDatabaseStatus(); // Start inactivity auto-logout timer
   } catch (err) {
     // Auth failed: Reset & notify
     sessionStorage.removeItem('sposh_admin_passcode');
@@ -334,6 +356,7 @@ async function checkPasscodeAndLoad(passcode) {
     document.getElementById('admin-portal').style.display = 'block';
     loadDashboard();
     resetInactivityTimer(); // Start timer if session is restored
+    checkDatabaseStatus();
   } catch (err) {
     // Token is stale or invalid: Clear and prompt login
     sessionStorage.removeItem('sposh_admin_passcode');

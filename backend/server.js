@@ -1202,13 +1202,13 @@ app.patch('/api/bookings/:id/complete', adminLimiter, async (req, res) => {
       booking.status = 'completed';
       booking.paymentStatus = 'fully_paid';
       booking.completedAt = new Date();
-      booking.completionNotes = completionNotes || '';
+      booking.completionNotes = _xss(completionNotes) || '';
       booking.balancePaymentMethod = paymentMethod || 'cash';
       await booking.save();
     } else {
       Object.assign(booking, {
         status: 'completed', paymentStatus: 'fully_paid',
-        completedAt: new Date(), completionNotes: completionNotes || '',
+        completedAt: new Date(), completionNotes: _xss(completionNotes) || '',
         balancePaymentMethod: paymentMethod || 'cash', updatedAt: new Date()
       });
     }
@@ -1625,7 +1625,7 @@ app.put('/api/admin/services/:id', adminLimiter, async (req, res) => {
         return res.status(404).json({ error: 'Service not found.' });
       }
 
-      if (name) option.name = name;
+      if (name) option.name = _xss(name);
       option.price = Number(price);
       if (durationMinutes !== undefined && !isNaN(durationMinutes)) option.durationMinutes = Number(durationMinutes);
       await option.save();
@@ -1637,7 +1637,7 @@ app.put('/api/admin/services/:id', adminLimiter, async (req, res) => {
       if (!option) {
         return res.status(404).json({ error: 'Service not found.' });
       }
-      if (name) option.name = name;
+      if (name) option.name = _xss(name);
       option.price = Number(price);
       if (durationMinutes !== undefined && !isNaN(durationMinutes)) option.durationMinutes = Number(durationMinutes);
       res.json({ status: 'success', message: 'Service updated successfully.', service: option });
@@ -1682,7 +1682,7 @@ app.post('/api/admin/services', adminLimiter, async (req, res) => {
 
       const newOption = new ServiceOption({
         id: serviceId,
-        name,
+        name: _xss(name),
         price: Number(price),
         durationMinutes: Number(durationMinutes),
         categoryId
@@ -1829,7 +1829,12 @@ app.get('/api/admin/staff', verifyAdmin, async (req, res) => {
 // 13. POST /api/admin/staff
 app.post('/api/admin/staff', adminLimiter, verifyAdmin, async (req, res) => {
   try {
-    const { name, role, bio, ig, img, passcode, permissions } = req.body;
+    const { name: _name, role: _role, bio: _bio, ig: _ig, img: _img, passcode, permissions } = req.body;
+    const name = _xss(_name);
+    const role = _xss(_role);
+    const bio = _xss(_bio);
+    const ig = _xss(_ig);
+    const img = _xss(_img);
     if (!name || !passcode) {
       return res.status(400).json({ error: 'Name and passcode are required.' });
     }
@@ -1880,7 +1885,7 @@ app.post('/api/admin/staff', adminLimiter, verifyAdmin, async (req, res) => {
 app.put('/api/admin/staff/:id', adminLimiter, verifyAdmin, async (req, res) => {
   try {
     const staffId = req.params.id;
-    const { name, role, bio, ig, img, passcode, permissions } = req.body;
+    const { name: _name, role: _role, bio: _bio, ig: _ig, img: _img, passcode, permissions } = req.body;
 
     const useDb = mongoose.connection.readyState === 1;
     if (useDb) {
@@ -1889,13 +1894,13 @@ app.put('/api/admin/staff/:id', adminLimiter, verifyAdmin, async (req, res) => {
         return res.status(404).json({ error: 'Staff member not found.' });
       }
 
-      if (name !== undefined) staff.name = name;
-      if (role !== undefined) staff.role = role;
-      if (bio !== undefined) staff.bio = bio;
-      if (ig !== undefined) staff.ig = ig;
-      if (fb !== undefined) staff.fb = fb;
-      if (tiktok !== undefined) staff.tiktok = tiktok;
-      if (img !== undefined) staff.img = img;
+      if (_name !== undefined) staff.name = _xss(_name);
+      if (_role !== undefined) staff.role = _xss(_role);
+      if (_bio !== undefined) staff.bio = _xss(_bio);
+      if (_ig !== undefined) staff.ig = _xss(_ig);
+      if (req.body.fb !== undefined) staff.fb = _xss(req.body.fb);
+      if (req.body.tiktok !== undefined) staff.tiktok = _xss(req.body.tiktok);
+      if (_img !== undefined) staff.img = _xss(_img);
       if (passcode !== undefined) staff.passcodeHash = passcode; // pre-save hook will re-hash
       if (permissions !== undefined) {
         staff.permissions = {
@@ -1915,13 +1920,13 @@ app.put('/api/admin/staff/:id', adminLimiter, verifyAdmin, async (req, res) => {
         return res.status(404).json({ error: 'Staff member not found.' });
       }
 
-      if (name !== undefined) staff.name = name;
-      if (role !== undefined) staff.role = role;
-      if (bio !== undefined) staff.bio = bio;
-      if (ig !== undefined) staff.ig = ig;
+      if (_name !== undefined) staff.name = _xss(_name);
+      if (_role !== undefined) staff.role = _xss(_role);
+      if (_bio !== undefined) staff.bio = _xss(_bio);
+      if (_ig !== undefined) staff.ig = _xss(_ig);
       if (fb !== undefined) staff.fb = fb;
       if (tiktok !== undefined) staff.tiktok = tiktok;
-      if (img !== undefined) staff.img = img;
+      if (_img !== undefined) staff.img = _xss(_img);
       if (passcode !== undefined) staff.passcode = passcode;
       if (permissions !== undefined) {
         staff.permissions = {
