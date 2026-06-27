@@ -8,7 +8,7 @@ const API_TIMEOUT_MS = 6000;
 
 // ─── INACTIVITY AUTO-LOGOUT ────────────────────────────────────
 const INACTIVITY_TIMEOUT_MS = 15 * 60 * 1000;  // 15 minutes
-const INACTIVITY_WARNING_MS = 13 * 60 * 1000;  // Show warning at 13 min (2 min before logout)
+const INACTIVITY_WARNING_MS = INACTIVITY_TIMEOUT_MS - (15 * 1000);  // Show warning 15 seconds before logout
 let _inactivityTimer = null;
 let _warningTimer = null;
 let _warningOverlay = null;
