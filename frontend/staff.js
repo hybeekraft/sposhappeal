@@ -409,6 +409,42 @@ async function loadRevenue() {
   const loader = document.getElementById('revenue-loader');
   if (loader) loader.style.display = 'flex';
 
+  try {
+    // Fetch latest bookings
+    const res = await adminFetch('/staff/bookings');
+    bookingsCache = res.bookings || [];
+
+    // Populate staff filter list
+    const staffSelect = document.getElementById('revenue-filter-staff');
+    if (staffSelect) {
+      const currentVal = staffSelect.value;
+      staffSelect.innerHTML = '<option value="all">All Staff</option>';
+      const expertsMap = {};
+      bookingsCache.forEach(b => {
+        if (b.expert && b.expertName) {
+          expertsMap[b.expert] = b.expertName;
+        }
+      });
+      Object.keys(expertsMap).forEach(id => {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = expertsMap[id];
+        staffSelect.appendChild(opt);
+      });
+      if (currentVal && staffSelect.querySelector(`option[value="${currentVal}"]`)) {
+        staffSelect.value = currentVal;
+      }
+    }
+
+    renderRevenue();
+  } catch (err) {
+    adminToast('Failed to load revenue data: ' + err.message);
+  } finally {
+    if (loader) loader.style.display = 'none';
+  }
+}
+
+function renderRevenue() {
   const grid = document.getElementById('revenue-grid');
   const monthCard = document.getElementById('revenue-month-card');
   const monthRows = document.getElementById('revenue-month-rows');
@@ -416,74 +452,110 @@ async function loadRevenue() {
   if (grid) grid.innerHTML = '';
   if (monthCard) monthCard.style.display = 'none';
 
-  try {
-    const res = await adminFetch('/admin/revenue');
+  const timeframe = document.getElementById('revenue-filter-timeframe')?.value || 'month';
+  const serviceType = document.getElementById('revenue-filter-type')?.value || 'all';
+  const expertId = document.getElementById('revenue-filter-staff')?.value || 'all';
 
-    if (!res || !res.allTime || res.allTime.bookings === 0) {
-      if (grid) {
-        grid.innerHTML = `
-          <div class="empty-state" style="grid-column: 1 / -1;">
-            <i class="fa-solid fa-chart-line"></i>
-            <h4>No Revenue Found</h4>
-            <p>No customer appointments or deposit payments recorded in the database.</p>
-          </div>`;
-      }
-      return;
-    }
+  // Helper date logic
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-    if (grid) {
-      grid.innerHTML = `
-        <div style="background: var(--admin-card); border: 1px solid rgba(224, 68, 122, 0.15); border-radius: 12px; padding: 20px;">
-          <div style="color: #a59f95; font-size: 0.85rem; margin-bottom: 8px;">Today's Deposits</div>
-          <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">₦${res.today.deposits.toLocaleString()}</div>
-          <div style="color: #e0447a; font-size: 0.75rem; margin-top: 4px;">${res.today.bookings} bookings today</div>
-        </div>
-        <div style="background: var(--admin-card); border: 1px solid rgba(224, 68, 122, 0.15); border-radius: 12px; padding: 20px;">
-          <div style="color: #a59f95; font-size: 0.85rem; margin-bottom: 8px;">This Month's Deposits</div>
-          <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">₦	ext{res.thisMonth.deposits.toLocaleString()}</div>
-          <div style="color: #e0447a; font-size: 0.75rem; margin-top: 4px;">${res.thisMonth.bookings} bookings this month</div>
-        </div>
-        <div style="background: var(--admin-card); border: 1px solid rgba(224, 68, 122, 0.15); border-radius: 12px; padding: 20px;">
-          <div style="color: #a59f95; font-size: 0.85rem; margin-bottom: 8px;">All-Time Deposits</div>
-          <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">₦	ext{res.allTime.deposits.toLocaleString()}</div>
-          <div style="color: #e0447a; font-size: 0.75rem; margin-top: 4px;">${res.allTime.bookings} bookings total</div>
-        </div>
-      `;
-    }
+  // Start of this week (Monday)
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const startOfWeek = new Date(now.getFullYear(), now.getMonth(), diff);
+  startOfWeek.setHours(0, 0, 0, 0);
 
-    if (monthCard && monthRows) {
-      monthCard.style.display = 'block';
-      monthRows.innerHTML = `
-        <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
-          <span style="color:#a59f95;">Completed Appointments</span>
-          <span style="color:#fff;font-weight:700;">${res.thisMonth.completed}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
-          <span style="color:#a59f95;">Completed Service Revenue</span>
-          <span style="color:#e0447a;font-weight:700;">₦	ext{res.thisMonth.totalRevenue.toLocaleString()}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
-          <span style="color:#a59f95;">Confirmed Bookings</span>
-          <span style="color:#fff;font-weight:700;">${res.confirmed}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding-bottom:8px;">
-          <span style="color:#a59f95;">Pending Bookings</span>
-          <span style="color:#fff;font-weight:700;">${res.pending}</span>
-        </div>
-      `;
-    }
-  } catch (err) {
-    adminToast('Failed to load revenue: ' + err.message);
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  // Filter bookings (exclude cancelled ones)
+  const filtered = bookingsCache.filter(b => {
+    if (b.status === 'cancelled') return false;
+
+    // Timeframe filter
+    const bDate = new Date(b.createdAt || b.dateISO);
+    if (timeframe === 'today' && bDate < startOfToday) return false;
+    if (timeframe === 'week' && bDate < startOfWeek) return false;
+    if (timeframe === 'month' && bDate < startOfMonth) return false;
+
+    // Service Type filter
+    if (serviceType !== 'all' && b.serviceType !== serviceType) return false;
+
+    // Expert filter
+    if (expertId !== 'all' && b.expert !== expertId) return false;
+
+    return true;
+  });
+
+  if (filtered.length === 0) {
     if (grid) {
       grid.innerHTML = `
         <div class="empty-state" style="grid-column: 1 / -1;">
-          <i class="fa-solid fa-triangle-exclamation" style="color:#e74c3c;"></i>
-          <h4>Failed to Load Data</h4>
-          <p>${err.message || 'Error communicating with server.'}</p>
+          <i class="fa-solid fa-chart-line"></i>
+          <h4>No Revenue Found</h4>
+          <p>No customer appointments or deposit payments matching the current filters were found.</p>
         </div>`;
     }
-  } finally {
-    if (loader) loader.style.display = 'none';
+    return;
+  }
+
+  // Calculate stats
+  const totalBookings = filtered.length;
+  const totalDeposits = filtered.reduce((acc, b) => acc + (Number(b.depositDue) || 0), 0);
+
+  const completedBookings = filtered.filter(b => b.status === 'completed');
+  const totalRevenue = completedBookings.reduce((acc, b) => acc + (Number(b.total) || 0), 0);
+
+  const confirmedBookingsCount = filtered.filter(b => b.status === 'confirmed').length;
+  const pendingBookingsCount = filtered.filter(b => b.status === 'pending').length;
+
+  if (grid) {
+    grid.innerHTML = `
+      <div style="background: var(--admin-card); border: 1px solid rgba(224, 68, 122, 0.15); border-radius: 12px; padding: 20px;">
+        <div style="color: #a59f95; font-size: 0.85rem; margin-bottom: 8px;">Total Bookings</div>
+        <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">${totalBookings}</div>
+        <div style="color: #e0447a; font-size: 0.75rem; margin-top: 4px;">For selected filters</div>
+      </div>
+      <div style="background: var(--admin-card); border: 1px solid rgba(224, 68, 122, 0.15); border-radius: 12px; padding: 20px;">
+        <div style="color: #a59f95; font-size: 0.85rem; margin-bottom: 8px;">Deposits Collected</div>
+        <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">₦${totalDeposits.toLocaleString()}</div>
+        <div style="color: #e0447a; font-size: 0.75rem; margin-top: 4px;">Down payments received</div>
+      </div>
+      <div style="background: var(--admin-card); border: 1px solid rgba(224, 68, 122, 0.15); border-radius: 12px; padding: 20px;">
+        <div style="color: #a59f95; font-size: 0.85rem; margin-bottom: 8px;">Total Completed Revenue</div>
+        <div style="color: #fff; font-size: 1.5rem; font-weight: 700;">₦	ext{totalRevenue.toLocaleString()}</div>
+        <div style="color: #e0447a; font-size: 0.75rem; margin-top: 4px;">From completed sessions</div>
+      </div>
+    `;
+  }
+
+  if (monthCard && monthRows) {
+    monthCard.style.display = 'block';
+
+    const headerTitle = monthCard.querySelector('h4');
+    if (headerTitle) {
+      const label = timeframe === 'today' ? 'Today' : timeframe === 'week' ? 'This Week' : timeframe === 'month' ? 'This Month' : 'All-Time';
+      headerTitle.innerHTML = `<i class="fa-regular fa-calendar" style="color:#e0447a;"></i> ${label}'s Breakdown`;
+    }
+
+    monthRows.innerHTML = `
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
+        <span style="color:#a59f95;">Completed Appointments</span>
+        <span style="color:#fff;font-weight:700;">${completedBookings.length}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
+        <span style="color:#a59f95;">Completed Service Revenue</span>
+        <span style="color:#e0447a;font-weight:700;">₦	ext{totalRevenue.toLocaleString()}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:8px;">
+        <span style="color:#a59f95;">Confirmed Bookings (Pending Attendance)</span>
+        <span style="color:#fff;font-weight:700;">${confirmedBookingsCount}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding-bottom:8px;">
+        <span style="color:#a59f95;">Pending Bookings (Unconfirmed Deposits)</span>
+        <span style="color:#fff;font-weight:700;">${pendingBookingsCount}</span>
+      </div>
+    `;
   }
 }
 

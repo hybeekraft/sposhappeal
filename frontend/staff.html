@@ -210,6 +210,33 @@
           <i class="fa-solid fa-circle-notch fa-spin"></i> Loading revenue data...
         </div>
 
+        <!-- Revenue Filters -->
+        <div class="filter-controls" style="display:flex;gap:16px;align-items:center;margin-bottom:24px;flex-wrap:wrap;background:rgba(255,255,255,0.02);border:1px solid rgba(224,68,122,0.1);padding:16px;border-radius:12px;">
+          <div class="filter-group" style="display:flex;flex-direction:column;gap:6px;">
+            <label style="color:#a59f95;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Timeframe</label>
+            <select id="revenue-filter-timeframe" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;min-width:140px;cursor:pointer;">
+              <option value="all">All-Time</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month" selected>This Month</option>
+            </select>
+          </div>
+          <div class="filter-group" style="display:flex;flex-direction:column;gap:6px;">
+            <label style="color:#a59f95;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Service Type</label>
+            <select id="revenue-filter-type" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;min-width:140px;cursor:pointer;">
+              <option value="all">All Types</option>
+              <option value="salon">In-Studio (Salon)</option>
+              <option value="home">Home Service</option>
+            </select>
+          </div>
+          <div class="filter-group" style="display:flex;flex-direction:column;gap:6px;">
+            <label style="color:#a59f95;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Staff Member</label>
+            <select id="revenue-filter-staff" onchange="renderRevenue()" style="background:#160D22;color:#fff;border:1px solid rgba(224,68,122,0.2);border-radius:8px;padding:8px 12px;font-size:0.85rem;outline:none;min-width:160px;cursor:pointer;">
+              <option value="all">All Staff</option>
+            </select>
+          </div>
+        </div>
+
         <!-- Stats cards -->
         <div id="revenue-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;">
           <!-- Populated by staff.js -->
