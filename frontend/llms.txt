@@ -1,0 +1,32 @@
+# S'posh APPEAL
+
+S'posh APPEAL is a premium unisex beauty salon and studio based in Lekki Phase 1, Lagos, Nigeria. The brand specializes in high-end, personalized beauty and styling services, offering both in-studio appointments and home services.
+
+## Contact Information
+- **Location**: Plot 15, Admiralty Way, Lekki Phase 1, Lagos, Nigeria
+- **Phone**: +234 913 128 2016
+- **WhatsApp Support**: +234 701 108 3217
+- **Operating Hours**:
+  - Monday - Friday: 09:00 - 18:00
+  - Saturday: 08:00 - 19:00
+  - Sunday: 10:00 - 17:00
+- **Official Website**: https://sposhappeal.vercel.app/
+- **Socials**:
+  - Instagram: https://instagram.com/sposhappeal_001
+  - Facebook: https://web.facebook.com/profile.php?id=61573953737973
+  - TikTok: https://tiktok.com/@sposhappeal
+
+## Services & Pricing (Starting Prices)
+- **Hair Making**: ₦5,000 (Braids, weaves, twists, washes, natural styling, and treatments)
+- **Wig Install & Sales**: ₦7,000 (Frontal/closure installs, custom wig making, revamping)
+- **Nail Art**: ₦3,000 (Acrylic fixing, luxury manicure & pedicure, custom designs, chrome)
+- **Lash & Brow**: ₦8,000 (Individual extensions, mega-volume, brow styling)
+- **Makeup Studio**: ₦8,000 (Bridal, birthday, events, photoshoots, soft glam)
+- **Personal Care**: ₦10,000 (Facials, steam facials, pore extraction, skincare)
+- **Men's Grooming**: ₦2,500 (Precision haircuts, fades, trims)
+
+## Booking & Reservation Rules
+- **Appointment Page**: https://sposhappeal.vercel.app/booking.html
+- **Deposit Policy**: A deposit is required to confirm all bookings (usually 30% of total service cost). Slots are automatically marked pending and released if the deposit is not paid.
+- **Rescheduling & Cancellation**: Permitted up to 24 hours before the appointment. Changes within 24 hours of the slot are locked.
+- **Home Service**: Available upon request for select services. An address is required during checkout.

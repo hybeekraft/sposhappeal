@@ -4,3 +4,4 @@ Disallow: /staff.html
 Disallow: /api/
 
 Sitemap: https://sposhappeal.vercel.app/sitemap.xml
+llms: https://sposhappeal.vercel.app/llms.txt
