@@ -750,69 +750,7 @@ let mockCategories = DEFAULT_CATEGORIES.map(c => ({ ...c }));
 let mockOptions = DEFAULT_OPTIONS.map(o => ({ ...o }));
 let mockStaff = DEFAULT_STAFF.map(s => ({ ...s, passcode: s.passcodeHash }));
 
-const mockDate1 = new Date();
-mockDate1.setDate(mockDate1.getDate() + 2);
-mockDate1.setHours(12, 0, 0, 0);
-
-const mockDate2 = new Date();
-mockDate2.setDate(mockDate2.getDate() + 3);
-mockDate2.setHours(12, 0, 0, 0);
-
-let mockBookings = [
-  {
-    reference_id: 'SP-987123',
-    clientName: 'Sarah Jenkins',
-    clientEmail: 'client2@example.com',
-    clientPhone: '08031234567',
-    services: [
-      { id: 'nails-pedi-mani', name: 'Pedicure and Manicure', price: 10000, durationMinutes: 75 }
-    ],
-    expert: 'adaeze',
-    expertName: 'Stylist 2',
-    dateISO: mockDate1,
-    dateDisplay: mockDate1.toLocaleDateString('en-GB', {
-      weekday: 'short', day: 'numeric', month: 'long', year: 'numeric'
-    }),
-    time: '10:00 - 11:15 (75 min)',
-    startTime: '10:00 AM',
-    total: 10000,
-    depositDue: 5000,
-    serviceType: 'salon',
-    address: '',
-    notes: 'Please make it extra neat',
-    paymentStatus: 'paid',
-    status: 'confirmed',
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    reference_id: 'SP-456789',
-    clientName: 'Michael Obi',
-    clientEmail: 'client@example.com',
-    clientPhone: '08099887766',
-    services: [
-      { id: 'haircut-fade', name: 'Fade Cut', price: 5000, durationMinutes: 60 },
-      { id: 'haircut-beard', name: 'Beard Grooming', price: 5000, durationMinutes: 60 }
-    ],
-    expert: 'kunle',
-    expertName: 'Stylist 4',
-    dateISO: mockDate2,
-    dateDisplay: mockDate2.toLocaleDateString('en-GB', {
-      weekday: 'short', day: 'numeric', month: 'long', year: 'numeric'
-    }),
-    time: '14:00 - 16:00 (2 hr)',
-    startTime: '02:00 PM',
-    total: 10000,
-    depositDue: 5000,
-    serviceType: 'salon',
-    address: '',
-    notes: '',
-    paymentStatus: 'pending',
-    status: 'pending',
-    createdAt: new Date(),
-    updatedAt: new Date()
-  }
-];
+let mockBookings = [];
 
 const app = express();
 
