@@ -98,12 +98,58 @@ function compileEmailTemplate({ title, headerAccentColor, name, description, det
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>${title}</title>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>${title}</title>
+    <style>
+      @media only screen and (max-width: 600px) {
+        .outer-table {
+          padding: 0 !important;
+        }
+        .main-container {
+          border-radius: 0 !important;
+          border: none !important;
+          box-shadow: none !important;
+        }
+        .header-cell {
+          padding: 36px 16px !important;
+        }
+        .body-cell {
+          padding: 36px 16px !important;
+        }
+        .footer-cell {
+          padding: 36px 16px !important;
+        }
+        .action-btn {
+          display: block !important;
+          margin: 10px 0 !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
+          text-align: center !important;
+        }
+        .detail-label {
+          width: 100px !important;
+          font-size: 0.75rem !important;
+          padding: 10px 0 !important;
+        }
+        .detail-value {
+          font-size: 0.9rem !important;
+          padding: 10px 0 !important;
+        }
+        .financial-label {
+          width: 100px !important;
+          font-size: 0.75rem !important;
+          padding: 6px 0 !important;
+        }
+        .financial-value {
+          font-size: 1.0rem !important;
+          padding: 6px 0 !important;
+        }
+      }
+    </style>
+  </head>
 <body style="margin:0;padding:0;background:#11100f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
-  <table width="100%" cellpadding="0" cellspacing="0" class="outer-table" style="background:#11100f;padding:60px 16px;">
+  <table width="100%" cellpadding="0" cellspacing="0" class="outer-table" style="background:#11100f;padding:40px 0;">
     <tr>
       <td align="center">
         <!-- Main Email Container -->
@@ -111,7 +157,7 @@ function compileEmailTemplate({ title, headerAccentColor, name, description, det
           
           <!-- Header Banner -->
           <tr>
-            <td class="header-cell" style="background:#1a1917;padding:48px 40px;text-align:center;border-bottom:3px solid ${headerAccentColor};">
+            <td class="header-cell" style="background:#1a1917;padding:40px 20px;text-align:center;border-bottom:3px solid ${headerAccentColor};">
               <div style="margin-bottom:16px;">
                 <img src="https://sposhappeal.vercel.app/assets/sposh_logo.png" alt="S'posh APPEAL Logo" style="height:60px;width:auto;display:inline-block;border:none;">
               </div>
@@ -126,7 +172,7 @@ function compileEmailTemplate({ title, headerAccentColor, name, description, det
           
           <!-- Body Content Area -->
           <tr>
-            <td class="body-cell" style="padding:48px 40px;background:#FAF6F0;">
+            <td class="body-cell" style="padding:40px 20px;background:#FAF6F0;">
               <p style="color:#1a1917;font-size:1.15rem;line-height:1.6;margin:0 0 24px;font-family:Georgia,serif;">
                 Hi <strong style="color:#1a1917;font-weight:700;">${name}</strong>,
               </p>
@@ -135,7 +181,7 @@ function compileEmailTemplate({ title, headerAccentColor, name, description, det
               </p>
               
               <!-- Core Details Card -->
-              <div class="details-card" style="background:#ffffff;border-radius:12px;padding:32px;border:1px solid #ebdcb9;margin-bottom:36px;box-shadow:0 4px 15px rgba(26,25,23,0.02);">
+              <!-- Core Details (Simplified: no nested card div) -->
                 <div style="color:#1a1917;font-size:0.8rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin:0 0 20px;border-bottom:2px solid #ebdcb9;padding-bottom:12px;font-family:sans-serif;">
                   ${detailsCardTitle}
                 </div>
@@ -146,7 +192,6 @@ function compileEmailTemplate({ title, headerAccentColor, name, description, det
                 
                 <!-- Financial Breakdown Section -->
                 ${financialsHtml}
-              </div>
               
               <!-- Action Buttons -->
               <div style="text-align:center;margin:36px 0 24px;">
@@ -160,7 +205,7 @@ function compileEmailTemplate({ title, headerAccentColor, name, description, det
           
           <!-- Footer -->
           <tr>
-            <td class="footer-cell" style="padding:48px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
+            <td class="footer-cell" style="padding:40px 20px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
               <div style="color:#c8a261;font-size:0.85rem;font-weight:700;letter-spacing:3px;margin-bottom:8px;font-family:sans-serif;">
                 S'POSH APPEAL
               </div>
@@ -320,7 +365,7 @@ async function dispatchBookingNotifications(booking, actionType) {
         </a>
       `,
       nextStepsHtml: `
-        <div style="background:#ffffff;border:1px dashed #c8a261;border-radius:12px;padding:28px;margin-top:36px;box-shadow:0 4px 15px rgba(26,25,23,0.01);">
+        <div style="background:#ffffff;border:1px dashed #c8a261;border-radius:12px;padding:20px;margin-top:24px;box-shadow:0 4px 15px rgba(26,25,23,0.01);">
           <h4 style="color:#1a1917;margin:0 0 16px;font-size:0.85rem;letter-spacing:3px;text-transform:uppercase;font-weight:700;font-family:sans-serif;border-bottom:1px dashed #ebdcb9;padding-bottom:10px;">📍 Next Steps & Info</h4>
           <ul style="color:#1a1917;font-size:0.92rem;line-height:1.7;margin:0;padding-left:20px;font-family:Georgia,serif;">
             <li style="margin-bottom:10px;"><strong style="color:#1a1917;font-weight:700;">Service Type:</strong> ${booking.serviceType === 'home' ? 'Home Service (Our expert will arrive at: <span style="color:#c8a261;font-weight:600;">' + (booking.address || '') + '</span>)' : 'In-Studio (Plot 15, Admiralty Way, Lekki Phase 1, Lagos)'}</li>
@@ -415,7 +460,7 @@ async function dispatchBookingNotifications(booking, actionType) {
         </a>
       `,
       nextStepsHtml: `
-        <div style="background:#ffffff;border:1px dashed #c8a261;border-radius:12px;padding:28px;margin-top:36px;box-shadow:0 4px 15px rgba(26,25,23,0.01);">
+        <div style="background:#ffffff;border:1px dashed #c8a261;border-radius:12px;padding:20px;margin-top:24px;box-shadow:0 4px 15px rgba(26,25,23,0.01);">
           <h4 style="color:#1a1917;margin:0 0 16px;font-size:0.85rem;letter-spacing:3px;text-transform:uppercase;font-weight:700;font-family:sans-serif;border-bottom:1px dashed #ebdcb9;padding-bottom:10px;">📍 Next Steps & Info</h4>
           <ul style="color:#1a1917;font-size:0.92rem;line-height:1.7;margin:0;padding-left:20px;font-family:Georgia,serif;">
             <li style="margin-bottom:10px;"><strong style="color:#1a1917;font-weight:700;">Service Type:</strong> ${booking.serviceType === 'home' ? 'Home Service (Our expert will arrive at: <span style="color:#c8a261;font-weight:600;">' + (booking.address || '') + '</span>)' : 'In-Studio (Plot 15, Admiralty Way, Lekki Phase 1, Lagos)'}</li>
@@ -496,7 +541,7 @@ async function dispatchBookingNotifications(booking, actionType) {
         </a>
       `,
       nextStepsHtml: `
-        <div style="background:#ffffff;border:1px dashed #e74c3c;border-radius:12px;padding:28px;margin-top:36px;box-shadow:0 4px 15px rgba(26,25,23,0.01);">
+        <div style="background:#ffffff;border:1px dashed #e74c3c;border-radius:12px;padding:20px;margin-top:24px;box-shadow:0 4px 15px rgba(26,25,23,0.01);">
           <h4 style="color:#e74c3c;margin:0 0 16px;font-size:0.85rem;letter-spacing:3px;text-transform:uppercase;font-weight:700;font-family:sans-serif;border-bottom:1px dashed #ebdcb9;padding-bottom:10px;">📍 Refunds & Info</h4>
           <ul style="color:#1a1917;font-size:0.92rem;line-height:1.7;margin:0;padding-left:20px;font-family:Georgia,serif;">
             <li style="margin-bottom:10px;"><strong style="color:#1a1917;font-weight:700;">Refunds:</strong> If you did not request this cancellation or have questions about a deposit refund, please contact us on WhatsApp as soon as possible.</li>
@@ -579,7 +624,7 @@ async function dispatchBookingNotifications(booking, actionType) {
         </a>
       `,
       nextStepsHtml: `
-        <div style="background:#ffffff;border:1px dashed #ebdcb9;border-radius:12px;padding:28px;margin-top:36px;box-shadow:0 4px 15px rgba(26,25,23,0.01);">
+        <div style="background:#ffffff;border:1px dashed #ebdcb9;border-radius:12px;padding:20px;margin-top:24px;box-shadow:0 4px 15px rgba(26,25,23,0.01);">
           <h4 style="color:#1a1917;margin:0 0 16px;font-size:0.85rem;letter-spacing:3px;text-transform:uppercase;font-weight:700;font-family:sans-serif;border-bottom:1px dashed #ebdcb9;padding-bottom:10px;">⚠️ Secure Reservation</h4>
           <ul style="color:#1a1917;font-size:0.92rem;line-height:1.7;margin:0;padding-left:20px;font-family:Georgia,serif;">
             <li style="margin-bottom:10px;"><strong style="color:#1a1917;font-weight:700;">Expiry:</strong> We will reserve your selected slot for up to <span style="color:#e0447a;font-weight:600;">30 minutes</span>. If deposit payment is not completed within this time, the reservation will expire and the slot will be released back to the public.</li>
