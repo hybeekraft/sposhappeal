@@ -103,15 +103,15 @@ function compileEmailTemplate({ title, headerAccentColor, name, description, det
   <title>${title}</title>
 </head>
 <body style="margin:0;padding:0;background:#11100f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#11100f;padding:60px 16px;">
+  <table width="100%" cellpadding="0" cellspacing="0" class="outer-table" style="background:#11100f;padding:60px 16px;">
     <tr>
       <td align="center">
         <!-- Main Email Container -->
-        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;background:#FAF6F0;border-radius:12px;overflow:hidden;border:1px solid #ebdcb9;box-shadow:0 20px 50px rgba(0,0,0,0.5);">
+        <table width="100%" cellpadding="0" cellspacing="0" class="main-container" style="max-width:620px;background:#FAF6F0;border-radius:12px;overflow:hidden;border:1px solid #ebdcb9;box-shadow:0 20px 50px rgba(0,0,0,0.5);">
           
           <!-- Header Banner -->
           <tr>
-            <td style="background:#1a1917;padding:48px 40px;text-align:center;border-bottom:3px solid ${headerAccentColor};">
+            <td class="header-cell" style="background:#1a1917;padding:48px 40px;text-align:center;border-bottom:3px solid ${headerAccentColor};">
               <div style="margin-bottom:16px;">
                 <img src="https://sposhappeal.vercel.app/assets/sposh_logo.png" alt="S'posh APPEAL Logo" style="height:60px;width:auto;display:inline-block;border:none;">
               </div>
@@ -126,7 +126,7 @@ function compileEmailTemplate({ title, headerAccentColor, name, description, det
           
           <!-- Body Content Area -->
           <tr>
-            <td style="padding:48px 40px;background:#FAF6F0;">
+            <td class="body-cell" style="padding:48px 40px;background:#FAF6F0;">
               <p style="color:#1a1917;font-size:1.15rem;line-height:1.6;margin:0 0 24px;font-family:Georgia,serif;">
                 Hi <strong style="color:#1a1917;font-weight:700;">${name}</strong>,
               </p>
@@ -135,7 +135,7 @@ function compileEmailTemplate({ title, headerAccentColor, name, description, det
               </p>
               
               <!-- Core Details Card -->
-              <div style="background:#ffffff;border-radius:12px;padding:32px;border:1px solid #ebdcb9;margin-bottom:36px;box-shadow:0 4px 15px rgba(26,25,23,0.02);">
+              <div class="details-card" style="background:#ffffff;border-radius:12px;padding:32px;border:1px solid #ebdcb9;margin-bottom:36px;box-shadow:0 4px 15px rgba(26,25,23,0.02);">
                 <div style="color:#1a1917;font-size:0.8rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin:0 0 20px;border-bottom:2px solid #ebdcb9;padding-bottom:12px;font-family:sans-serif;">
                   ${detailsCardTitle}
                 </div>
@@ -160,7 +160,7 @@ function compileEmailTemplate({ title, headerAccentColor, name, description, det
           
           <!-- Footer -->
           <tr>
-            <td style="padding:48px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
+            <td class="footer-cell" style="padding:48px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
               <div style="color:#c8a261;font-size:0.85rem;font-weight:700;letter-spacing:3px;margin-bottom:8px;font-family:sans-serif;">
                 S'POSH APPEAL
               </div>
@@ -266,44 +266,44 @@ async function dispatchBookingNotifications(booking, actionType) {
       detailsCardTitle: "📋 Booking Details",
       detailsRowsHtml: `
         <tr>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;width:140px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Reference ID</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#c8a261;font-weight:700;font-size:1.05rem;">${ref}</td>
+          <td class="detail-label" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;width:140px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Reference ID</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#c8a261;font-weight:700;font-size:1.05rem;">${ref}</td>
         </tr>
         <tr>
           <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Service(s)</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${serviceNames}</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${serviceNames}</td>
         </tr>
         <tr>
           <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Date</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${dateStr}</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${dateStr}</td>
         </tr>
         <tr>
           <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Time / Slot</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${timeStr}</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${timeStr}</td>
         </tr>
         <tr>
-          <td style="padding:12px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Expert</td>
-          <td style="padding:12px 0;color:#1a1917;font-weight:700;font-size:1.0rem;">${booking.expertName || 'Any Available Expert'}</td>
+          <td class="detail-label" style="padding:12px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Expert</td>
+          <td class="detail-value" style="padding:12px 0;color:#1a1917;font-weight:700;font-size:1.0rem;">${booking.expertName || 'Any Available Expert'}</td>
         </tr>
       `,
       financialsHtml: `
         <div style="border-top:2px solid #ebdcb9;margin-top:24px;padding-top:24px;">
           <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.95rem;line-height:1.7;font-family:Georgia,serif;">
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;width:140px;">Total Cost</td>
-              <td style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${total.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;width:140px;">Total Cost</td>
+              <td class="financial-value" style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${total.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Deposit Paid</td>
-              <td style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${deposit.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Deposit Paid</td>
+              <td class="financial-value" style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${deposit.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Balance Due</td>
-              <td style="padding:8px 0;color:#1a1917;font-weight:900;font-size:1.2rem;">₦${balanceDue.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Balance Due</td>
+              <td class="financial-value" style="padding:8px 0;color:#1a1917;font-weight:900;font-size:1.2rem;">₦${balanceDue.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:12px 0 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Payment Status</td>
-              <td style="padding:12px 0 0;">
+              <td class="financial-label" style="padding:12px 0 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Payment Status</td>
+              <td class="financial-value" style="padding:12px 0 0;">
                 <span style="border:2px solid ${badgeColor};color:${badgeColor};padding:6px 16px;border-radius:4px;font-size:0.8rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1.5px;background:transparent;">
                   ${paymentStatusBadge}
                 </span>
@@ -313,9 +313,9 @@ async function dispatchBookingNotifications(booking, actionType) {
         </div>
       `,
       buttonsHtml: `
-        <a href="https://sposhappeal.vercel.app/booking.html?email=${email}" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:16px 32px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #1a1917;box-shadow: 0 4px 10px rgba(0,0,0,0.15);">View Booking</a>
-        <a href="${calendarUrl}" target="_blank" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:16px 32px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #1a1917;box-shadow: 0 4px 10px rgba(0,0,0,0.15);">📅 Add to Calendar</a>
-        <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:14px 28px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
+        <a href="https://sposhappeal.vercel.app/booking.html?email=${email}" class="action-btn" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:16px 32px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #1a1917;box-shadow: 0 4px 10px rgba(0,0,0,0.15);">View Booking</a>
+        <a href="${calendarUrl}" target="_blank" class="action-btn" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:16px 32px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #1a1917;box-shadow: 0 4px 10px rgba(0,0,0,0.15);">📅 Add to Calendar</a>
+        <a href="https://wa.me/2347011083217" target="_blank" class="action-btn" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:14px 28px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
           <img src="https://img.icons8.com/ios-glyphs/30/25d366/whatsapp.png" alt="WhatsApp" style="width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:6px;border:none;">WhatsApp Support
         </a>
       `,
@@ -361,44 +361,44 @@ async function dispatchBookingNotifications(booking, actionType) {
       detailsCardTitle: "📅 Updated Summary",
       detailsRowsHtml: `
         <tr>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;width:140px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Reference ID</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#e0447a;font-weight:700;font-size:1.05rem;">${ref}</td>
+          <td class="detail-label" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;width:140px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Reference ID</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#e0447a;font-weight:700;font-size:1.05rem;">${ref}</td>
         </tr>
         <tr>
           <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Service(s)</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${serviceNames}</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${serviceNames}</td>
         </tr>
         <tr>
           <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">New Date</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:1.05rem;">${dateStr}</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:1.05rem;">${dateStr}</td>
         </tr>
         <tr>
           <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">New Time</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:1.05rem;">${timeStr}</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:1.05rem;">${timeStr}</td>
         </tr>
         <tr>
-          <td style="padding:12px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Expert</td>
-          <td style="padding:12px 0;color:#1a1917;font-weight:700;font-size:1.0rem;">${booking.expertName || 'Any Available Expert'}</td>
+          <td class="detail-label" style="padding:12px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Expert</td>
+          <td class="detail-value" style="padding:12px 0;color:#1a1917;font-weight:700;font-size:1.0rem;">${booking.expertName || 'Any Available Expert'}</td>
         </tr>
       `,
       financialsHtml: `
         <div style="border-top:2px solid #ebdcb9;margin-top:24px;padding-top:24px;">
           <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.95rem;line-height:1.7;font-family:Georgia,serif;">
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;width:140px;">Total Cost</td>
-              <td style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${total.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;width:140px;">Total Cost</td>
+              <td class="financial-value" style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${total.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Deposit Paid</td>
-              <td style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${deposit.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Deposit Paid</td>
+              <td class="financial-value" style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${deposit.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Balance Due</td>
-              <td style="padding:8px 0;color:#1a1917;font-weight:900;font-size:1.2rem;">₦${balanceDue.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Balance Due</td>
+              <td class="financial-value" style="padding:8px 0;color:#1a1917;font-weight:900;font-size:1.2rem;">₦${balanceDue.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:12px 0 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Payment Status</td>
-              <td style="padding:12px 0 0;">
+              <td class="financial-label" style="padding:12px 0 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Payment Status</td>
+              <td class="financial-value" style="padding:12px 0 0;">
                 <span style="border:2px solid ${badgeColor};color:${badgeColor};padding:6px 16px;border-radius:4px;font-size:0.8rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1.5px;background:transparent;">
                   ${paymentStatusBadge}
                 </span>
@@ -408,9 +408,9 @@ async function dispatchBookingNotifications(booking, actionType) {
         </div>
       `,
       buttonsHtml: `
-        <a href="https://sposhappeal.vercel.app/booking.html?email=${email}" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:16px 32px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #1a1917;box-shadow: 0 4px 10px rgba(0,0,0,0.15);">View Booking</a>
-        <a href="${calendarUrl}" target="_blank" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:16px 32px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #1a1917;box-shadow: 0 4px 10px rgba(0,0,0,0.15);">📅 Add to Calendar</a>
-        <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:14px 28px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
+        <a href="https://sposhappeal.vercel.app/booking.html?email=${email}" class="action-btn" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:16px 32px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #1a1917;box-shadow: 0 4px 10px rgba(0,0,0,0.15);">View Booking</a>
+        <a href="${calendarUrl}" target="_blank" class="action-btn" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:16px 32px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #1a1917;box-shadow: 0 4px 10px rgba(0,0,0,0.15);">📅 Add to Calendar</a>
+        <a href="https://wa.me/2347011083217" target="_blank" class="action-btn" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:14px 28px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
           <img src="https://img.icons8.com/ios-glyphs/30/25d366/whatsapp.png" alt="WhatsApp" style="width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:6px;border:none;">WhatsApp Support
         </a>
       `,
@@ -452,36 +452,36 @@ async function dispatchBookingNotifications(booking, actionType) {
       detailsCardTitle: "❌ Cancelled Summary",
       detailsRowsHtml: `
         <tr>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;width:140px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Reference ID</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#e74c3c;font-weight:700;font-size:1.05rem;">${ref}</td>
+          <td class="detail-label" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;width:140px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Reference ID</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#e74c3c;font-weight:700;font-size:1.05rem;">${ref}</td>
         </tr>
         <tr>
           <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Service(s)</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${serviceNames}</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${serviceNames}</td>
         </tr>
         <tr>
           <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Original Date</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${dateStr}</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${dateStr}</td>
         </tr>
         <tr>
-          <td style="padding:12px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Original Time</td>
-          <td style="padding:12px 0;color:#1a1917;font-weight:700;font-size:1.0rem;">${timeStr}</td>
+          <td class="detail-label" style="padding:12px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Original Time</td>
+          <td class="detail-value" style="padding:12px 0;color:#1a1917;font-weight:700;font-size:1.0rem;">${timeStr}</td>
         </tr>
       `,
       financialsHtml: `
         <div style="border-top:2px solid #ebdcb9;margin-top:24px;padding-top:24px;">
           <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.95rem;line-height:1.7;font-family:Georgia,serif;">
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;width:140px;">Total Cost</td>
-              <td style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${total.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;width:140px;">Total Cost</td>
+              <td class="financial-value" style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${total.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Deposit Refund</td>
-              <td style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${deposit.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Deposit Refund</td>
+              <td class="financial-value" style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${deposit.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:12px 0 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Booking Status</td>
-              <td style="padding:12px 0 0;">
+              <td class="financial-label" style="padding:12px 0 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Booking Status</td>
+              <td class="financial-value" style="padding:12px 0 0;">
                 <span style="border:2px solid #e74c3c;color:#e74c3c;padding:6px 16px;border-radius:4px;font-size:0.8rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1.5px;background:transparent;">
                   CANCELLED ❌
                 </span>
@@ -491,7 +491,7 @@ async function dispatchBookingNotifications(booking, actionType) {
         </div>
       `,
       buttonsHtml: `
-        <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:14px 28px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
+        <a href="https://wa.me/2347011083217" target="_blank" class="action-btn" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:14px 28px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
           <img src="https://img.icons8.com/ios-glyphs/30/25d366/whatsapp.png" alt="WhatsApp" style="width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:6px;border:none;">WhatsApp Support
         </a>
       `,
@@ -530,40 +530,40 @@ async function dispatchBookingNotifications(booking, actionType) {
       detailsCardTitle: "⏳ Booking Summary",
       detailsRowsHtml: `
         <tr>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;width:140px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Reference ID</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#e0447a;font-weight:700;font-size:1.05rem;">${ref}</td>
+          <td class="detail-label" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;width:140px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Reference ID</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#e0447a;font-weight:700;font-size:1.05rem;">${ref}</td>
         </tr>
         <tr>
           <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Service(s)</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${serviceNames}</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${serviceNames}</td>
         </tr>
         <tr>
           <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Date</td>
-          <td style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${dateStr}</td>
+          <td class="detail-value" style="padding:12px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;font-size:1.0rem;">${dateStr}</td>
         </tr>
         <tr>
-          <td style="padding:12px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Time / Slot</td>
-          <td style="padding:12px 0;color:#1a1917;font-weight:700;font-size:1.0rem;">${timeStr}</td>
+          <td class="detail-label" style="padding:12px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Time / Slot</td>
+          <td class="detail-value" style="padding:12px 0;color:#1a1917;font-weight:700;font-size:1.0rem;">${timeStr}</td>
         </tr>
       `,
       financialsHtml: `
         <div style="border-top:2px solid #ebdcb9;margin-top:24px;padding-top:24px;">
           <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.95rem;line-height:1.7;font-family:Georgia,serif;">
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;width:140px;">Total Cost</td>
-              <td style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${total.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;width:140px;">Total Cost</td>
+              <td class="financial-value" style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${total.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Deposit Due</td>
-              <td style="padding:8px 0;color:#e74c3c;font-weight:900;font-size:1.2rem;">₦${deposit.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Deposit Due</td>
+              <td class="financial-value" style="padding:8px 0;color:#e74c3c;font-weight:900;font-size:1.2rem;">₦${deposit.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Balance Due</td>
-              <td style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${balanceDue.toLocaleString()}</td>
+              <td class="financial-label" style="padding:8px 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Balance Due</td>
+              <td class="financial-value" style="padding:8px 0;color:#1a1917;font-weight:800;font-size:1.1rem;">₦${balanceDue.toLocaleString()}</td>
             </tr>
             <tr>
-              <td style="padding:12px 0 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Payment Status</td>
-              <td style="padding:12px 0 0;">
+              <td class="financial-label" style="padding:12px 0 0;color:#555047;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;font-family:sans-serif;">Payment Status</td>
+              <td class="financial-value" style="padding:12px 0 0;">
                 <span style="border:2px solid #e67e22;color:#e67e22;padding:6px 16px;border-radius:4px;font-size:0.8rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1.5px;background:transparent;">
                   AWAITING DEPOSIT ⏳
                 </span>
@@ -573,8 +573,8 @@ async function dispatchBookingNotifications(booking, actionType) {
         </div>
       `,
       buttonsHtml: `
-        <a href="https://sposhappeal.vercel.app/booking.html?ref=${ref}" style="display:inline-block;background:#e0447a;color:#ffffff;text-decoration:none;padding:16px 32px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #e0447a;box-shadow: 0 4px 12px rgba(224,68,122,0.25);">Pay Deposit Now</a>
-        <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:14px 28px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
+        <a href="https://sposhappeal.vercel.app/booking.html?ref=${ref}" class="action-btn" style="display:inline-block;background:#e0447a;color:#ffffff;text-decoration:none;padding:16px 32px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #e0447a;box-shadow: 0 4px 12px rgba(224,68,122,0.25);">Pay Deposit Now</a>
+        <a href="https://wa.me/2347011083217" target="_blank" class="action-btn" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:14px 28px;border-radius:6px;font-size:0.85rem;font-weight:700;margin:8px 6px;letter-spacing:2px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
           <img src="https://img.icons8.com/ios-glyphs/30/25d366/whatsapp.png" alt="WhatsApp" style="width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:6px;border:none;">WhatsApp Support
         </a>
       `,
