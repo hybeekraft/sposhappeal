@@ -806,7 +806,10 @@ function openRescheduleModal(id) {
 
   document.getElementById('resched-ref-label').textContent = id;
   const currentIsoDate = booking.dateISO ? booking.dateISO.split('T')[0] : '';
-  document.getElementById('resched-date').value = currentIsoDate;
+  const dateInput = document.getElementById('resched-date');
+  dateInput.value = currentIsoDate;
+  const todayStr = new Date().toISOString().split('T')[0];
+  dateInput.min = todayStr;
   document.getElementById('resched-time').value = booking.startTime || '';
 
   document.getElementById('reschedule-modal').style.display = 'flex';

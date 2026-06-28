@@ -1373,6 +1373,16 @@ app.patch('/api/bookings/reschedule/:id', bookingLimiter, async (req, res) => {
     // Calculate display date format (e.g. Sat, 20 June 2026)
     const dateObj = new Date(appointment_date);
     dateObj.setHours(12, 0, 0, 0);
+
+    // Ensure the new date is not in the past
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const selectedDate = new Date(appointment_date);
+    selectedDate.setHours(0, 0, 0, 0);
+    if (selectedDate < today) {
+      return res.status(400).json({ error: 'Cannot reschedule to a past date.' });
+    }
+
     const dateDisplay = dateObj.toLocaleDateString('en-GB', {
       weekday: 'short',
       day: 'numeric',
