@@ -303,7 +303,7 @@ async function handleLogin(event) {
 
   const selectedRole = document.getElementById('login-role').value;
   if (!selectedRole) {
-    errEl.textContent = 'Please select a personnel role.';
+    errEl.textContent = 'Please select a role.';
     return;
   }
   if (!passcode) return;
