@@ -171,50 +171,50 @@ async function dispatchBookingNotifications(booking, actionType) {
     <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">You're All Set!</div>
   </td></tr>
   <tr><td style="padding:36px 32px;background:#FAF6F0;">
-    <p style="color:#2d2b27;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
-    <p style="color:#2d2b27;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">Your appointment at S'posh APPEAL has been confirmed and your deposit secured. We have set aside this time exclusively for you. We look forward to welcoming you to the salon. ✨</p>
+    <p style="color:#1a1917;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
+    <p style="color:#1a1917;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">Your appointment at S'posh APPEAL has been confirmed and your deposit secured. We have set aside this time exclusively for you. We look forward to welcoming you to the salon. ✨</p>
     
     <div style="background:#ffffff;border-radius:8px;padding:24px;border:1px solid #ebdcb9;box-shadow:none;margin-bottom:28px;">
       <div style="color:#1a1917;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #ebdcb9;padding-bottom:10px;font-family:sans-serif;">📋 Booking Details</div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#c8a261;font-weight:700;">${ref}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${serviceNames}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Date</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Date</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${dateStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Time / Slot</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Time / Slot</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${timeStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Expert</td>
+          <td style="padding:10px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Expert</td>
           <td style="padding:10px 0;color:#1a1917;font-weight:700;">${booking.expertName || 'Any Available Expert'}</td>
         </tr>
       </table>
       
       <div style="border-top:1px solid #ebdcb9;margin-top:16px;padding-top:16px;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
             <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦${total.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
             <td style="padding:6px 0;color:#1a1917;font-weight:800;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
             <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦${balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:8px 0 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
+            <td style="padding:8px 0 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
             <td style="padding:8px 0 0;">
               <span style="border:1px solid ${badgeBorder};color:${badgeColor};padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1px;background:transparent;">
                 ${paymentStatusBadge}
@@ -235,7 +235,7 @@ async function dispatchBookingNotifications(booking, actionType) {
 
     <div style="background:#ffffff;border:1px dashed #c8a261;border-radius:8px;padding:20px;margin-top:28px;">
       <h4 style="color:#1a1917;margin:0 0 12px;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
-      <ul style="color:#2d2b27;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
+      <ul style="color:#1a1917;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
         ${booking.serviceType === 'home'
           ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#c8a261;font-weight:600;">${booking.address}</span>)</li>
              <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Preparation:</strong> Please prepare a clean space with power access for our expert prior to arrival.</li>`
@@ -249,13 +249,13 @@ async function dispatchBookingNotifications(booking, actionType) {
   </td></tr>
   <tr><td style="padding:32px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
     <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
-    <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
+    <div style="color:#ebdcb9;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
     <div style="margin-top:16px;margin-bottom:16px;">
       <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
       <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
       <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
     </div>
-    <div style="color:#2d2b27;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
+    <div style="color:#a59f95;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
@@ -293,50 +293,50 @@ async function dispatchBookingNotifications(booking, actionType) {
     <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">Appointment Moved!</div>
   </td></tr>
   <tr><td style="padding:36px 32px;background:#FAF6F0;">
-    <p style="color:#2d2b27;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
-    <p style="color:#2d2b27;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">Your S'posh APPEAL appointment has been successfully rescheduled. Below are your updated booking details:</p>
+    <p style="color:#1a1917;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
+    <p style="color:#1a1917;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">Your S'posh APPEAL appointment has been successfully rescheduled. Below are your updated booking details:</p>
     
     <div style="background:#ffffff;border-radius:8px;padding:24px;border:1px solid #ebdcb9;box-shadow:none;margin-bottom:28px;">
       <div style="color:#1a1917;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #ebdcb9;padding-bottom:10px;font-family:sans-serif;">📅 Updated Summary</div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#e0447a;font-weight:700;">${ref}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${serviceNames}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">New Date</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">New Date</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:0.95rem;">${dateStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">New Time</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">New Time</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#3498db;font-weight:700;font-size:0.95rem;">${timeStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Expert</td>
+          <td style="padding:10px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Expert</td>
           <td style="padding:10px 0;color:#1a1917;font-weight:700;">${booking.expertName || 'Any Available Expert'}</td>
         </tr>
       </table>
       
       <div style="border-top:1px solid #ebdcb9;margin-top:16px;padding-top:16px;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
             <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦${total.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
             <td style="padding:6px 0;color:#1a1917;font-weight:800;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
             <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦${balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:8px 0 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
+            <td style="padding:8px 0 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
             <td style="padding:8px 0 0;">
               <span style="border:1px solid ${badgeBorder};color:${badgeColor};padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1px;background:transparent;">
                 ${paymentStatusBadge}
@@ -357,7 +357,7 @@ async function dispatchBookingNotifications(booking, actionType) {
 
     <div style="background:#ffffff;border:1px dashed #3498db;border-radius:8px;padding:20px;margin-top:28px;">
       <h4 style="color:#3498db;margin:0 0 12px;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
-      <ul style="color:#2d2b27;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
+      <ul style="color:#1a1917;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
         ${booking.serviceType === 'home'
           ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#3498db;font-weight:600;">${booking.address}</span>)</li>
              <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Preparation:</strong> Please prepare a clean space with power access for our expert prior to arrival.</li>`
@@ -371,13 +371,13 @@ async function dispatchBookingNotifications(booking, actionType) {
   </td></tr>
   <tr><td style="padding:32px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
     <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
-    <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
+    <div style="color:#ebdcb9;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
     <div style="margin-top:16px;margin-bottom:16px;">
       <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
       <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
       <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
     </div>
-    <div style="color:#2d2b27;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
+    <div style="color:#a59f95;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
@@ -411,42 +411,42 @@ async function dispatchBookingNotifications(booking, actionType) {
     <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">Appointment Cancelled</div>
   </td></tr>
   <tr><td style="padding:36px 32px;background:#FAF6F0;">
-    <p style="color:#2d2b27;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
-    <p style="color:#2d2b27;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">Your S'posh APPEAL appointment has been cancelled. Below are the details for your records:</p>
+    <p style="color:#1a1917;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
+    <p style="color:#1a1917;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">Your S'posh APPEAL appointment has been cancelled. Below are the details for your records:</p>
     
     <div style="background:#ffffff;border-radius:8px;padding:24px;border:1px solid #ebdcb9;box-shadow:none;margin-bottom:28px;">
       <div style="color:#1a1917;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #ebdcb9;padding-bottom:10px;font-family:sans-serif;">📅 Cancelled Details</div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#e0447a;font-weight:700;">${ref}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${serviceNames}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Original Date</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Original Date</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${dateStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Time / Slot</td>
+          <td style="padding:10px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Time / Slot</td>
           <td style="padding:10px 0;color:#1a1917;font-weight:700;">${timeStr}</td>
         </tr>
       </table>
       
       <div style="border-top:1px solid #ebdcb9;margin-top:16px;padding-top:16px;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
             <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦${total.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Paid</td>
             <td style="padding:6px 0;color:#1a1917;font-weight:800;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:8px 0 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
+            <td style="padding:8px 0 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
             <td style="padding:8px 0 0;">
               <span style="border:1px solid #e74c3c;color:#e74c3c;padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1px;background:transparent;">
                 Cancelled ❌
@@ -466,7 +466,7 @@ async function dispatchBookingNotifications(booking, actionType) {
 
     <div style="background:#ffffff;border:1px dashed #e74c3c;border-radius:8px;padding:20px;margin-top:28px;">
       <h4 style="color:#e74c3c;margin:0 0 12px;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">📍 Refunds & Info</h4>
-      <ul style="color:#2d2b27;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
+      <ul style="color:#1a1917;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
         <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Refunds:</strong> If you did not request this cancellation or have questions about a deposit refund, please contact us on WhatsApp as soon as possible.</li>
         <li style="margin-bottom:8px;"><strong style="color:#1a1917;">Contact Number:</strong> <a href="tel:+2349131282016" style="color:#e0447a;text-decoration:none;font-weight:600;">09131282016</a></li>
       </ul>
@@ -474,13 +474,13 @@ async function dispatchBookingNotifications(booking, actionType) {
   </td></tr>
   <tr><td style="padding:32px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
     <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
-    <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
+    <div style="color:#ebdcb9;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
     <div style="margin-top:16px;margin-bottom:16px;">
       <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
       <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
       <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
     </div>
-    <div style="color:#2d2b27;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
+    <div style="color:#a59f95;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
@@ -514,46 +514,46 @@ async function dispatchBookingNotifications(booking, actionType) {
     <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">Booking Received!</div>
   </td></tr>
   <tr><td style="padding:36px 32px;background:#FAF6F0;">
-    <p style="color:#2d2b27;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
-    <p style="color:#2d2b27;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">We have reserved your slot at S'posh APPEAL! Complete your deposit payment below to confirm your appointment.</p>
+    <p style="color:#1a1917;font-size:0.95rem;line-height:1.6;margin:0 0 20px;font-family:Georgia,serif;">Hi <strong style="color:#1a1917;">${name}</strong>,</p>
+    <p style="color:#1a1917;font-size:0.9rem;line-height:1.7;margin:0 0 28px;font-family:Georgia,serif;font-style:italic;">We have reserved your slot at S'posh APPEAL! Complete your deposit payment below to confirm your appointment.</p>
     
     <div style="background:#ffffff;border-radius:8px;padding:24px;border:1px solid #ebdcb9;box-shadow:none;margin-bottom:28px;">
       <div style="color:#1a1917;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;border-bottom:1px solid #ebdcb9;padding-bottom:10px;font-family:sans-serif;">📋 Booking Summary</div>
-      <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;width:130px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Reference ID</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#e0447a;font-weight:700;">${ref}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Service(s)</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${serviceNames}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Date</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Date</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${dateStr}</td>
         </tr>
         <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Time / Slot</td>
+          <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Time / Slot</td>
           <td style="padding:10px 0;border-bottom:1px solid #ebdcb9;color:#1a1917;font-weight:700;">${timeStr}</td>
         </tr>
       </table>
       
       <div style="border-top:1px solid #ebdcb9;margin-top:16px;padding-top:16px;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="color:#2d2b27;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="color:#1a1917;font-size:0.88rem;line-height:1.6;font-family:Georgia,serif;">
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;width:130px;">Total Cost</td>
             <td style="padding:6px 0;color:#1a1917;font-weight:800;font-size:0.95rem;">₦${total.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Due</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Deposit Due</td>
             <td style="padding:6px 0;color:#e74c3c;font-weight:900;">₦${deposit.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
+            <td style="padding:6px 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Balance Due</td>
             <td style="padding:6px 0;color:#1a1917;font-weight:900;font-size:1.05rem;">₦${balanceDue.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:8px 0 0;color:#4a453c;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
+            <td style="padding:8px 0 0;color:#1a1917;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;">Payment Status</td>
             <td style="padding:8px 0 0;">
               <span style="border:1px solid ${badgeBorder};color:${badgeColor};padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:700;display:inline-block;font-family:sans-serif;text-transform:uppercase;letter-spacing:1px;background:transparent;">
                 Awaiting Deposit ⚠️
@@ -573,7 +573,7 @@ async function dispatchBookingNotifications(booking, actionType) {
 
     <div style="background:#ffffff;border:1px dashed #ebdcb9;border-radius:8px;padding:20px;margin-top:28px;">
       <h4 style="color:#c8a261;margin:0 0 12px;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">📍 Next Steps & Info</h4>
-      <ul style="color:#2d2b27;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
+      <ul style="color:#1a1917;font-size:0.82rem;line-height:1.6;margin:0;padding-left:18px;font-family:Georgia,serif;">
         <li style="margin-bottom:8px;color:#c8a261;font-weight:700;">⚠️ Your slot is NOT confirmed until the deposit is paid. Please complete payment using the button above.</li>
         ${booking.serviceType === 'home'
           ? `<li style="margin-bottom:8px;"><strong style="color:#1a1917;">Service Type:</strong> Home Service (Our expert will arrive at: <span style="color:#c8a261;font-weight:600;">${booking.address}</span>)</li>`
@@ -586,13 +586,13 @@ async function dispatchBookingNotifications(booking, actionType) {
   </td></tr>
   <tr><td style="padding:32px;background:#1a1917;text-align:center;border-top:1px solid #ebdcb9;">
     <div style="color:#c8a261;font-size:0.75rem;font-weight:700;letter-spacing:2px;margin-bottom:6px;">S'POSH APPEAL</div>
-    <div style="color:#a59f95;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
+    <div style="color:#ebdcb9;font-size:0.7rem;">Plot 15, Admiralty Way, Lekki Phase 1, Lagos &bull; Nigeria</div>
     <div style="margin-top:16px;margin-bottom:16px;">
       <a href="https://instagram.com/sposhappeal_001" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/instagram-new.png" alt="Instagram" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
       <a href="https://web.facebook.com/profile.php?id=61573953737973" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/facebook-new.png" alt="Facebook" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
       <a href="https://tiktok.com/@sposhappeal" target="_blank" style="text-decoration:none;margin:0 6px;"><img src="https://img.icons8.com/ios-glyphs/30/c8a261/tiktok.png" alt="TikTok" style="width:22px;height:22px;display:inline-block;vertical-align:middle;border:none;"></a>
     </div>
-    <div style="color:#2d2b27;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
+    <div style="color:#a59f95;font-size:0.7rem;margin-top:6px;">&copy; 2026 S'posh APPEAL. All rights reserved.</div>
   </td></tr>
 </table></td></tr></table>
 </body></html>`;
