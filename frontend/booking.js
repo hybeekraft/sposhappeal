@@ -50,6 +50,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (errEl) errEl.textContent = '';
       input.classList.remove('field-invalid');
     });
+    if (id === 'f-name') {
+      const toTitleCase = (str) => {
+        return str.split(' ').map(word => {
+          if (!word) return '';
+          if (word === word.toUpperCase() && word.length > 1) {
+            word = word.toLowerCase();
+          }
+          return word.charAt(0).toUpperCase() + word.slice(1);
+        }).join(' ');
+      };
+      const formatName = () => {
+        input.value = toTitleCase(input.value);
+      };
+      input.addEventListener('blur', formatName);
+      input.addEventListener('change', formatName);
+    }
   });
 
   // Stepper Click Navigation: Allow clicking completed steps to navigate back

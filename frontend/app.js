@@ -1,3 +1,15 @@
+
+  function toTitleCase(str) {
+    if (!str) return '';
+    return str.split(' ').map(word => {
+      if (!word) return '';
+      if (word === word.toUpperCase() && word.length > 1) {
+        word = word.toLowerCase();
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(' ');
+  }
+
 /* =================================================================
    S'POSH APPEAL — app.js
    Services · Experts · Testimonials · Booking Wizard · LocalStorage
@@ -1283,6 +1295,10 @@ const PHONE_REGEX = /^[+\d][\d\s-]{6,}$/;
 function validateStep(s) {
   if (s === 1) {
     clearFieldErrors();
+    const nameInput = document.getElementById('f-name');
+
+    if (nameInput) nameInput.value = toTitleCase(nameInput.value);
+
     const n = document.getElementById('f-name').value.trim();
     const e = document.getElementById('f-email').value.trim();
     const p = document.getElementById('f-phone').value.trim();
@@ -1346,6 +1362,10 @@ function validateStep(s) {
 }
 
 function captureDetails() {
+  const nameInput = document.getElementById('f-name');
+
+  if (nameInput) nameInput.value = toTitleCase(nameInput.value);
+
   state.name = document.getElementById('f-name').value.trim();
   state.email = document.getElementById('f-email').value.trim();
   state.phone = document.getElementById('f-phone').value.trim();
