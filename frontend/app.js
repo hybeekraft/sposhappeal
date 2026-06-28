@@ -772,30 +772,49 @@ function renderBookingsList(overrideList = null, hasSearched = false) {
 /* ─── BOOKINGS LOOKUP (My Bookings email search) ───────────── */
 async function lookupMyBookings() {
   const input = document.getElementById('bookings-lookup-email');
-  const email = input?.value.trim().toLowerCase();
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  const value = input?.value.trim();
+  if (!value) {
     if (input) {
       input.classList.add('field-invalid');
       setTimeout(() => input.classList.remove('field-invalid'), 600);
     }
-    toast('Please enter a valid email address.');
+    toast('Please enter your email or Booking Reference ID.');
+    return;
+  }
+
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  const isRef = /^[a-zA-Z0-9-]+$/.test(value) && value.length >= 6;
+
+  if (!isEmail && !isRef) {
+    if (input) {
+      input.classList.add('field-invalid');
+      setTimeout(() => input.classList.remove('field-invalid'), 600);
+    }
+    toast('Please enter a valid email address or Reference ID (e.g. SP-XXXXXX).');
     return;
   }
 
   const btn = document.getElementById('btn-bookings-lookup');
   const originalHTML = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Searching…';
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Searching...';
 
-  // Always include local bookings matching this email
+  // Always include local bookings matching this email or reference_id
   const local = getBookings()
-    .filter(b => (b.clientEmail || '').toLowerCase() === email)
+    .filter(b => {
+      if (isEmail) {
+        return (b.clientEmail || '').toLowerCase() === value.toLowerCase();
+      } else {
+        const idToCheck = (b.reference_id || b.id || '').toUpperCase();
+        return idToCheck === value.toUpperCase();
+      }
+    })
     .map(b => ({ ...b, source: 'local' }));
 
   let remote = [];
   if (API_BASE) {
     try {
-      const result = await apiFetch(`/bookings/my?email=${encodeURIComponent(email)}`);
+      const result = await apiFetch(`/bookings/my?query=${encodeURIComponent(value)}`);
       remote = (result?.bookings || []).map(b => ({
         id: b.reference_id,
         dateISO: b.dateISO,
@@ -804,7 +823,7 @@ async function lookupMyBookings() {
         serviceNames: (b.services || []).map(s => s.name).join(', '),
         expertName: b.expertName,
         clientName: b.clientName,
-        clientEmail: email,
+        clientEmail: b.clientEmail || '',
         total: b.total,
         status: b.status,
         paymentStatus: b.paymentStatus,
@@ -820,7 +839,7 @@ async function lookupMyBookings() {
 
   const combined = [...remote, ...local];
   if (!combined.length) {
-    toast('No bookings found for that email.');
+    toast('No bookings found for that email or reference ID.');
   }
   renderBookingsList(combined, true);
 }

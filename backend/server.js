@@ -1289,24 +1289,40 @@ app.post('/api/bookings/new', bookingLimiter, async (req, res) => {
   }
 });
 
-// 2. Fetch Bookings by Client Email (GET /api/bookings/my)
+// 2. Fetch Bookings by Client Email or Reference ID (GET /api/bookings/my)
 app.get('/api/bookings/my', bookingLimiter, async (req, res) => {
   try {
-    const email = req.query.email;
-    if (!email) {
-      return res.status(400).json({ error: 'Email parameter is required.' });
+    const queryVal = (req.query.email || req.query.query || req.query.ref || '').trim();
+    if (!queryVal) {
+      return res.status(400).json({ error: 'Email or Reference ID is required.' });
     }
 
     const useDb = mongoose.connection.readyState === 1;
     if (useDb) {
-      const bookings = await Booking.find({ clientEmail: email.toLowerCase() })
-        .sort({ createdAt: -1 })
-        .lean();
+      let bookings;
+      if (queryVal.includes('@')) {
+        bookings = await Booking.find({ clientEmail: queryVal.toLowerCase() })
+          .sort({ createdAt: -1 })
+          .lean();
+      } else {
+        bookings = await Booking.find({
+          $or: [
+            { reference_id: queryVal.toUpperCase() },
+            { reference_id: queryVal }
+          ]
+        })
+          .sort({ createdAt: -1 })
+          .lean();
+      }
       res.json({ bookings });
     } else {
-      const bookings = mockBookings
-        .filter(b => b.clientEmail.toLowerCase() === email.toLowerCase())
-        .sort((a, b) => b.createdAt - a.createdAt);
+      let bookings;
+      if (queryVal.includes('@')) {
+        bookings = mockBookings.filter(b => b.clientEmail.toLowerCase() === queryVal.toLowerCase());
+      } else {
+        bookings = mockBookings.filter(b => b.reference_id.toUpperCase() === queryVal.toUpperCase() || b.reference_id === queryVal);
+      }
+      bookings.sort((a, b) => b.createdAt - a.createdAt);
       res.json({ bookings });
     }
   } catch (err) {
