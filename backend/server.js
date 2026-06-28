@@ -228,8 +228,8 @@ async function dispatchBookingNotifications(booking, actionType) {
     <div style="text-align:center;margin:28px 0 16px;">
       <a href="https://sposhappeal.vercel.app/booking.html?email=${encodeURIComponent(email)}" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">View Booking</a>
       <a href="${calendarUrl}" target="_blank" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">📅 Add to Calendar</a>
-      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
-        💬 WhatsApp Support
+      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
+        <img src="https://img.icons8.com/ios-glyphs/30/25d366/whatsapp.png" alt="WhatsApp" style="width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:6px;border:none;">WhatsApp Support
       </a>
     </div>
 
@@ -350,8 +350,8 @@ async function dispatchBookingNotifications(booking, actionType) {
     <div style="text-align:center;margin:28px 0 16px;">
       <a href="https://sposhappeal.vercel.app/booking.html?email=${encodeURIComponent(email)}" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">View Booking</a>
       <a href="${calendarUrl}" target="_blank" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">📅 Add to Calendar</a>
-      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
-        💬 WhatsApp Support
+      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
+        <img src="https://img.icons8.com/ios-glyphs/30/25d366/whatsapp.png" alt="WhatsApp" style="width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:6px;border:none;">WhatsApp Support
       </a>
     </div>
 
@@ -459,8 +459,8 @@ async function dispatchBookingNotifications(booking, actionType) {
     
     <div style="text-align:center;margin:28px 0 16px;">
       <a href="https://sposhappeal.vercel.app/booking.html" style="display:inline-block;background:#1a1917;color:#FAF6F0;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #1a1917;">Book Again</a>
-      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
-        💬 WhatsApp Support
+      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.8rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
+        <img src="https://img.icons8.com/ios-glyphs/30/25d366/whatsapp.png" alt="WhatsApp" style="width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:6px;border:none;">WhatsApp Support
       </a>
     </div>
 
@@ -566,8 +566,8 @@ async function dispatchBookingNotifications(booking, actionType) {
     
     <div style="text-align:center;margin:28px 0 16px;">
       <a href="https://sposhappeal.vercel.app/booking.html?email=${encodeURIComponent(email)}" style="display:inline-block;background:#c8a261;color:#fff;text-decoration:none;padding:14px 28px;border-radius:4px;font-size:0.85rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #c8a261;">Complete Payment →</a>
-      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 22px;border-radius:4px;font-size:0.82rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;">
-        💬 WhatsApp Support
+      <a href="https://wa.me/2347011083217" target="_blank" style="display:inline-block;background:transparent;color:#25d366;text-decoration:none;padding:12px 22px;border-radius:4px;font-size:0.82rem;font-weight:700;margin:6px 4px;letter-spacing:1px;text-transform:uppercase;border:1px solid #25d366;vertical-align:middle;">
+        <img src="https://img.icons8.com/ios-glyphs/30/25d366/whatsapp.png" alt="WhatsApp" style="width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:6px;border:none;">WhatsApp Support
       </a>
     </div>
 
