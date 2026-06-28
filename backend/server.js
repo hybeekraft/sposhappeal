@@ -166,7 +166,7 @@ async function dispatchBookingNotifications(booking, actionType) {
 <tr><td align="center">
 <table width="100%" style="max-width:580px;background:#FAF6F0;border-radius:8px;overflow:hidden;border:1px solid #ebdcb9;box-shadow:0 10px 45px rgba(0,0,0,0.3);">
   <tr><td style="background:#1a1917;padding:40px 32px;text-align:center;border-bottom:2px solid #c8a261;">
-    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
+    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.png" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
     <div style="color:#c8a261;font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
     <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">You're All Set!</div>
   </td></tr>
@@ -288,7 +288,7 @@ async function dispatchBookingNotifications(booking, actionType) {
 <tr><td align="center">
 <table width="100%" style="max-width:580px;background:#FAF6F0;border-radius:8px;overflow:hidden;border:1px solid #ebdcb9;box-shadow:0 10px 45px rgba(0,0,0,0.3);">
   <tr><td style="background:#1a1917;padding:40px 32px;text-align:center;border-bottom:2px solid #3498db;">
-    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
+    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.png" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
     <div style="color:#3498db;font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
     <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">Appointment Moved!</div>
   </td></tr>
@@ -406,7 +406,7 @@ async function dispatchBookingNotifications(booking, actionType) {
 <tr><td align="center">
 <table width="100%" style="max-width:580px;background:#FAF6F0;border-radius:8px;overflow:hidden;border:1px solid #ebdcb9;box-shadow:0 10px 45px rgba(0,0,0,0.3);">
   <tr><td style="background:#1a1917;padding:40px 32px;text-align:center;border-bottom:2px solid #e74c3c;">
-    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
+    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.png" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
     <div style="color:#e74c3c;font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
     <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">Appointment Cancelled</div>
   </td></tr>
@@ -509,7 +509,7 @@ async function dispatchBookingNotifications(booking, actionType) {
 <tr><td align="center">
 <table width="100%" style="max-width:580px;background:#FAF6F0;border-radius:8px;overflow:hidden;border:1px solid #ebdcb9;box-shadow:0 10px 45px rgba(0,0,0,0.3);">
   <tr><td style="background:#1a1917;padding:40px 32px;text-align:center;border-bottom:2px solid #c8a261;">
-    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.webp" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
+    <div style="margin-bottom:12px;"><img src="https://sposhappeal.vercel.app/assets/sposh_logo.png" alt="S'posh APPEAL Logo" style="height:48px;width:auto;"></div>
     <div style="color:#c8a261;font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">S'posh APPEAL</div>
     <div style="color:#FAF6F0;font-size:1.6rem;font-weight:400;font-family:Georgia,serif;letter-spacing:0.5px;">Booking Received!</div>
   </td></tr>
