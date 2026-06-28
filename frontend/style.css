@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 /* ═══════════════════════════════════════════════
    S'POSH APPEAL — Design System
@@ -45,8 +45,8 @@
   --glass-bg:       rgba(9, 7, 14, 0.85);
 
   /* Typography */
-  --font-display:   'Cormorant Garamond', serif;
-  --font-body:      'DM Sans', sans-serif;
+  --font-display:   'Playfair Display', serif;
+  --font-body:      'Inter', sans-serif;
 
   /* Geometry */
   --radius-xs:      3px;
