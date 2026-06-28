@@ -981,13 +981,14 @@ app.get('/api/status', (req, res) => {
 // ─── API ROUTES ─────────────────────────────────────────────────────────────
 // ─── CRON JOBS ────────────────────────────────────────────────────────────────
 
-// 24hr Appointment Reminder (POST /api/cron/reminders)
+// 24hr Appointment Reminder (GET/POST /api/cron/reminders)
 // Called daily by Vercel Cron — sends WhatsApp reminder to clients
 // whose appointment is tomorrow. Protected by CRON_SECRET env var.
-app.post('/api/cron/reminders', async (req, res) => {
+app.all('/api/cron/reminders', async (req, res) => {
   try {
     // Verify cron secret to prevent unauthorized calls
-    const secret = req.headers['x-cron-secret'];
+    const authHeader = req.headers['authorization'];
+    const secret = req.headers['x-cron-secret'] || (authHeader && authHeader.startsWith('Bearer ') ? authHeader.substring(7) : null);
     if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
       return res.status(401).json({ error: 'Unauthorized cron request.' });
     }
